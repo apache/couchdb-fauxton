@@ -80,7 +80,7 @@
   .cancel-button {
     font-size: 16px;
     vertical-align: middle;
-    color: $cf-text-dark-gray;
+    color: $cf-btn-cancel-color;
     &:hover {
       color: $cf-brand-hightlight-hover;
       text-decoration: none;
@@ -89,16 +89,20 @@
     &--disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      color: $cf-text-dark-gray;
+      color: $cf-btn-cancel-color;
     }
     &--disabled:hover {
       opacity: 0.5;
       cursor: not-allowed;
-      color: $cf-text-dark-gray;
+      color: $cf-btn-cancel-color;
     }
   }
   .panel-button {
-    color: $cf-text-dark-gray;
+    color: $cf-text-fonticon01;
+    border: 0;
+    background-color: $cf-background01;
+    padding: 11px;
+
     &:hover {
       color: $cf-brand-hightlight-hover;
       text-decoration: none;
@@ -108,21 +112,6 @@
       color: $cf-text01-muted;
       cursor: not-allowed;
     }
-  }
-
-  .bgEditorGutter {
-    width: 49px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background-color: #3b3b3b;
-  }
-
-  .panel-button {
-    border: 0;
-    background-color: $cf-background01;
-    padding: 11px;
-    color: #555555;
 
     span:first-of-type {
       margin-left: 4px;
@@ -136,6 +125,15 @@
       padding-right: 5px;
     }
   }
+
+  .bgEditorGutter {
+    width: 49px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: #3b3b3b;
+  }
+
   .panel-section {
     border-left: 1px solid $cf-border-color01;
     text-align: center;

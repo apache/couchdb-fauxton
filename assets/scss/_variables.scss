@@ -18,24 +18,19 @@
 // }
 
 
-// 
-// Note: Fauxton colors/styling are defined first and then can be used to 
+// ==================================================================================
+// Note: Fauxton colors/styling are defined first and then they can be used to 
 // override Bootstrap variables at the end.
-// 
+// ==================================================================================
 
-// 
-// Fauxton's generic styles
-// 
 
 // other colors - just listing for now but should be revised to reduce colors that are too similar
 // the idea is that all color values are listed here. other scss files should be using a color variable instead of literal values. 
 
-$cf-text-dark-gray: #666666;
 $cf-white: #ffffff;
 $cf-border-lighter-gray: #e3e3e3;
 $cf-red: #ff0000;
 $cf-black: #000000;
-
 
 $cf-gray: #2b2b33;
 $cf-gray: #323232;
@@ -44,6 +39,7 @@ $cf-gray: #4d4d4d;
 $cf-gray: #505050;
 $cf-gray: #555555;
 $cf-gray: #565656;
+$cf-gray: #666666;
 $cf-gray: #727a82;
 $cf-gray: #767f89;
 $cf-gray: #777777;
@@ -58,8 +54,6 @@ $cf-gray: #cccccc;
 $cf-gray: #dddddd;
 $cf-gray: #e6e6e6;
 
-
-
 $cf-dark-red: #9d261d;
 $cf-another-red: #b11925;
 $cf-red-ish: #d9534f;
@@ -72,6 +66,17 @@ $cf-green2: #29be9d;
 
 $cf-light-blue: #72cdf4;
 
+
+$cf-text05: #666666 !default; // font-icon, top header icons/text
+// not sure makes sense to have a common color for icons - maybe they should just use whatever the font color is around them.
+$cf-text-fonticon01: $cf-text05;
+// Styling of cancel buttons should be revised when styling form elements 
+$cf-btn-cancel-color: $cf-text05;
+
+
+// ========================
+// Fauxton's generic styles
+// ========================
 
 // base
 $cf-background01: #f2f2f2 !default; // main page background color. former $background
@@ -101,9 +106,9 @@ $cf-main-content-padding: 15px !default;
 $cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2) !default;
 
 
-// 
+// ===================================
 // Fauxton's component-specific styles
-// 
+// ===================================
 
 // buttons
 $cf-btn-primary-bg: $cf-primary !default;

@@ -48,10 +48,8 @@
   input[type="text"],
   textarea {
     @include border-radius(5px);
-    background-color: $cf-text-dark-gray;
     padding: 8px;
     border: none;
-    color: #eeeeee;
     font-size: 13px;
   }
 
@@ -67,16 +65,8 @@
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
     padding: 8px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
     font-size: 13px;
-  }
-  input:-webkit-input-placeholder,
-  form input:-moz-placeholder,
-  input:-ms-input-placeholder {
-    color: rgba(255, 255, 255, 0.4);
   }
 }
 

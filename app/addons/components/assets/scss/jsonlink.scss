@@ -12,16 +12,15 @@
 
 .faux__jsonlink {
   /*width: 76px; Static width cause rendering problems on Edge */
-  border-left: 1px solid #cccccc;
+  border-left: 1px solid $cf-border-color01;
   padding: 16px 12px 12px 12px !important;
   height: 64px;
-  background-color: rgba(0, 0, 0, 0);
   text-align: center;
   min-width: 55px;
 }
 
 .faux__jsonlink-link {
-  color: $cf-text-dark-gray;
+  color: $cf-text-fonticon01;
   text-decoration: none;
   line-height: 33px;
   font-size: 13px;
@@ -31,7 +30,7 @@
 .faux__jsonlink-link:focus,
 .faux__jsonlink-link:active {
   text-decoration: none;
-  color: $cf-text-dark-gray;
+  color: $cf-text-fonticon01;
 }
 
 .faux__jsonlink-link-brackets {
@@ -43,14 +42,13 @@
 .faux__doclink {
   text-align: center;
   width: 55px;
-  border-left: 1px solid #cccccc;
+  border-left: 1px solid $cf-border-color01;
   padding: 18px 12px 12px 12px !important;
   height: 64px;
-  background-color: rgba(0, 0, 0, 0);
 }
 
 .faux__doclink-link {
-  color: $cf-text-dark-gray;
+  color: $cf-text-fonticon01;
   text-decoration: none;
   line-height: 33px;
   font-size: 20px;
@@ -64,7 +62,7 @@
 .faux__doclink-link:focus,
 .faux__doclink-link:visited {
   text-decoration: none;
-  color: $cf-text-dark-gray;
+  color: $cf-text-fonticon01;
 }
 
 @media (max-width: 1090px) {

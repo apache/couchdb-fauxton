@@ -42,7 +42,7 @@
 }
 
 .faux__polling-info-text {
-  color: $cf-text-dark-gray;
+  color: $cf-text-fonticon01;
 }
 
 .faux__polling-info-value {
@@ -50,7 +50,7 @@
 }
 
 .faux__polling-info-value--off {
-  color: #999999;
+  color: $cf-text-fonticon01;
 }
 
 .faux__polling-info-value--active {
@@ -64,7 +64,7 @@
 }
 
 div.faux__refresh-btn {
-  border-left: 1px solid #cccccc;
+  border-left: 1px solid $cf-border-color01;
   line-height: 40px;
   padding: 12px 13px;
   flex: 0 0 auto;
@@ -78,7 +78,7 @@ div.faux__refresh-btn {
 .faux__refresh-link:visited,
 .faux__refresh-link:focus,
 .faux__refresh-link {
-  color: $cf-text-dark-gray;
+  color: $cf-text-fonticon01;
   font-size: 14px;
   text-decoration: none;
 }
