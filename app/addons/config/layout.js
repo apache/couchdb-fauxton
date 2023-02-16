@@ -32,7 +32,7 @@ export const ConfigHeader = ({ node, crumbs, docURL, endpoint }) => {
             <AddOptionButtonContainer node={node} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
-          <div id="notification-center-btn" className="flex-fill">
+          <div id="notification-center-btn">
             <NotificationCenterButton />
           </div>
         </div>

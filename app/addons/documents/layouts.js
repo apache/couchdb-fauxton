@@ -73,7 +73,7 @@ export const TabsSidebarHeader = ({
           <div style={{flex:1, padding: '18px 6px 12px 12px'}}>
             {partKeySelector}
           </div>
-          <div id="right-header" className="flex-fill">
+          <div id="right-header">
             <RightAllDocsHeader
               hideQueryOptions={hideQueryOptions}
               hideJumpToDoc={hideJumpToDoc}
@@ -85,7 +85,7 @@ export const TabsSidebarHeader = ({
               selectedNavItem={selectedNavItem} />
           </div>
           <ApiBarContainer docURL={docURL} endpoint={endpoint} endpointAddQueryOptions={endpointAddQueryOptions} />
-          <div id="notification-center-btn" className="flex-fill">
+          <div id="notification-center-btn">
             <NotificationCenterButton />
           </div>
         </div>
