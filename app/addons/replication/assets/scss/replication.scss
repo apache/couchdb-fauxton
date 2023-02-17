@@ -238,11 +238,11 @@ td.replication__row-status {
 }
 
 .replication__row-status--completed {
-  color: #5cb85c;
+  color: $cf-success;
 }
 
 .replication__row-status--error {
-  color: #d9534f;
+  color: $cf-error;
 }
 
 .replication__table-header-icon {

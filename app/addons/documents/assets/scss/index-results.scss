@@ -184,11 +184,11 @@ a.document-result-screen__toolbar-create-btn:visited {
     padding-left: 0px;
   }
   .tableview-conflict {
-    color: $cf-red;
-  }
-  .icon-code-fork {
-    padding-right: 2px;
-    color: $cf-red;
+    color: $cf-brand-highlight;
+    .fonticon {
+      padding-right: 4px;
+      vertical-align: middle;
+    }
   }
   .tableview-el-last {
     width: 75px;

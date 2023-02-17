@@ -76,7 +76,7 @@ class RowStatus extends React.Component {
       <span>
         <a
           data-bypass="true"
-          className="replication__row-btn replication__row-btn--warning icon-exclamation-sign"
+          className="replication__row-btn replication__row-btn--warning fonticon-attention-circled"
           onClick={this.showModal.bind(this)}
           title="View error message">
         </a>

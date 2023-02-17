@@ -132,7 +132,7 @@ class PermissionsSection extends React.Component {
               <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
               <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add User</button>
             </form>
-            <ul className="unstyled permission-items span10">
+            <ul className="list-unstyled permission-items span10">
               {this.getNames()}
             </ul>
           </div>
@@ -145,7 +145,7 @@ class PermissionsSection extends React.Component {
               <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
               <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add Role</button>
             </form>
-            <ul className="unstyled permission-items span10">
+            <ul className="list-unstyled permission-items span10">
               {this.getRoles()}
             </ul>
           </div>

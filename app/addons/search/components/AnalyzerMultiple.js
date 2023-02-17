@@ -84,7 +84,7 @@ export default class AnalyzerMultiple extends React.Component {
           defaultSelected={this.props.defaultAnalyzer}
           onChange={this.props.selectDefaultMultipleAnalyzer}
           isValidating={this.validate} />
-        <ul id="analyzer-fields" className="unstyled">{this.getRows()}</ul>
+        <ul id="analyzer-fields" className="list-unstyled">{this.getRows()}</ul>
         <button className="addfield btn btn-small btn-primary" onClick={this.addRow}>
           Add Field
         </button>

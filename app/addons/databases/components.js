@@ -255,7 +255,7 @@ const GraveyardInfo = ({ docCount, docDelCount }) => {
 
   return (
     <OverlayTrigger placement="top" overlay={tooltip}>
-      <i className="js-db-graveyard icon icon-exclamation-sign" title={graveyardTitle}></i>
+      <i className="js-db-graveyard fonticon fonticon-attention-circled" title={graveyardTitle}></i>
     </OverlayTrigger>
   );
 };

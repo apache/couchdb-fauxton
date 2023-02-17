@@ -113,9 +113,10 @@ export default class PartitionKeySelector extends React.Component {
   }
 
   render() {
-    if (!this.props.selectorVisible) {
-      return null;
-    }
+    // TODO: force it to appear so we remember to review the styling
+    // if (!this.props.selectorVisible) {
+    //   return null;
+    // }
     const global = this.props.globalMode && !this.state.editMode;
     return (
       <div className="partition-selector" >

@@ -78,7 +78,7 @@ export default class TableRow extends React.Component {
     let attachmentIndicator = null;
     let textAttachments = null;
 
-    const conflictCount = Object.keys(el._conflicts || {}).length;
+    let conflictCount = Object.keys(el._conflicts || {}).length;
     let conflictIndicator = null;
     let textConflicts = null;
 
@@ -92,16 +92,16 @@ export default class TableRow extends React.Component {
       );
     }
 
-    if (conflictCount) {
-      textConflicts = conflictCount === 1 ? conflictCount + ' Conflict' : conflictCount + ' Conflicts';
-      conflictIndicator = (
-        <div className="tableview-conflict" data-conflicts-indicator style={{display: 'inline'}} title={textConflicts}>
-          <i
-            style={{fontSize: '17px'}}
-            className="icon icon-code-fork"></i>{conflictCount}
-        </div>
-      );
-    }
+    //TODO: revert - forcing it to show up so we remember to fix the icon
+    // if (conflictCount) {
+    textConflicts = conflictCount === 1 ? conflictCount + ' Conflict' : conflictCount + ' Conflicts';
+    conflictIndicator = (
+      <div className="tableview-conflict" data-conflicts-indicator style={{display: 'inline'}} title={textConflicts}>
+        <i
+          className="fonticon fonticon-attention-circled"></i>{conflictCount}
+      </div>
+    );
+    // }
 
     return (
       <td className="tableview-el-last" onClick={this.onClick.bind(this)}>

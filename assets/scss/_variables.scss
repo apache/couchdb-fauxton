@@ -10,38 +10,22 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-// TMP - to force dropdown menus to show until we can fix <DropdownMenu>
-// .add-dropdown {
-// 	.dropdown-menu {
-// 		display: block;
-// 	}
-// }
-
+// Import bootstrap functions here so we can use the color utilities below
+@import '~bootstrap/scss/functions';
 
 // ==================================================================================
-// Note: Fauxton colors/styling are defined first and then they can be used to 
+// Note: Fauxton colors/styling must be defined first so they can be used to 
 // override Bootstrap variables at the end.
 // ==================================================================================
 
 
-// other colors - just listing for now but should be revised to reduce colors that are too similar
-// the idea is that all color values are listed here. other scss files should be using a color variable instead of literal values. 
-
-$cf-white: #ffffff;
-$cf-black: #000000;
-
-$cf-red: #ff0000;
-$cf-dark-red: #9d261d;
-$cf-another-red: #b11925;
-$cf-red-ish: #d9534f;
-$cf-bright-red: #e23632;
-$cf-light-red: #fbcece;
-$cf-bright-red2: #ff6532;
-
-$cf-bright-green: #5cb85c;
-$cf-green2: #29be9d;
-
-$cf-light-blue: #72cdf4;
+// TMP - trying out different palletes
+// $theme1: #9d261d, #9E8B2C, #0D9E49, #19159E;
+// $theme2: #af2d24, #B09B37, #13B054, #211CB0;  // brand-highlight
+// $theme3: #d9534f, #D9C264, #38D970, #4347D9;
+// $theme4: #E73D34, #E8CC4D, #1EE86B, #2A2AE8;  // brand-highlight-hover
+// $theme6: #ff0c35, #FFC926, #26FF4F, #002DFF;
+// $theme7: #ff6532, #FFF74D, #19FFCA, #7826FF;
 
 
 // TODO: not sure makes sense to have a common color for icons - maybe they should just use whatever the font color is around them.
@@ -68,6 +52,11 @@ $cf-border-color02: #999999 !default;
 $cf-primary: #2bb673 !default;
 $cf-secondary: #0082bf !default;
 $cf-danger: #ff0c35 !default;
+$cf-success: #448c11 !default;
+$cf-info: #329898 !default;
+$cf-error: #d9534f !default;
+$cf-white: #ffffff;
+$cf-black: #000000;
 
 // typography
 $cf-text01: #333333 !default; // default text color for pages
@@ -90,20 +79,21 @@ $cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2) !default;
 // ===================================
 
 // buttons
+$cf-disable-mix-amount: 15%;
 $cf-btn-primary-bg: $cf-primary !default;
 $cf-btn-primary-color: $cf-white !default;
-$cf-btn-primary-bg-disabled: #8ec9ad !default;
-$cf-btn-primary-color-disabled: #f2f2f2 !default;
+$cf-btn-primary-bg-disabled: tint-color($cf-btn-primary-bg, $cf-disable-mix-amount) !default;
+$cf-btn-primary-color-disabled: tint-color($cf-btn-primary-color, $cf-disable-mix-amount) !default;
 
 $cf-btn-secondary-bg: $cf-secondary !default;
 $cf-btn-secondary-color: $cf-white !default;
-$cf-btn-secondary-bg-disabled: #86bad2 !default;
-$cf-btn-secondary-color-disabled: #f2f2f2 !default;
+$cf-btn-secondary-bg-disabled: tint-color($cf-btn-secondary-bg, $cf-disable-mix-amount) !default;
+$cf-btn-secondary-color-disabled: tint-color($cf-btn-secondary-color, $cf-disable-mix-amount) !default;
 
 $cf-btn-danger-bg: $cf-danger !default;
 $cf-btn-danger-color: $cf-white !default;
-$cf-btn-danger-bg-disabled: #ff9797 !default;
-$cf-btn-danger-color-disabled: #f2f2f2 !default;
+$cf-btn-danger-bg-disabled: tint-color($cf-btn-danger-bg, $cf-disable-mix-amount) !default;
+$cf-btn-danger-color-disabled: tint-color($cf-btn-danger-color, $cf-disable-mix-amount) !default;
 
 // code editor or viewer
 $cf-code-bg: #4d4d4d !default;
@@ -149,9 +139,9 @@ $cf-navbar-item-bg: $cf-background03 !default;
 
 // notifications
 $cf-alert-bg: $cf-white !default;
-$cf-alert-info-color: #329898 !default;
-$cf-alert-success-color: #448c11 !default;
-$cf-alert-error-color: #ff0c35 !default;
+$cf-alert-info-color: $cf-info !default;
+$cf-alert-success-color: $cf-success !default;
+$cf-alert-error-color: $cf-error !default;
 
 // pagination
 $cf-pagination-bg: $cf-white !default;
@@ -184,6 +174,7 @@ $cf-topheader-height: 64px !default;
 
 // tray
 $cf-tray-body-bg: $cf-background02 !default;
+$cf-tray-body-color: $cf-text02 !default;
 
 // logo paths can be set via settings.json
 $largeLogoPath: "../../../../../assets/img/CouchDB-negative-logo.png" !default;

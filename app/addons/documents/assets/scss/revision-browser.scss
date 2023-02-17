@@ -21,12 +21,6 @@ div#dashboard-content div.revision-wrapper {
   .left-area {
     text-align: center;
   }
-  .ours-rev {
-    font-size: 16px;
-    color: $cf-white;
-    text-align: center;
-    margin-top: 15px;
-  }
 
   .revision-browser-no-conflict {
     text-align: center;
@@ -53,10 +47,6 @@ div#dashboard-content div.revision-wrapper {
 
   .revision-browser-controls .Select .Select-menu-outer {
     border-radius: inherit;
-  }
-
-  .revision-browser-controls .Select div.Select-placeholder {
-    color: #9d261d;
   }
 
   .revision-view-controls {

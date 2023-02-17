@@ -16,19 +16,19 @@ button.clipboard-copy-element {
 }
 
 #perma-warning {
-  background-color: white;
+  background-color: $cf-white;
   height: 3.5rem;
   border-bottom-style: solid;
   border-width: 2px;
   border-top-style: solid;
-  border-color: #b11925;
+  border-color: $cf-brand-highlight;
   overflow-y: auto;
 }
 
 .perma-warning__content {
   margin: 0rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
-  color: #b11925;
+  color: $cf-brand-highlight;
   top: 50%;
   transform: translateY(-50%);
   position: relative;
