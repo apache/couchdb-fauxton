@@ -346,7 +346,7 @@ input.errorHighlight {
   button.btn {
     padding: 10px 15px;
     background-color: $cf-white;
-    color: #888888;
+    color: $cf-text05;
     &.active:first-child {
       border-right-radius: 10px;
     }

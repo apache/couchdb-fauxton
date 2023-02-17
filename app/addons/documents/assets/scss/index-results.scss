@@ -88,7 +88,7 @@ a.document-result-screen__toolbar-create-btn:visited {
   margin-top: -125px;
   width: 100%;
   h3 {
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid $cf-border-color01;
     height: 45px;
     font-size: 20px;
     font-weight: normal;
@@ -184,11 +184,11 @@ a.document-result-screen__toolbar-create-btn:visited {
     padding-left: 0px;
   }
   .tableview-conflict {
-    color: #ff0000;
+    color: $cf-red;
   }
   .icon-code-fork {
     padding-right: 2px;
-    color: #ff0000;
+    color: $cf-red;
   }
   .tableview-el-last {
     width: 75px;

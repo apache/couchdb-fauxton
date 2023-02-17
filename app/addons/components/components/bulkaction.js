@@ -63,7 +63,7 @@ export class BulkActionComponent extends React.Component {
     return (
       <ul className="bulk-action-component-popover-actions">
         <li onClick={this.selectAll} >
-          <i className="icon fonticon-cancel"></i> {this.props.dropdownContentText}
+          <i className="fonticon fonticon-cancel"></i> {this.props.dropdownContentText}
         </li>
       </ul>
     );

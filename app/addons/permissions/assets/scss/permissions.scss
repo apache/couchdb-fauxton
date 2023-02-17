@@ -11,15 +11,15 @@
 // the License.
 @import "../../../../../assets/scss/variables";
 
-.permission-items.unstyled {
+.permission-items.list-unstyled {
   margin-left: 0px;
   li {
     padding: 5px;
-    border-bottom: 1px solid $cf-border-lighter-gray;
-    border-right: 1px solid $cf-border-lighter-gray;
-    border-left: 3px solid $cf-border-lighter-gray;
+    border-bottom: 1px solid $cf-border-color01;
+    border-right: 1px solid $cf-border-color01;
+    border-left: 3px solid $cf-border-color01;
     &:first-child {
-      border-top: 1px solid $cf-border-lighter-gray;
+      border-top: 1px solid $cf-border-color01;
     }
     &:nth-child(odd) {
       border-left: 3px solid $cf-red;

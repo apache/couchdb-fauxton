@@ -28,15 +28,12 @@
     list-style-type: none;
 
     &.disabled {
-      color: #cccccc;
       cursor: default;
-      &:hover {
-        background-color: inherit;
-      }
+      color: $cf-text02-muted;
     }
 
     &:hover {
-      background-color: #fbcece; // light red
+      background-color: $cf-brand-hightlight-hover;
     }
     &:last-child {
       -webkit-border-bottom-right-radius: 5px;

@@ -28,14 +28,9 @@
 // the idea is that all color values are listed here. other scss files should be using a color variable instead of literal values. 
 
 $cf-white: #ffffff;
-$cf-border-lighter-gray: #e3e3e3;
-$cf-red: #ff0000;
 $cf-black: #000000;
 
-
-$cf-gray: #cccccc;
-$cf-gray: #dddddd;
-
+$cf-red: #ff0000;
 $cf-dark-red: #9d261d;
 $cf-another-red: #b11925;
 $cf-red-ish: #d9534f;
@@ -49,12 +44,12 @@ $cf-green2: #29be9d;
 $cf-light-blue: #72cdf4;
 
 
+// TODO: not sure makes sense to have a common color for icons - maybe they should just use whatever the font color is around them.
 $cf-text05: #666666 !default; // font-icon, top header icons/text
-// not sure makes sense to have a common color for icons - maybe they should just use whatever the font color is around them.
 $cf-text-fonticon01: $cf-text05;
-// Styling of cancel buttons should be revised when styling form elements 
+// TODO: Styling of cancel buttons should be revised when styling form elements 
 $cf-btn-cancel-color: $cf-text05;
-// TODO: revise. used as button bg for query options panel 
+// TODO: review - does it need its own bg color?
 $cf-query-options-btn-bg: #727a82;
 
 
@@ -97,15 +92,16 @@ $cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2) !default;
 // buttons
 $cf-btn-primary-bg: $cf-primary !default;
 $cf-btn-primary-color: $cf-white !default;
-$cf-btn-secondary-bg: $cf-secondary !default;
-$cf-btn-secondary-color: $cf-white !default;
-$cf-btn-danger-bg: $cf-danger !default;
-$cf-btn-danger-color: $cf-white !default;
-
 $cf-btn-primary-bg-disabled: #8ec9ad !default;
 $cf-btn-primary-color-disabled: #f2f2f2 !default;
+
+$cf-btn-secondary-bg: $cf-secondary !default;
+$cf-btn-secondary-color: $cf-white !default;
 $cf-btn-secondary-bg-disabled: #86bad2 !default;
 $cf-btn-secondary-color-disabled: #f2f2f2 !default;
+
+$cf-btn-danger-bg: $cf-danger !default;
+$cf-btn-danger-color: $cf-white !default;
 $cf-btn-danger-bg-disabled: #ff9797 !default;
 $cf-btn-danger-color-disabled: #f2f2f2 !default;
 

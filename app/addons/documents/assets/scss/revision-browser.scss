@@ -40,7 +40,7 @@ div#dashboard-content div.revision-wrapper {
 
   .revision-browser-controls .Select .Select-control {
     border-radius: inherit;
-    border-color: #cccccc;
+    border-color: $cf-border-color01;
   }
 
   .revision-browser-controls
@@ -48,7 +48,7 @@ div#dashboard-content div.revision-wrapper {
     .is-focused:not(.is-open)
     > .Select-control {
     box-shadow: transparent;
-    border-color: #cccccc;
+    border-color: $cf-border-color01;
   }
 
   .revision-browser-controls .Select .Select-menu-outer {
