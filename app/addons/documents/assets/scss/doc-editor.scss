@@ -163,7 +163,7 @@
 
   .ace_marker-layer .ace_bracket {
     margin: 0;
-    border: 1px solid #999999;
+    border: 1px solid $cf-border-color02;
   }
 
   // hide the labels on the buttons when the screen is shrunk too small,
@@ -221,6 +221,6 @@ div.string-editor-modal {
 }
 
 .attachment-delimiter {
-  color: #999999;
+  color: $cf-border-color02;
   margin: 0 4px;
 }
