@@ -61,7 +61,7 @@ $cf-black: #000000;
 // typography
 $cf-text01: #333333 !default; // default text color for pages
 $cf-text02: #ffffff !default; // text color for overlay panels, trays
-$cf-text03: #b3b4b4 !default; // text color for items in dropdowns, main nav bar
+$cf-text03: #d9d9d9 !default; // text color for items in dropdowns, main nav bar
 $cf-text04: #767f89 !default; // sidebar subitems
 $cf-text01-muted: #999999 !default;
 $cf-text02-muted: #bbbbbb !default;
@@ -102,9 +102,9 @@ $cf-code-cursor-color: $cf-white !default;
 $cf-code-active-bg: $cf-black !default;
 $cf-code-selection-bg: rgba(29, 151, 215, 0.5) !default;
 $cf-code-token-variable-color: $cf-white;
-$cf-code-token-constant-color: #72cdf4;
-$cf-code-token-boolean-color: #ff6532;
-$cf-code-token-string-color: #29be9d;
+$cf-code-token-constant-color: #88D5F6;
+$cf-code-token-boolean-color: #F8C072; 
+$cf-code-token-string-color: #18E2B6;
 $cf-code-token-muted: $cf-text02-muted;
 
 
