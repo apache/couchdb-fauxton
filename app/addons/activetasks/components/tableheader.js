@@ -37,11 +37,9 @@ export class TableHeader extends React.Component {
 
   render() {
     return (
-      <td className={`header-field ${this.props.headerName} tableheader`} onClick={this.onTableHeaderClick}>
-        <label className="header-field label-text noselect">
-          {this.props.displayName} {this.arrow()}
-        </label>
-      </td>
+      <th className={`header-${this.props.headerName}`} onClick={this.onTableHeaderClick}>
+        {this.props.displayName} {this.arrow()}
+      </th>
     );
   }
 }

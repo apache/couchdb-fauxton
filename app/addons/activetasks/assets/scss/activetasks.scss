@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-@import "../../../../../assets/scss/variables";
-@import "../../../../../assets/scss/mixins";
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/mixins';
 
 #active-tasks-page {
   overflow: auto;
@@ -21,40 +21,38 @@
     height: 100%;
   }
 
-  .task-tabs li,
-  .active-tasks td.tableheader {
-    cursor: pointer;
-    padding-bottom: 15px;
+  .table-active-tasks {
+    th {
+      cursor: pointer;
 
-    &.type {
-      width: 10%;
-    }
+      &.header-type {
+        width: 10%;
+      }
 
-    &.database {
-      width: 30%;
-    }
+      &.header-database {
+        width: 30%;
+      }
 
-    &.started-on {
-      width: 13%;
-    }
+      &.header-tarted-on {
+        width: 13%;
+      }
 
-    &.updated-on {
-      width: 13%;
-    }
+      &.header-updated-on {
+        width: 13%;
+      }
 
-    &.pid {
-      width: 10%;
-    }
+      &.header-pid {
+        width: 10%;
+      }
 
-    &.progress {
-      width: 23%;
-    }
-  }
+      &.header-progress {
+        width: 23%;
+      }
 
-  #active-tasks-table {
-    min-width: 725px;
-    td.header-field {
-      padding: 0px;
+      .fonticon-up-dir,
+      .fonticon-down-dir {
+        color: $cf-brand-highlight;
+      }
     }
 
     p.multiline-active-tasks-message {
@@ -75,69 +73,14 @@
     }
   }
 
-  .task-search-database {
-    margin: 20px;
-  }
-
-  .active-tasks.dashboard-upper-menu {
-    left: 220px;
-
-    .closeMenu & {
-      left: 64px;
-    }
-  }
-
   .component-tab-element-wrapper {
     #active-tasks-search-box {
       display: inline;
       font-size: 14px;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       height: 51px;
       width: 200px;
       margin: 9px 0 0 0;
     }
-  }
-
-  .dashboard-lower-menu {
-    padding-top: 90px;
-    padding-left: 20px;
-  }
-
-  .header-field {
-    background-color: $cf-border-color01;
-
-    &.radio {
-      display: none;
-    }
-
-    &.label-text {
-      display: block;
-      font-weight: bold;
-      padding: 10px;
-      margin: 0px;
-      height: 50px;
-      @include noselect();
-    }
-
-    .table td {
-      padding: 0px;
-      margin: 0px;
-    }
-
-    .icon-caret-up,
-    .icon-caret-down {
-      color: $cf-brand-highlight;
-    }
-  }
-}
-
-.active-tasks__polling-wrapper {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  height: 100%;
-
-  &--ie1X {
-    align-items: stretch;
   }
 }
