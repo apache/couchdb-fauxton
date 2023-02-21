@@ -69,6 +69,7 @@ $cf-sans-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
 // padding and margins
 $cf-main-content-padding: 15px !default;
+$cf-border-radius: .375rem !default;
 
 // shadows
 $cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2) !default;
@@ -103,10 +104,9 @@ $cf-code-active-bg: $cf-black !default;
 $cf-code-selection-bg: rgba(29, 151, 215, 0.5) !default;
 $cf-code-token-variable-color: $cf-white;
 $cf-code-token-constant-color: #88D5F6;
-$cf-code-token-boolean-color: #F8C072; 
+$cf-code-token-boolean-color: #F8C072;
 $cf-code-token-string-color: #18E2B6;
 $cf-code-token-muted: $cf-text02-muted;
-
 
 // documents list (JSON view)
 $cf-jsondocs-header-bg: $cf-code-gutter-bg !default;
@@ -196,20 +196,27 @@ $link-decoration: none;
 $primary: $cf-primary;
 $secondary: $cf-secondary;
 $danger: $cf-danger;
+
 // dropdowns
 $dropdown-bg: $cf-dropdown-bg;
 $dropdown-color: $cf-dropdown-color;
+
 // forms
 $input-bg: $cf-input-bg;
+
 // modals
 $modal-backdrop-opacity: 0.5;
+
 // pagination
 $pagination-bg: $cf-pagination-bg;
 $pagination-border-color: $cf-pagination-border;
+
 // popover
 $popover-bg: $cf-background02;
 $popover-body-color: $cf-text02;
+
 // tables
 $table-striped-bg: $cf-table-stripped-bg;
+
 // other
-$enable-rounded: true !default; // TODO: this is a change from the Fauxton's previously setting 'borderRadius: 0'. I think it should be using the round corners but the rest of the UI will have to follow suit.
+$enable-rounded: true !default; // TODO: this is a change from the Fauxton's previous setting 'borderRadius: 0'. I think it should be using the round corners (it's the current trend) but the rest of the UI will have to follow suit.

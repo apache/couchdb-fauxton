@@ -28,7 +28,7 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 const databasesStore = Stores.databasesStore;
 const deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
-const { Accordion, AccordionItem, DeleteDatabaseModal, ToggleHeaderButton, TrayContents } = Components;
+const { Accordion, AccordionItem, DeleteDatabaseModal, ToggleHeaderButton, TrayContents, ToolbarButton } = Components;
 
 
 class DatabasesController extends React.Component {
@@ -230,19 +230,9 @@ class DatabaseRow extends React.Component {
         {this.getExtensionColumns(item)}
 
         <td className="database-actions">
-          <a className="db-actions btn fonticon-replicate set-replication-start"
-            aria-label={`Replicate ${id}`}
-            title={"Replicate " + name}
-            href={"#/replication/_create/" + encodedId} />
-          <a
-            aria-label={`Set permissions for ${id}`}
-            className="db-actions btn fonticon-lock set-permissions"
-            title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />
-          <a
-            aria-label={`Delete ${id}`}
-            className="db-actions btn fonticon-trash"
-            onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)}
-            title={'Delete ' + id} data-bypass="true" />
+          <ToolbarButton icon="fonticon-replicate" aria-label={`Replicate ${id}`} onClick={() => FauxtonAPI.navigate("#/replication/_create/" + encodedId)} />
+          <ToolbarButton icon="fonticon-lock" aria-label={`Set permission for ${id}`} onClick={() => FauxtonAPI.navigate("#/database/" + encodedId + "/permissions")} />
+          <ToolbarButton icon="fonticon-trash" aria-label={`Delete ${id}`} onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)} />
         </td>
       </tr>
     );

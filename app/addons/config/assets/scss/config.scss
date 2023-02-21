@@ -15,6 +15,7 @@
 
 .config-item {
   height: 65px;
+  vertical-align: middle;
 
   .config-value-form {
     button {
@@ -36,9 +37,6 @@
     text-align: center;
   }
 
-  button {
-    width: 7%;
-  }
   transition: background-color 100ms;
 }
 

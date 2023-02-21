@@ -32,6 +32,7 @@ import {Polling, RefreshBtn} from './components/polling';
 import {Copy} from './components/copy';
 import {TabWindowWrapper} from './components/tabwindowwrapper';
 import {ThrottledReactSelectAsync} from './components/throttledreacselect';
+import {ToolbarButton} from './components/toolbarbutton';
 
 export default {
   Accordion,
@@ -61,5 +62,6 @@ export default {
   RefreshBtn,
   Copy,
   TabWindowWrapper,
-  ThrottledReactSelectAsync
+  ThrottledReactSelectAsync,
+  ToolbarButton
 };
