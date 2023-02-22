@@ -12,7 +12,7 @@
 
 exports.command = LoginToGui;
 
-function LoginToGui (user, pw) {
+function LoginToGui(user, pw) {
 
   const client = this;
   const waitTime = client.globals.maxWaitTime;
@@ -33,7 +33,7 @@ function LoginToGui (user, pw) {
     .waitForElementVisible('#password', waitTime, false)
     .setValue('.couch-login-wrapper #password', [password])
 
-    .clickWhenVisible('#submit')
+    .clickWhenVisible('#login-btn')
 
     .closeNotification()
     .waitForElementPresent('[data-name="jump-to-db"]', waitTime, false)
