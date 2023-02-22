@@ -95,7 +95,7 @@ class Pagination extends React.Component {
   createItemsForPage = (visiblePages) => {
     return _.range(visiblePages.from, visiblePages.to).map((i) => {
       return (
-        <li key={i} className={(this.props.page === i ? 'active' : null)}>
+        <li key={i} className={'page-item ' + (this.props.page === i ? 'active' : '')}>
           {this.getLink(i, i)}
         </li>
       );
@@ -111,14 +111,15 @@ class Pagination extends React.Component {
     };
   }
 
-  getLink = (i, label) => {
+  getLink = (i, label, fontIcon) => {
+    const linkClass = fontIcon ? `page-link ${fontIcon}` : 'page-link';
     if (this.props.onClick) {
       return (
-        <a onClick={this.getOnPageClick(i)} dangerouslySetInnerHTML={{__html: label}}></a>
+        <a className={linkClass} onClick={this.getOnPageClick(i)}>{label}</a>
       );
     }
     return (
-      <a href={this.props.urlPrefix + i + this.props.urlSuffix} dangerouslySetInnerHTML={{__html: label}}></a>
+      <a className={linkClass} href={this.props.urlPrefix + i + this.props.urlSuffix}>{label}</a>
     );
   };
 
@@ -135,12 +136,12 @@ class Pagination extends React.Component {
 
     return (
       <ul className="pagination">
-        <li className={(this.props.page === 1 ? "disabled" : null)}>
-          {this.getLink(prevPage, '&laquo;')}
+        <li className={'page-item ' + (this.props.page === 1 ? "disabled" : '')}>
+          {this.getLink(prevPage, '', 'fonticon-left-open')}
         </li>
         {rangeItems}
-        <li className={(this.props.page < totalPages ? null : "disabled")}>
-          {this.getLink(nextPage, '&raquo;')}
+        <li className={'page-item ' + (this.props.page < totalPages ? '' : "disabled")}>
+          {this.getLink(nextPage, '', 'fonticon-right-open')}
         </li>
       </ul>
     );

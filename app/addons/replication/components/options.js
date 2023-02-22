@@ -56,7 +56,7 @@ const ReplicationDoc = ({value, onChange}) =>
         onClick={() => onChange('')} />
       <input
         type="text"
-        className="replication__doc-name-input"
+        className="form-control replication__doc-name-input"
         placeholder="Custom ID (optional)"
         value={value}
         onChange={(e) => onChange(e.target.value)}

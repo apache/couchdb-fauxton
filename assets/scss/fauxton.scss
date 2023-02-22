@@ -42,7 +42,6 @@
 @import 'formstyles';
 @import 'pagination';
 @import 'trays';
-@import 'mixins';
 @import 'animations';
 @import 'react-animations';
 @import 'notification-center';
@@ -489,58 +488,6 @@ table.table.column-bordered {
   border-top-color: $cf-brand-hightlight-hover;
 }
 
-//----footer--///
-
-footer.pagination-footer {
-  background-color: $cf-pagination-bg;
-  border-top: 1px solid $cf-pagination-border;
-  height: 50px;
-  overflow: hidden;
-
-  font-size: 14px;
-
-  .pagination {
-    box-shadow: none;
-    margin: 0;
-    height: 50px;
-    border-left: 1px solid $cf-pagination-border;
-    li {
-      display: inline-block;
-      a {
-        padding: 15px 10px 15px 15px;
-        border: none;
-      }
-    }
-  }
-
-  .page-controls {
-    float: left;
-  }
-
-  .current-databases,
-  .current-docs {
-    float: right;
-    margin: 17px 20px 17px 20px;
-  }
-
-  .documents-pagination {
-    float: right;
-  }
-  #per-page {
-    float: right;
-    top: 2px;
-    #select-per-page {
-      margin-top: 10px;
-    }
-  }
-}
-
-#right-content {
-  footer.pagination-footer {
-    bottom: $cf-navbar-width-collapsed;
-  }
-}
-
 #primary-nav-right-shadow {
   position: absolute;
   top: 0px;
@@ -754,7 +701,6 @@ body .control-toggle-include-docs span {
 }
 
 .noscript-warning {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 1px 30px 10px 30px;
   color: $cf-white;
   background: $cf-brand-highlight;

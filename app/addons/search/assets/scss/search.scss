@@ -119,7 +119,7 @@
 
 @mixin search-index-code-section() {
   font-size: 12px;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-family: monospace;
   background-color: $cf-background01;
   padding: 5px;
   border-radius: 3px;

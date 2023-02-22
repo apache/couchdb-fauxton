@@ -55,8 +55,8 @@ $cf-danger: #ff0c35 !default;
 $cf-success: #448c11 !default;
 $cf-info: #329898 !default;
 $cf-error: #d9534f !default;
-$cf-white: #ffffff;
-$cf-black: #000000;
+$cf-white: #ffffff !default;
+$cf-black: #000000 !default;
 
 // typography
 $cf-text01: #333333 !default; // default text color for pages
@@ -146,6 +146,8 @@ $cf-alert-error-color: $cf-error !default;
 // pagination
 $cf-pagination-bg: $cf-white !default;
 $cf-pagination-border: $cf-border-color01 !default;
+$cf-pagination-active-bg: $cf-brand-highlight;
+$cf-pagination-active-color: $cf-text02;
 
 // sidebar
 $cf-sidebar-width: 330px !default;
@@ -191,7 +193,7 @@ $body-color: $cf-text01;
 $text-muted: $cf-text01-muted;
 $font-family-base: $cf-sans-font-family;
 $link-color: $cf-brand-highlight;
-$link-hover-color: $cf-brand-highlight;
+$link-hover-color: $cf-brand-hightlight-hover;
 $link-decoration: none;
 $primary: $cf-primary;
 $secondary: $cf-secondary;
@@ -202,6 +204,8 @@ $dropdown-bg: $cf-dropdown-bg;
 $dropdown-color: $cf-dropdown-color;
 
 // forms
+$input-btn-focus-color: rgba($cf-brand-highlight, .25);
+$input-focus-border-color: tint-color($cf-brand-highlight, 50%);
 $input-bg: $cf-input-bg;
 
 // modals
@@ -210,6 +214,10 @@ $modal-backdrop-opacity: 0.5;
 // pagination
 $pagination-bg: $cf-pagination-bg;
 $pagination-border-color: $cf-pagination-border;
+// disabling border radius because paginatin buttons should always be square to match the footer.
+$pagination-border-radius: 0;
+$pagination-active-bg: $cf-pagination-active-bg;
+$pagination-active-color: $cf-pagination-active-color;
 
 // popover
 $popover-bg: $cf-background02;
