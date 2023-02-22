@@ -143,7 +143,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      expect(el.find('input.config-value-input').length).toBe(1);
+      expect(el.find('input.form-control').length).toBe(1);
       expect(el.find('button.btn-config-cancel').length).toBe(1);
       expect(el.find('button.btn-config-save').length).toBe(1);
     });
@@ -155,7 +155,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      expect(el.find('input.config-value-input').prop('disabled')).toBe(true);
+      expect(el.find('input.form-control').prop('disabled')).toBe(true);
     });
 
     it('saves changed value of input when save clicked', () => {
@@ -167,7 +167,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      el.find('input.config-value-input').simulate('change', change);
+      el.find('input.form-control').simulate('change', change);
       el.find('button.btn-config-save').simulate('click');
       expect(spy.calledWith('new_value')).toBeTruthy();
     });
