@@ -12,7 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { Button } from 'react-bootstrap';
 import FauxtonAPI from '../../../../core/api';
 import FauxtonComponents from '../../../fauxton/components';
 import GeneralComponents from '../../../components/react-components';
@@ -200,9 +200,9 @@ export default class DocEditorScreen extends React.Component {
       <div>
         <div id="doc-editor-actions-panel">
           <div className="doc-actions-left">
-            <button disabled={this.props.isSaving} className="save-doc btn btn-primary save" type="button" onClick={this.saveDoc}>
-              <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
-            </button>
+            <Button id="save-doc-btn" disabled={this.props.isSaving} variant="cf-primary" onClick={this.saveDoc}>
+              <i className="fonticon-ok-circled"></i> {saveButtonLabel}
+            </Button>
             <div>
               <a href={this.props.isSaving ? undefined : `#/${endpoint}`}
                 className={cancelBtClass}>Cancel</a>

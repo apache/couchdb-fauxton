@@ -47,22 +47,33 @@
 @import 'react-animations';
 @import 'notification-center';
 
-
 // Defines new button variants
 .btn-cf-primary {
   @include button-variant(
-    $cf-btn-primary-bg, // background
-    $cf-btn-primary-bg, // border
-    $cf-btn-primary-color, // color
-    $cf-brand-hightlight-hover, // hover background
-    $cf-brand-hightlight-hover, // hover border
-    $cf-btn-primary-color, // hover color
-    $cf-btn-primary-bg, // active background
-    $cf-btn-primary-bg, // active border
-    $cf-btn-primary-color, // active color
-    $cf-btn-primary-bg-disabled, // disabled background
-    $cf-btn-primary-bg-disabled, // disabled border
-    $cf-btn-primary-color-disabled // disabled color
+    // background
+    $cf-btn-primary-bg,
+    // border
+    $cf-btn-primary-bg,
+    // color
+    $cf-btn-primary-color,
+    // hover background
+    $cf-brand-hightlight-hover,
+    // hover border
+    $cf-brand-hightlight-hover,
+    // hover color
+    $cf-btn-primary-color,
+    // active background
+    $cf-btn-primary-bg,
+    // active border
+    $cf-btn-primary-bg,
+    // active color
+    $cf-btn-primary-color,
+    // disabled background
+    $cf-btn-primary-bg-disabled,
+    // disabled border
+    $cf-btn-primary-bg-disabled,
+    // disabled color
+    $cf-btn-primary-color-disabled
   );
 }
 
@@ -279,8 +290,10 @@ table.table.column-bordered {
 //   font-size: 16px;
 // }
 
-.notification-icon {
-  padding-right: 8px;
+// Icons in buttons
+.btn > i[class*='fonticon-'] {
+  margin-right: 0.4rem;
+  vertical-align: middle;
 }
 
 #dashboard-upper-content {
@@ -310,13 +323,6 @@ table.table.column-bordered {
 
 /*ONE PANEL TEMPLATE ONLY STYLES  AKA _all_dbs */
 
-.result-tools {
-  border-bottom: 1px solid $cf-border-color02;
-  padding: 10px 0;
-  float: left;
-  width: 100%;
-  margin-bottom: 10px;
-}
 
 #db-views-tabs-nav {
   position: fixed;

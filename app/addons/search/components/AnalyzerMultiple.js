@@ -10,9 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from '../../../core/api';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
+import FauxtonAPI from '../../../core/api';
 import AnalyzerRow from './AnalyzerRow';
 import AnalyzerDropdown from './AnalyzerDropdown';
 
@@ -85,9 +86,9 @@ export default class AnalyzerMultiple extends React.Component {
           onChange={this.props.selectDefaultMultipleAnalyzer}
           isValidating={this.validate} />
         <ul id="analyzer-fields" className="list-unstyled">{this.getRows()}</ul>
-        <button className="addfield btn btn-small btn-primary" onClick={this.addRow}>
+        <Button className="addfield" variant="cf-primary" onClick={this.addRow}>
           Add Field
-        </button>
+        </Button>
       </div>
     );
   }

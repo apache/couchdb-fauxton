@@ -25,7 +25,7 @@ const LoadNewsButton = ({ showNews, isChecked, toggleChange }) => {
       <p>
         If you don’t want to share your IP address, do not click the button.
       </p>
-      <Button onClick={showNews}>Load News</Button>
+      <Button onClick={showNews} variant="cf-primary">Load News</Button>
       <label className="news-checkbox">
         <input type="checkbox" checked={isChecked} onChange={toggleChange} />
         Remember my choice

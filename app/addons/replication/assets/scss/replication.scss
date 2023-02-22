@@ -294,6 +294,8 @@ input.replication__bulk-select-input[type="checkbox"] {
 .replication__row-actions-list {
   margin: 0px;
   text-decoration: none;
+  min-width: 120px;
+  padding-left: 0px;
 }
 
 .replication__row-list {

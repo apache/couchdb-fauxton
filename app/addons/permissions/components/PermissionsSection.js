@@ -11,7 +11,7 @@
 // the License.
 
 import React from 'react';
-
+import { Button } from 'react-bootstrap';
 import FauxtonAPI from '../../../core/api';
 import app from '../../../app';
 import _ from 'lodash';
@@ -130,7 +130,7 @@ class PermissionsSection extends React.Component {
             </header>
             <form onSubmit={this.addNames} className="permission-item-form permissions-add-user form-inline">
               <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
-              <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add User</button>
+              <Button type="submit" variant="cf-primary"><i className="fonticon-plus-circled" />Add User</Button>
             </form>
             <ul className="list-unstyled permission-items span10">
               {this.getNames()}
@@ -143,7 +143,7 @@ class PermissionsSection extends React.Component {
             </header>
             <form onSubmit={this.addRoles} className="permission-item-form permissions-add-role form-inline">
               <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
-              <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add Role</button>
+              <Button type="submit" variant="cf-primary"><i className="fonticon-plus-circled" />Add Role</Button>
             </form>
             <ul className="list-unstyled permission-items span10">
               {this.getRoles()}

@@ -14,6 +14,7 @@ import FauxtonAPI from '../../../core/api';
 import app from '../../../app';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import GeneralComponents from '../../components/react-components';
 import IndexEditorComponents from '../../documents/index-editor/components';
 import Analyzer from './Analyzer';
@@ -153,9 +154,9 @@ export default class SearchIndexEditor extends React.Component {
         <Analyzer ref={node => this.analyzer = node} {...this.props}/>
 
         <div className="control-group">
-          <button id="save-index" className="btn btn-primary save" onClick={this.saveIndex}>
-            <i className="icon fonticon-ok-circled" />{btnLabel}
-          </button>
+          <Button id="save-index" variant="cf-primary" onClick={this.saveIndex}>
+            <i className="fonticon-ok-circled" />{btnLabel}
+          </Button>
           <a href={this.getCancelLink()} className="index-cancel-link">Cancel</a>
         </div>
       </form>

@@ -93,7 +93,7 @@ export default class IndexSection extends React.Component {
                 </ul>
               </Popover>
             }>
-            <span className="index-menu-toggle fonticon fonticon-wrench2"></span>
+            <span className="index-menu-toggle fonticon fonticon-wrench"></span>
           </OverlayTrigger>
         </li>
       );

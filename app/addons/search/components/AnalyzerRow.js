@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import AnalyzerDropdown from './AnalyzerDropdown';
 
 export default class AnalyzerRow extends React.Component {
@@ -72,7 +73,7 @@ export default class AnalyzerRow extends React.Component {
             onChange={this.selectAnalyzer} />
 
           <div className="span4">
-            <button className="btn btn-danger delete-analyzer" onClick={this.deleteRow}>delete</button>
+            <Button className="delete-analyzer" variant="cf-danger" onClick={this.deleteRow}>delete</Button>
           </div>
         </div>
       </li>

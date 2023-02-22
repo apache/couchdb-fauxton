@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 export default class PanelButton extends React.Component {
   static propTypes = {
@@ -30,17 +31,14 @@ export default class PanelButton extends React.Component {
   };
 
   render() {
-    var iconClasses = 'fonticon ' + this.props.iconClass;
     return (
       <div className="panel-section">
-        <button className={`panel-button ${this.props.className}`}
-          title={this.props.title}
+        <Button variant='cf-secondary'
           onClick={this.props.onClick}
           disabled={this.props.disabled} >
-
-          <i className={iconClasses}></i>
+          <i className={this.props.iconClass}></i>
           <span>{this.props.title}</span>
-        </button>
+        </Button>
       </div>
     );
   }

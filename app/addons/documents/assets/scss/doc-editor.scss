@@ -70,7 +70,7 @@
     float: left;
     padding: 9px 0;
     button {
-      margin: 0 10px 0 30px;
+      margin: 0 10px 0 14px;
     }
     div {
       display: inline-block;
@@ -134,9 +134,8 @@
   }
 
   .panel-section {
-    border-left: 1px solid $cf-border-color01;
     text-align: center;
-    padding: 9px 0;
+    padding: 10px 8px 10px 0px;
     display: inline-block;
 
     &.open .dropdown-toggle,

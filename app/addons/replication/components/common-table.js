@@ -10,9 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import PropTypes from 'prop-types';
-
 import React from 'react';
-import {Table, Tooltip, OverlayTrigger} from "react-bootstrap";
+import {Button, Table, Tooltip, OverlayTrigger} from "react-bootstrap";
 import moment from 'moment';
 import {ErrorModal} from './modals';
 import {removeCredentialsFromUrl} from '../api';
@@ -131,7 +130,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
       <li className="replication__row-list" key={1}>
         <a
           href={`#replication/id/${encodeURIComponent(_id)}`}
-          className="replication__row-btn icon-wrench replication__row-btn--no-left-pad"
+          className="replication__row-btn fonticon-wrench replication__row-btn--no-left-pad"
           title={'Edit replication'}
           data-bypass="true"
         >
@@ -246,11 +245,11 @@ Row.propTypes = {
 
 const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) => {
   const trash = someDocsSelected ?
-    <button
+    <Button
       onClick={() => deleteDocs()}
-      className="bulk-select-trash fonticon fonticon-trash"
-      title="Delete all selected">
-    </button> : null;
+      className="bulk-select-trash">
+      <i className="fonticon-trash"/>Delete all selected
+    </Button> : null;
 
   return (
     <div className="replication__bulk-select-wrapper">

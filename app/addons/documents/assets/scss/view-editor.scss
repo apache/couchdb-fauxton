@@ -37,6 +37,16 @@
   .padded-box {
     margin: 15px;
   }
+  .actions-panel {
+    display: flex;
+    align-items: center;
+  }
+  .right-side-actions {
+    flex-grow: 1;
+    .edit-link {
+      float: right;
+    }
+  }
   .db-title {
     color: $cf-brand-highlight;
     line-height: 30px;
@@ -54,11 +64,6 @@
   }
   form {
     padding-bottom: 15px;
-  }
-  a.edit-link {
-    float: right;
-    margin-right: 5px;
-    cursor: pointer;
   }
   .help-link {
     margin-left: 4px;

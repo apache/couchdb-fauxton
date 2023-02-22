@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import ReactSelect from 'react-select';
 import '../../../../../assets/js/plugins/prettify';
 import app from '../../../../app';
@@ -20,7 +21,6 @@ import ReactComponents from '../../../components/react-components';
 
 const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
 const CodeEditorPanel = ReactComponents.CodeEditorPanel;
-const ConfirmButton = ReactComponents.ConfirmButton;
 const LoadLines = ReactComponents.LoadLines;
 const getDocUrl = app.helpers.getDocUrl;
 
@@ -120,9 +120,13 @@ export default class MangoIndexEditor extends Component {
             {this.partitionedCheckobx()}
           </PaddedBorderedBox>
           <div className="padded-box">
-            <div className="control-group">
-              <ConfirmButton text="Create index" id="create-index-btn" showIcon={false} />
-              <a className="edit-link" href={editQueryURL}>edit query</a>
+            <div className="actions-panel">
+              <Button variant="cf-primary" className="btn-space" id="create-index-btn" >
+              Create Index
+              </Button>
+              <div className="right-side-actions">
+                <Button variant="cf-secondary" className="edit-link" href={editQueryURL}>Edit Query</Button>
+              </div>
             </div>
           </div>
         </form>

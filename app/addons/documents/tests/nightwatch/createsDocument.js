@@ -41,7 +41,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
 
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel #save-doc-btn')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')
@@ -86,7 +86,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
 
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel #save-doc-btn')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
 
@@ -135,7 +135,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
 
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel #save-doc-btn')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')

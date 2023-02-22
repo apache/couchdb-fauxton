@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import FauxtonAPI from '../../../core/api';
 import GeneralComponents from '../../components/react-components';
 
@@ -116,8 +117,8 @@ export default class SearchForm extends React.Component {
               placeholder="Enter your search query"
               onChange={this.onType}
               value={this.props.searchQuery} />
-            <button className="btn btn-primary" id="search-index-query-button" type="submit" disabled={this.props.hasActiveQuery}
-              onClick={this.querySearch}>{buttonLabel}</button>
+            <Button variant="cf-primary" id="search-index-query-button" type="submit" disabled={this.props.hasActiveQuery}
+              onClick={this.querySearch}>{buttonLabel}</Button>
           </span>
           <a className="help-link" data-bypass="true" href={FauxtonAPI.constants.DOC_URLS.SEARCH_INDEX_QUERIES} target="_blank" rel="noopener noreferrer">
             <i className="icon-question-sign" />

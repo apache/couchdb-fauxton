@@ -9,10 +9,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import PropTypes from 'prop-types';
 
+import PropTypes from 'prop-types';
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import Components from '../../components/react-components';
 
 const {ConfirmButton} = Components;
@@ -135,12 +135,12 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onClose} className="btn replication__error-cancel">
+        <Button onClick={onClose} variant="cf-primary" className="replication__error-cancel">
           Change Document ID
-        </button>
-        <button onClick={onClick} className="btn replication__error-continue">
-          <i className="icon icon-eraser" /> Overwrite Existing Document
-        </button>
+        </Button>
+        <Button onClick={onClick} variant="cf-primary" className="replication__error-continue">
+          <i className="icon icon-eraser" />Overwrite Existing Document
+        </Button>
       </Modal.Footer>
     </Modal>
   );

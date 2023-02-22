@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import PropTypes from 'prop-types';
-
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 export const ReplicationFilter = ({value, onChange}) => {
   return (
@@ -38,10 +38,10 @@ export const ReplicationHeader = ({filter, onFilterChange}) => {
     <div className="replication__activity_header">
       <div></div>
       <ReplicationFilter value={filter} onChange={onFilterChange} />
-      <a href="#/replication/_create" className="btn save replication__activity_header-btn btn-primary">
-        <i className="icon fonticon-plus-circled"></i>
+      <Button href="#/replication/_create" variant="cf-primary">
+        <i className="fonticon-plus-circled"></i>
         New Replication
-      </a>
+      </Button>
     </div>
   );
 };
