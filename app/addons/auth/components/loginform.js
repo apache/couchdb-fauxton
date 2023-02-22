@@ -128,9 +128,7 @@ class LoginForm extends React.Component {
                 value={this.state.password}
               />
               <br />
-              <button id="submit" className="btn btn-success" type="submit">
-                Log In
-              </button>
+              <Button id="login-btn" variant="cf-primary" type="submit">Log In</Button>
             </form>
           </div>
         </div>
