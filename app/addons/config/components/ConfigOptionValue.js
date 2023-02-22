@@ -66,7 +66,7 @@ export default class ConfigOptionValue extends React.Component {
               onChange={this.onChange.bind(this)}
               defaultValue={this.props.value}
               disabled={this.props.saving}
-              autoFocus type="text" className="config-value-input"
+              autoFocus type="text" className="form-control config-value-input"
             />
             {this.getButtons()}
           </div>
