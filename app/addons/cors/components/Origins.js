@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react";
+import { Form } from 'react-bootstrap';
 
 export default class Origins extends Component {
 
@@ -28,12 +29,20 @@ export default class Origins extends Component {
       <div>
         <p><strong> Origin Domains </strong> </p>
         <p>Databases will accept requests from these domains: </p>
-        <label className="radio">
-          <input type="radio" checked={this.props.isAllOrigins} value="all" onChange={ this.onOriginChange.bind(this) } name="all-domains"/> All domains ( * )
-        </label>
-        <label className="radio">
-          <input type="radio" checked={!this.props.isAllOrigins} value="selected" onChange={ this.onOriginChange.bind(this) } name="selected-domains"/> Restrict to specific domains
-        </label>
+        <Form.Check
+          type="radio"
+          value="all"
+          label="All domains ( * )"
+          checked={this.props.isAllOrigins}
+          onChange={ this.onOriginChange.bind(this) }
+        />
+        <Form.Check
+          type="radio"
+          value="selected"
+          label="Restrict to specific domains"
+          checked={!this.props.isAllOrigins}
+          onChange={ this.onOriginChange.bind(this) }
+        />
       </div>
     );
   }

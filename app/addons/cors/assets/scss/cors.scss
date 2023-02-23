@@ -66,64 +66,14 @@
       margin-top: 18px;
     }
   }
-
-  .input-append {
-    width: 80%;
-  }
-
-  input[type="text"] {
-    width: 100%;
-  }
-
-  .input-append.edit-domain-section {
-    width: 100%;
-    margin-bottom: 0px;
-
-    input {
-      width: calc(100% #{"-"} 82px);
-      /*
-        the 'update' button is 76 px wide,
-        so 82px gives it a little room
-        compatible browsers: http://caniuse.com/#feat=calc
-      */
-    }
-  }
 }
 
 #origin-domain-table {
-  td {
-    padding: 8px 2px;
-  }
-  span {
-    cursor: pointer;
-    color: $cf-brand-highlight;
-    display: inline-block;
-    padding-top: 9px;
-  }
+  margin-top: 1rem;
+  border-top: 1px solid $cf-border-color01;
 
-  tr a {
-    text-decoration: none;
-    color: $cf-text01;
-  }
-
-  tr a:hover {
-    color: $cf-brand-hightlight-hover;
-  }
-
-  .edit-domain-section {
-    .btn {
-      height: 46px;
-    }
-  }
-  .url-display {
-    padding: 10px;
-  }
-
-  .update-domain-btn {
-    position: absolute;
-    right: -2px;
-    top: 0;
-    padding: 9px;
-    border-radius: 0 6px 6px 0;
+  .action-btn-col {
+    width: 30px;
+    vertical-align: middle;
   }
 }
