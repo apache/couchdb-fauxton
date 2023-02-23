@@ -12,18 +12,26 @@
 @import "../../../../../assets/scss/variables";
 
 .permission-items.list-unstyled {
-  margin-left: 0px;
+  margin-top: 10px;
+  margin-left: 0;
+
   li {
     padding: 5px;
     border-bottom: 1px solid $cf-border-color01;
     border-right: 1px solid $cf-border-color01;
     border-left: 3px solid $cf-border-color01;
+
     &:first-child {
       border-top: 1px solid $cf-border-color01;
     }
+
     &:nth-child(odd) {
       border-left: 3px solid $cf-brand-highlight;
     }
+  }
+
+  span {
+    padding-left: 5px;
   }
 }
 

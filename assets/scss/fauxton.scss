@@ -48,8 +48,7 @@
 
 // Defines new button variants
 .btn-cf-primary {
-  @include button-variant(
-    // background
+  @include button-variant( // background
     $cf-btn-primary-bg,
     // border
     $cf-btn-primary-bg,
@@ -72,13 +71,11 @@
     // disabled border
     $cf-btn-primary-bg-disabled,
     // disabled color
-    $cf-btn-primary-color-disabled
-  );
+    $cf-btn-primary-color-disabled );
 }
 
 .btn-cf-secondary {
-  @include button-variant(
-    $cf-btn-secondary-bg,
+  @include button-variant($cf-btn-secondary-bg,
     $cf-btn-secondary-bg,
     $cf-btn-secondary-color,
     $cf-brand-hightlight-hover,
@@ -89,13 +86,11 @@
     $cf-btn-secondary-color,
     $cf-btn-secondary-bg-disabled,
     $cf-btn-secondary-bg-disabled,
-    $cf-btn-secondary-color-disabled
-  );
+    $cf-btn-secondary-color-disabled );
 }
 
 .btn-cf-danger {
-  @include button-variant(
-    $cf-btn-danger-bg,
+  @include button-variant($cf-btn-danger-bg,
     $cf-btn-danger-bg,
     $cf-btn-danger-color,
     $cf-brand-hightlight-hover,
@@ -106,8 +101,7 @@
     $cf-btn-danger-color,
     $cf-btn-danger-bg-disabled,
     $cf-btn-danger-bg-disabled,
-    $cf-btn-danger-color-disabled
-  );
+    $cf-btn-danger-color-disabled );
 }
 
 /**
@@ -164,14 +158,16 @@
 // }
 
 /* bootstrap overrides */
-// .page-header {
-//   border-bottom: 1px solid $cf-border-lighter-gray;
-//   margin-bottom: 10px;
-//   h3 {
-//     text-transform: capitalize;
-//     margin-bottom: 0;
-//   }
-// }
+.page-header {
+  border-bottom: 1px solid $cf-page-header-border;
+  margin-bottom: 10px;
+  margin-top: 15px;
+
+  h3 {
+    text-transform: capitalize;
+    margin-bottom: 0;
+  }
+}
 
 // .nav-tabs > li {
 //   margin-right: 2px;
@@ -245,16 +241,20 @@ table.table.column-bordered {
   th {
     border-left-width: 1px;
   }
+
   th:first-child {
     border-left-width: 0px;
   }
+
   td {
     border-left-width: 1px;
   }
+
   td:first-child {
     border-left-width: 0px;
   }
 }
+
 // table.table {
 //   table-layout: fixed;
 // }
@@ -290,7 +290,7 @@ table.table.column-bordered {
 // }
 
 // Icons in buttons
-.btn > i[class*='fonticon-'] {
+.btn>i[class*='fonticon-'] {
   margin-right: 0.4rem;
   vertical-align: middle;
 }
@@ -337,13 +337,14 @@ table.table.column-bordered {
 
 /** table row selector thing **/
 .select {
-  > a {
+  >a {
     display: block;
     padding: 5px 15px 5px 5px;
     border: 1px solid $cf-border-color02;
     position: relative;
     background-color: $cf-white;
     color: $cf-text01;
+
     &:after {
       content: '';
       width: 0;
@@ -355,6 +356,7 @@ table.table.column-bordered {
       right: 9px;
       top: 12px;
     }
+
     &:before {
       content: '';
       border-left: 1px solid $cf-border-color02;
@@ -372,6 +374,7 @@ table.table.column-bordered {
 // missing: add_config_option
 .header-icon {
   font-size: 20px;
+
   &:before {
     float: left;
     margin: 10px 6px 0px 0px;
@@ -382,24 +385,26 @@ table.table.column-bordered {
   .help-block {
     padding: 5px 0 5px 0;
   }
+
   .icon {
     font-size: 16px;
   }
 }
 
 //---header--//
-#dashboard > header {
+#dashboard>header {
   background-color: $cf-topheader-bg;
   height: 64px;
 
   /* the position absolute is necessary to allow the 6px box shadow overlap the panels below. The parent <header>
    ensures the flexbox height is respected */
-  & > div {
+  &>div {
     height: 65px;
     @include bottom-border();
     position: absolute;
     width: 100%;
-    z-index: 2; /* needed because ace's selected row has a z-index of 1 & can't be overridden */
+    z-index: 2;
+    /* needed because ace's selected row has a z-index of 1 & can't be overridden */
   }
 }
 
@@ -424,6 +429,7 @@ table.table.column-bordered {
 }
 
 .faux-header__searchboxcontainer {
+
   .Select-control,
   .Select-menu-outer {
     width: 210px;
@@ -432,9 +438,10 @@ table.table.column-bordered {
 
 // this allows the results expand as much as need be when the component is used in the header
 .Select-menu-outer {
-  & > div > div {
+  &>div>div {
     padding-right: 25px; // prevents overlapping of auto-generated scrollbar
   }
+
   min-width: 210px;
   max-width: 450px;
   width: auto;
@@ -468,7 +475,7 @@ table.table.column-bordered {
   border-radius: initial;
 }
 
-.Select .is-focused:not(.is-open) > .Select-control {
+.Select .is-focused:not(.is-open)>.Select-control {
   box-shadow: transparent;
 }
 
@@ -480,11 +487,12 @@ table.table.column-bordered {
   max-height: 291px;
   background-color: $cf-background02;
 }
-.Select-arrow-zone > .Select-arrow {
+
+.Select-arrow-zone>.Select-arrow {
   border-top-color: $cf-background02;
 }
 
-.Select-arrow-zone:hover > .Select-arrow {
+.Select-arrow-zone:hover>.Select-arrow {
   border-top-color: $cf-brand-hightlight-hover;
 }
 
@@ -570,6 +578,7 @@ table.table.column-bordered {
 
 body .control-toggle-include-docs span {
   margin-left: 0;
+
   &::before {
     content: 'Include Docs';
   }
@@ -582,6 +591,7 @@ body .control-toggle-include-docs span {
         .control-toggle-include-docs span::before {
           content: ' Docs';
         }
+
         .right-header button i:before {
           margin: 2px 0 0 0;
         }
@@ -597,15 +607,19 @@ body .control-toggle-include-docs span {
         .control-toggle-include-docs span::before {
           content: 'Docs';
         }
+
         button:not(.control-toggle-include-docs) span {
           display: none;
         }
+
         button i:before {
           float: none;
         }
+
         .right-header button i:before {
           margin: 2px 0 0 0;
         }
+
         #query-options-tray:before {
           right: 180px;
         }
@@ -621,6 +635,7 @@ body .control-toggle-include-docs span {
         .control-toggle-include-docs span::before {
           content: 'Docs';
         }
+
         .right-header button i:before {
           margin: 2px 0 0 0;
         }
@@ -636,15 +651,19 @@ body .control-toggle-include-docs span {
         .control-toggle-include-docs span::before {
           content: 'Docs';
         }
+
         button:not(.control-toggle-include-docs) span {
           display: none;
         }
+
         button i:before {
           float: none;
         }
+
         #query-options-tray:before {
           right: 180px;
         }
+
         .right-header button i:before {
           margin: 2px 0 0 0;
         }
@@ -658,6 +677,7 @@ body .control-toggle-include-docs span {
 }
 
 .fauxton-table-list {
+
   a.db-actions,
   a.db-actions:visited {
     color: $cf-brand-highlight;
@@ -666,11 +686,13 @@ body .control-toggle-include-docs span {
     @include border-radius(6px);
     text-decoration: none;
     font-size: 19px;
+
     &:hover {
       background-color: $cf-brand-hightlight-hover;
       color: $cf-white;
     }
   }
+
   td {
     vertical-align: middle;
   }
@@ -695,6 +717,7 @@ body .control-toggle-include-docs span {
   input[type='radio'] {
     display: none;
   }
+
   label.btn {
     margin-right: 0;
   }

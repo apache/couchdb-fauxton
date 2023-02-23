@@ -17,15 +17,9 @@ import React from 'react';
 const PermissionsItem = ({removeItem, section, type, value}) => {
 
   return (
-    <li className="permissions__entry">
+    <li>
       <span>{value}</span>
-      <button
-        onClick={() => removeItem(section, type, value)}
-        type="button"
-        className="float-end close"
-      >
-        ×
-      </button>
+      <button type="button" className="btn-close float-end" aria-label="Remove item" onClick={() => removeItem(section, type, value)}></button>
     </li>
   );
 };
