@@ -11,42 +11,62 @@
 //  the License.
 
 //
-// BOOTSTRAP 5 NOTES (can be removed once upgrade is completed)
+// BOOTSTRAP 5 NOTES (these can be removed once upgrade is completed)
 // - These are changing global default for various form elements. My guess is a bunch of these no longer exist / conflict with the V5 styles.
-//   We'll probably need to update all form elements in Fauxton (<input>, <select>, etc) to use V5 styles.
-// - And then my guess would be most of the overrides below are no longer relevant/needed.
-//   E.g. there's a '.input-block-level' class in V2 that no longer exists, and he '.form-control' in V5 that most form elements need seems to be enough.
-// - '.input-append' and '.input-prepend' from V2 needs to be replaced with '.input-group'
-// 
 
-input[type="checkbox"],
-input[type="radio"] {
-  box-sizing: border-box;
-  padding: 0;
-}
 
-input[type="file"],
-input[type="checkbox"],
-input[type="radio"],
-select {
-  margin: 0 0 1em 0;
-}
-
-/*form elements and buttons*/
-.btn-group {
-  > .btn + .dropdown-toggle,
-  > .btn:first-child,
-  > .btn:last-child,
-  > .dropdown-toggle {
-    @include border-radius(0);
-    background-image: none;
-    text-shadow: none;
-  }
-}
-
+// Avoids a double line around buttons with focus
 button:focus {
   outline: 0 !important;
 }
+
+.help-block {
+  font-size: 12px;
+}
+
+a.help-link {
+  color: $cf-secondary;
+  text-decoration: none;
+  &:hover {
+    color: $cf-brand-hightlight-hover;
+  }
+}
+
+
+///  ================
+// BOOTSTRAP 5 NOTES
+// Styles above this comment are still needed in V5
+// Styles below this comment have not been reviewed yet
+///  ================
+
+
+
+// input[type="checkbox"],
+// input[type="radio"] {
+//   box-sizing: border-box;
+//   padding: 0;
+// }
+
+// input[type="file"],
+// input[type="checkbox"],
+// input[type="radio"],
+// select {
+//   margin: 0 0 1em 0;
+// }
+
+// /*form elements and buttons*/
+// .btn-group {
+//   > .btn + .dropdown-toggle,
+//   > .btn:first-child,
+//   > .btn:last-child,
+//   > .dropdown-toggle {
+//     @include border-radius(0);
+//     background-image: none;
+//     text-shadow: none;
+//   }
+// }
+
+
 
 // .btn {
 //   box-shadow: none;
@@ -154,51 +174,36 @@ button:focus {
 //   }
 // }
 
-.row-fluid .input-append [class*="span"],
-.input-prepend input[class*="span"] {
-  width: auto;
-}
+// .row-fluid .input-append [class*="span"],
+// .input-prepend input[class*="span"] {
+//   width: auto;
+// }
 
-.form-inline {
-  input[type="password"],
-  input[type="text"] {
-    width: auto;
-  }
-}
-.checkbox {
-  label {
-    display: inline-block;
-    padding-left: 30px;
-  }
-}
+// .form-inline {
+//   input[type="password"],
+//   input[type="text"] {
+//     width: auto;
+//   }
+// }
+// .checkbox {
+//   label {
+//     display: inline-block;
+//     padding-left: 30px;
+//   }
+// }
 
-label {
-  margin-right: 15px;
-  padding-left: 0;
-  display: block;
-  cursor: pointer;
-  position: relative;
-  font-size: 14px;
-  &.inline {
-    display: inline-block;
-  }
-}
-.help-block {
-  font-size: 12px;
-}
+// label {
+//   margin-right: 15px;
+//   padding-left: 0;
+//   display: block;
+//   cursor: pointer;
+//   position: relative;
+//   font-size: 14px;
+//   &.inline {
+//     display: inline-block;
+//   }
+// }
 
-a.help-link {
-  color: $cf-secondary;
-  text-decoration: none;
-  &:hover {
-    color: $cf-brand-hightlight-hover;
-  }
-}
-
-form.view-query-update,
-form.view-query-save {
-  max-width: 100%;
-}
 
 .custom-inputs {
   input[type="radio"],
