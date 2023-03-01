@@ -38,7 +38,8 @@
 
 .faux-navbar__burger {
   background-color: @brandDark2;
-  padding: 19px 0 18px 18px;
+  padding: 19px 0 18px 20px;
+  height: 65px;
 }
 
 .faux-navbar--narrow {
@@ -53,17 +54,17 @@
   color: @navIconActive;
 }
 
-.faux-navbar__burger__icon {
-  color: @navIconColor;
-  font-size: 27px;
+.faux-navbar__burger {
+  background-color: @brandDark2;
+  padding: 18px 0 18px 20px;  // left padding to 20px to match the other icons
+  // Set min-height and line-height so the row height doesn't change since the burger and close icons have different font sizes.
+  min-height: 64px;
+  line-height: 32px;
 }
 
-.faux-navbar__burger__icon--flipped:before{
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
+.faux-navbar__burger__icon {
+  color: @navIconColor;
+  font-size: 24px;  // reduce to 24px to match the other navbar icons
 }
 
 .faux-navbar__link, .faux-logout__link, .faux-login__link {
