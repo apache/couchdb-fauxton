@@ -15,6 +15,7 @@ import React from 'react';
 import {DeleteModal} from './modals';
 import {ReplicationTable} from './common-table';
 import {ReplicationHeader} from './common-activity';
+import PaginationFooter from '../../documents/index-results/components/pagination/PaginationFooter';
 
 export default class Activity extends React.Component {
   constructor (props) {
@@ -48,7 +49,7 @@ export default class Activity extends React.Component {
       docs = this.props.docs.filter(doc => doc.selected);
     }
 
-    this.props.deleteDocs(docs);
+    this.props.deleteDocs(docs, this.props.pagination);
     this.closeModal();
   }
 
@@ -66,7 +67,14 @@ export default class Activity extends React.Component {
       selectAllDocs,
       someDocsSelected,
       allDocsSelected,
-      selectDoc
+      selectDoc,
+      pageStart,
+      pageEnd,
+      docsPerPage,
+      updatePerPageResults,
+      paginateNext,
+      paginatePrevious,
+      pagination
     } = this.props;
 
     const {modalVisible} = this.state;
@@ -91,6 +99,25 @@ export default class Activity extends React.Component {
           column={activitySort.column}
           changeSort={changeActivitySort}
         />
+        <div className="replication__paginate-footer">
+          <PaginationFooter
+            hasResults={true}
+            showPrioritizedEnabled={false}
+            prioritizedEnabled={false}
+            canShowNext={pagination.canShowNext}
+            canShowPrevious={pagination.page > 1}
+            perPage={docsPerPage}
+            toggleShowAllColumns={false}
+            docs={this.props.docs}
+            pageStart={pageStart}
+            pageEnd={pageEnd}
+            updatePerPageResults={updatePerPageResults}
+            paginateNext={paginateNext}
+            paginatePrevious={paginatePrevious}
+            queryOptionsParams={{}}
+            fetchParams={pagination}
+          />
+        </div>
         <DeleteModal
           isReplicationDB={true}
           multipleDocs={this.numDocsSelected()}

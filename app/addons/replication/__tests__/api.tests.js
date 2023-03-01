@@ -478,71 +478,40 @@ describe('Replication API', () => {
 
   describe("fetchReplicationDocs", () => {
     const _repDocs = {
-      "total_rows":2,
-      "offset":0,
-      "rows":[
+      "docs":[
         {
-          "id":"_design/_replicator",
-          "key":"_design/_replicator",
-          "value":{
-            "rev":"1-1390740c4877979dbe8998382876556c"
+          "_id": "c94d4839d1897105cb75e1251e0003ea",
+          "_rev": "3-4559cb522de85ce03bd0e1991025e89a",
+          "user_ctx": {
+            "name": "tester",
+            "roles": ["_admin", "_reader", "_writer"]
           },
-          "doc":{"_id":"_design/_replicator",
-            "_rev":"1-1390740c4877979dbe8998382876556c",
-            "language":"javascript",
-            "validate_doc_update":"\n    function(newDoc, oldDoc, userCtx) {\n        function reportError(error_msg) {\n            log('Error writing document `' + newDoc._id +\n                '\\' to the replicator database: ' + error_msg);\n            throw({forbidden: error_msg});\n        }\n\n        function validateEndpoint(endpoint, fieldName) {\n            if ((typeof endpoint !== 'string') &&\n                ((typeof endpoint !== 'object') || (endpoint === null))) {\n\n                reportError('The `' + fieldName + '\\' property must exist' +\n                    ' and be either a string or an object.');\n            }\n\n            if (typeof endpoint === 'object') {\n                if ((typeof endpoint.url !== 'string') || !endpoint.url) {\n                    reportError('The url property must exist in the `' +\n                        fieldName + '\\' field and must be a non-empty string.');\n                }\n\n                if ((typeof endpoint.auth !== 'undefined') &&\n                    ((typeof endpoint.auth !== 'object') ||\n                        endpoint.auth === null)) {\n\n                    reportError('`' + fieldName +\n                        '.auth\\' must be a non-null object.');\n                }\n\n                if ((typeof endpoint.headers !== 'undefined') &&\n                    ((typeof endpoint.headers !== 'object') ||\n                        endpoint.headers === null)) {\n\n                    reportError('`' + fieldName +\n                        '.headers\\' must be a non-null object.');\n                }\n            }\n        }\n\n        var isReplicator = (userCtx.roles.indexOf('_replicator') >= 0);\n        var isAdmin = (userCtx.roles.indexOf('_admin') >= 0);\n\n        if (oldDoc && !newDoc._deleted && !isReplicator &&\n            (oldDoc._replication_state === 'triggered')) {\n            reportError('Only the replicator can edit replication documents ' +\n                'that are in the triggered state.');\n        }\n\n        if (!newDoc._deleted) {\n            validateEndpoint(newDoc.source, 'source');\n            validateEndpoint(newDoc.target, 'target');\n\n            if ((typeof newDoc.create_target !== 'undefined') &&\n                (typeof newDoc.create_target !== 'boolean')) {\n\n                reportError('The `create_target\\' field must be a boolean.');\n            }\n\n            if ((typeof newDoc.continuous !== 'undefined') &&\n                (typeof newDoc.continuous !== 'boolean')) {\n\n                reportError('The `continuous\\' field must be a boolean.');\n            }\n\n            if ((typeof newDoc.doc_ids !== 'undefined') &&\n                !isArray(newDoc.doc_ids)) {\n\n                reportError('The `doc_ids\\' field must be an array of strings.');\n            }\n\n            if ((typeof newDoc.selector !== 'undefined') &&\n                (typeof newDoc.selector !== 'object')) {\n\n                reportError('The `selector\\' field must be an object.');\n            }\n\n            if ((typeof newDoc.filter !== 'undefined') &&\n                ((typeof newDoc.filter !== 'string') || !newDoc.filter)) {\n\n                reportError('The `filter\\' field must be a non-empty string.');\n            }\n\n            if ((typeof newDoc.doc_ids !== 'undefined') &&\n                (typeof newDoc.selector !== 'undefined')) {\n\n                reportError('`doc_ids\\' field is incompatible with `selector\\'.');\n            }\n\n            if ( ((typeof newDoc.doc_ids !== 'undefined') ||\n                  (typeof newDoc.selector !== 'undefined')) &&\n                 (typeof newDoc.filter !== 'undefined') ) {\n\n                reportError('`filter\\' field is incompatible with `selector\\' and `doc_ids\\'.');\n            }\n\n            if ((typeof newDoc.query_params !== 'undefined') &&\n                ((typeof newDoc.query_params !== 'object') ||\n                    newDoc.query_params === null)) {\n\n                reportError('The `query_params\\' field must be an object.');\n            }\n\n            if (newDoc.user_ctx) {\n                var user_ctx = newDoc.user_ctx;\n\n                if ((typeof user_ctx !== 'object') || (user_ctx === null)) {\n                    reportError('The `user_ctx\\' property must be a ' +\n                        'non-null object.');\n                }\n\n                if (!(user_ctx.name === null ||\n                    (typeof user_ctx.name === 'undefined') ||\n                    ((typeof user_ctx.name === 'string') &&\n                        user_ctx.name.length > 0))) {\n\n                    reportError('The `user_ctx.name\\' property must be a ' +\n                        'non-empty string or null.');\n                }\n\n                if (!isAdmin && (user_ctx.name !== userCtx.name)) {\n                    reportError('The given `user_ctx.name\\' is not valid');\n                }\n\n                if (user_ctx.roles && !isArray(user_ctx.roles)) {\n                    reportError('The `user_ctx.roles\\' property must be ' +\n                        'an array of strings.');\n                }\n\n                if (!isAdmin && user_ctx.roles) {\n                    for (var i = 0; i < user_ctx.roles.length; i++) {\n                        var role = user_ctx.roles[i];\n\n                        if (typeof role !== 'string' || role.length === 0) {\n                            reportError('Roles must be non-empty strings.');\n                        }\n                        if (userCtx.roles.indexOf(role) === -1) {\n                            reportError('Invalid role (`' + role +\n                                '\\') in the `user_ctx\\'');\n                        }\n                    }\n                }\n            } else {\n                if (!isAdmin) {\n                    reportError('The `user_ctx\\' property is missing (it is ' +\n                       'optional for admins only).');\n                }\n            }\n        } else {\n            if (!isAdmin) {\n                if (!oldDoc.user_ctx || (oldDoc.user_ctx.name !== userCtx.name)) {\n                    reportError('Replication documents can only be deleted by ' +\n                        'admins or by the users who created them.');\n                }\n            }\n        }\n    }\n"
-          }
-        },
-        {
-          "id":"_design/filters",
-          "key":"_design/filters",
-          "value":{
-            "rev":"1-1390740c4877979dbe8998382876556c"
-          },
-          "doc":{
-            "_id":"_design/filters",
-            "_rev":"1-1390740c4877979dbe8998382876556c",
-            "filters": {
-              "afilter": "\n function (doc, req) { if (doc.type === 'a-doc') { return true; } \n return false }"
-            }
-          }
-        },
-        {
-          "id":"c94d4839d1897105cb75e1251e0003ea",
-          "key":"c94d4839d1897105cb75e1251e0003ea",
-          "value":{
-            "rev":"3-4559cb522de85ce03bd0e1991025e89a"
-          },
-          "doc":{"_id":"c94d4839d1897105cb75e1251e0003ea",
-            "_rev":"3-4559cb522de85ce03bd0e1991025e89a",
-            "user_ctx":{
-              "name":"tester",
-              "roles":["_admin", "_reader", "_writer"]},
-            "source":{
-              "headers":{
-                "Authorization":"Basic dGVzdGVyOnRlc3RlcnBhc3M="
-              },
-              "url":"http://dev:5984/animaldb"},
-            "target":{
-              "headers":{
-                "Authorization":"Basic dGVzdGVyOnRlc3RlcnBhc3M="},
-              "url":"http://dev:5984/animaldb-clone"
+          "source": {
+            "headers": {
+              "Authorization": "Basic dGVzdGVyOnRlc3RlcnBhc3M="
             },
-            "create_target":true,
-            "continuous":false,
-            "owner":"tester",
-            "_replication_state":"completed",
-            "_replication_state_time":"2017-02-28T12:16:28+00:00",
-            "_replication_id":"0ce2939af29317b5dbe11c15570ddfda",
-            "_replication_stats":{
-              "revisions_checked":14,
-              "missing_revisions_found":14,
-              "docs_read":14,
-              "docs_written":14,
-              "changes_pending":null,
-              "doc_write_failures":0,
-              "checkpointed_source_seq":"15-g1AAAAJDeJyV0N0NgjAQAOAKRnlzBJ3AcKWl9Uk20ZbSEII4gm6im-gmugke1AQJ8aFpck3u50vuakJIVIaGrJqzKSADKrYxPqixECii123bVmWoFidMLGVsqEjYtP0voTcY9f6rzHqFKcglsz5K1imHkcJTnoJVPsqxUy4jxepEioJ7KM0cI7nih9BtkDSlkAif2zjp7qRHJwW9lLNdDkZ6S08nvQZJMsNT4b_d20k_d4oVE1aK6VT1AXTajes"
-            }
+            "url": "http://dev:5984/animaldb"
+          },
+          "target": {
+            "headers": {
+              "Authorization": "Basic dGVzdGVyOnRlc3RlcnBhc3M="
+            },
+            "url": "http://dev:5984/animaldb-clone"
+          },
+          "create_target": true,
+          "continuous": false,
+          "owner": "tester",
+          "_replication_state": "completed",
+          "_replication_state_time": "2017-02-28T12:16:28+00:00",
+          "_replication_id": "0ce2939af29317b5dbe11c15570ddfda",
+          "_replication_stats": {
+            "revisions_checked": 14,
+            "missing_revisions_found": 14,
+            "docs_read": 14,
+            "docs_written": 14,
+            "changes_pending": null,
+            "doc_write_failures": 0,
+            "checkpointed_source_seq": "15-g1AAAAJDeJyV0N0NgjAQAOAKRnlzBJ3AcKWl9Uk20ZbSEII4gm6im-gmugke1AQJ8aFpck3u50vuakJIVIaGrJqzKSADKrYxPqixECii123bVmWoFidMLGVsqEjYtP0voTcY9f6rzHqFKcglsz5K1imHkcJTnoJVPsqxUy4jxepEioJ7KM0cI7nih9BtkDSlkAif2zjp7qRHJwW9lLNdDkZ6S08nvQZJMsNT4b_d20k_d4oVE1aK6VT1AXTajes"
           }
         }
       ]};
@@ -577,13 +546,69 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs and ignores all design docs", () => {
-        fetchMock.getOnce('./_scheduler/jobs', 404);
-        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
+        fetchMock.getOnce('/_scheduler/jobs', 404);
+        fetchMock.post((url,  options) => {
+          const body = JSON.parse(options.body);
+          return url === "/_replicator/_find"
+            && body.limit === 6
+            && body.skip === 0;
+        }, _repDocs);
         return supportNewApi(true)
-          .then(fetchReplicationDocs)
-          .then(docs => {
-            expect(docs.length).toBe(1);
+          .then(() => fetchReplicationDocs({docsPerPage: 5, page: 1}))
+          .then(({docs}) => {
+            expect(docs).toHaveLength(1);
             expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
+          });
+      });
+
+      it("paginates to page 2 correctly", () => {
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.post((url,  options) => {
+          const body = JSON.parse(options.body);
+          return url === "/_replicator/_find"
+            && body.limit === 11
+            && body.skip === 10;
+        }, _repDocs);
+        fetchMock.get('/_scheduler/docs?limit=11&skip=10', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 10, page: 2}))
+          .then(({canShowNext}) => {
+            expect(canShowNext).toBeFalsy;
+          });
+      });
+
+      it("sets canShowNext true and trims docs correctly", () => {
+        const clonedDoc = _repDocs.docs[2];
+        const repDocs = {
+          docs: [{
+            ...clonedDoc,
+            _id: '1',
+          }, {
+            ...clonedDoc,
+            _id: '2',
+          }, {
+
+            ...clonedDoc,
+            _id: '3',
+          }, {
+            ...clonedDoc,
+            _id: '4',
+          }]
+        };
+
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.post((url,  options) => {
+          const body = JSON.parse(options.body);
+          return url === "/_replicator/_find"
+            && body.limit === 4
+            && body.skip === 6;
+        }, repDocs);
+        fetchMock.get('/_scheduler/docs?limit=4&skip=6', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 3, page: 3}))
+          .then(({docs, canShowNext}) => {
+            expect(canShowNext).toBeTruthy();
+            expect(docs).toHaveLength(3);
           });
       });
     });
@@ -594,15 +619,71 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs", () => {
-        fetchMock.getOnce('./_scheduler/jobs', 200);
-        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
-        fetchMock.get('./_scheduler/docs?include_docs=true', _schedDocs);
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.post((url,  options) => {
+          const body = JSON.parse(options.body);
+          return url === "/_replicator/_find"
+            && body.limit === 6
+            && body.skip === 0;
+        }, _repDocs);
+        fetchMock.get('/_scheduler/docs?limit=6&skip=0', _schedDocs);
         return supportNewApi(true)
-          .then(fetchReplicationDocs)
-          .then(docs => {
-            expect(docs.length).toBe(1);
+          .then(() => fetchReplicationDocs({docsPerPage: 5, page: 1}))
+          .then(({docs}) => {
+            expect(docs).toHaveLength(1);
             expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
-            expect(docs[0].stateTime.toDateString()).toBe((new Date('2017-03-07T14:46:17')).toDateString());
+            expect(docs[0].stateTime.toDateString()).toBe(new Date('2017-03-07T14:46:17').toDateString());
+          });
+      });
+
+      it("paginates to page 2 correctly", () => {
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.post((url,  options) => {
+          const body = JSON.parse(options.body);
+          return url === "/_replicator/_find"
+            && body.limit === 11
+            && body.skip === 10;
+        }, _repDocs);
+        fetchMock.get('/_scheduler/docs?limit=11&skip=10', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 10, page: 2}))
+          .then(({canShowNext}) => {
+            expect(canShowNext).toBeFalsy();
+          });
+      });
+
+      it("sets canShowNext true and trims docs correctly", () => {
+        const clonedDoc = _repDocs.docs[2];
+        const repDocs = {
+          docs: [{
+            ...clonedDoc,
+            _id: '1',
+          }, {
+            ...clonedDoc,
+            _id: '2',
+          }, {
+
+            ...clonedDoc,
+            _id: '3',
+          }, {
+            ...clonedDoc,
+            _id: '4',
+          }]
+        };
+
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.post((url,  options) => {
+          const body = JSON.parse(options.body);
+          return url === "/_replicator/_find"
+            && body.limit === 4
+            && body.skip === 6;
+        }, repDocs);
+        fetchMock.get('/_scheduler/docs?limit=4&skip=6', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 3, page: 3}))
+          .then(({docs, canShowNext}) => {
+            expect(canShowNext).toBeTruthy();
+            expect(docs).toHaveLength(3);
           });
       });
     });

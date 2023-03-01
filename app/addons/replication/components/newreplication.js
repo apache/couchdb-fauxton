@@ -249,7 +249,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuth,
       targetAuthType,
       targetAuth,
-      targetDatabasePartitioned
+      targetDatabasePartitioned,
+      pagination
     } = this.props;
 
     let _rev;
@@ -274,7 +275,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuth,
       targetAuthType,
       targetAuth,
-      targetDatabasePartitioned
+      targetDatabasePartitioned,
+      pagination
     });
   }
 
