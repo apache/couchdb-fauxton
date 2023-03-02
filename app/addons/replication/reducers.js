@@ -90,7 +90,7 @@ const initialState = {
 
   checkingAPI: true,
   activitySort: loadActivitySort(),
-  pageLimit: 10,
+  pageLimit: 100,
 };
 
 const clearForm = (state) => {
