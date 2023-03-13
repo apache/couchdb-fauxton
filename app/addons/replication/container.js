@@ -21,7 +21,8 @@ import {
   changeActivitySort,
   deleteReplicates,
   selectAllReplicates,
-  selectReplicate
+  selectReplicate,
+  setPageLimit
 } from './actions';
 
 import {
@@ -53,7 +54,8 @@ import {
   isReplicateInfoLoading,
   getAllReplicateSelected,
   getReplicateInfo,
-  someReplicateSelected
+  someReplicateSelected,
+  getPageLimit
 } from './reducers';
 
 const mapStateToProps = ({replication, databases}, ownProps) => {
@@ -102,11 +104,12 @@ const mapStateToProps = ({replication, databases}, ownProps) => {
     replicateLoading: isReplicateInfoLoading(replication),
     replicateInfo: getReplicateInfo(replication),
     allReplicateSelected: getAllReplicateSelected(replication),
-    someReplicateSelected: someReplicateSelected(replication)
+    someReplicateSelected: someReplicateSelected(replication),
+    pageLimit: getPageLimit(replication)
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     checkForNewApi: () => dispatch(checkForNewApi()),
     updateFormField: (fieldName) => (value) => {
@@ -114,22 +117,23 @@ const mapDispatchToProps = (dispatch) => {
     },
     clearReplicationForm: () => dispatch(clearReplicationForm()),
     initReplicator: (localSource) => dispatch(initReplicator(localSource)),
-    getReplicationActivity: () => dispatch(getReplicationActivity()),
+    getReplicationActivity: (pageLimit) => dispatch(getReplicationActivity(pageLimit)),
     getReplicateActivity: () => dispatch(getReplicateActivity()),
     getReplicationStateFrom: (id) => dispatch(getReplicationStateFrom(id)),
     getDatabasesList: () => dispatch(getDatabasesList()),
-    replicate: (params) => dispatch(replicate(params)),
+    replicate: (params) => dispatch(replicate(params, ownProps.pageLimit)),
     showConflictModal: () => dispatch(showConflictModal()),
     hideConflictModal: () => dispatch(hideConflictModal()),
     filterReplicate: (filter) => dispatch(filterReplicate(filter)),
     filterDocs: (filter) => dispatch(filterDocs(filter)),
     selectDoc: (doc) => dispatch(selectDoc(doc)),
-    deleteDocs: (docs) => dispatch(deleteDocs(docs)),
+    deleteDocs: (docs) => dispatch(deleteDocs(docs, ownProps.pageLimit)),
     selectAllDocs: () => dispatch(selectAllDocs()),
     changeActivitySort: (sort) => dispatch(changeActivitySort(sort)),
     selectAllReplicates: () => dispatch(selectAllReplicates()),
     deleteReplicates: (replicates) => dispatch(deleteReplicates(replicates)),
-    selectReplicate: (replicate) => dispatch(selectReplicate(replicate))
+    selectReplicate: (replicate) => dispatch(selectReplicate(replicate)),
+    setPageLimit: (limit) => dispatch(setPageLimit(limit))
   };
 };
 

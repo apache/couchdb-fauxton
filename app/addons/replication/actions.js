@@ -51,7 +51,7 @@ export const getDatabasesList = () => dispatch => {
     });
 };
 
-export const replicate = (params) => dispatch => {
+export const replicate = (params, pageLimit) => dispatch => {
   const replicationDoc = createReplicationDoc(params);
   const url = MainHelper.getServerUrl("/_replicator");
   const promise = post(url, replicationDoc);
@@ -85,12 +85,12 @@ export const replicate = (params) => dispatch => {
         clear: true
       });
 
-      dispatch(getReplicationActivity());
+      dispatch(getReplicationActivity(pageLimit));
       FauxtonAPI.navigate('#/replication');
     }).catch(json => {
       if (json.error && json.error === "not_found") {
         return createReplicatorDB().then(() => {
-          return replicate(params)(dispatch);
+          return replicate(params, pageLimit)(dispatch);
         }).catch(handleError);
       }
       handleError(json);
@@ -111,15 +111,12 @@ export const clearReplicationForm = () => {
   return { type: ActionTypes.REPLICATION_CLEAR_FORM };
 };
 
-export const getReplicationActivity = () => dispatch => {
+export const getReplicationActivity = (pageLimit) => (dispatch) => {
   dispatch({
     type: ActionTypes.REPLICATION_FETCHING_STATUS,
   });
 
-  supportNewApi()
-    .then(supportNewApi => {
-      return fetchReplicationDocs(supportNewApi);
-    })
+  fetchReplicationDocs(pageLimit)
     .then(docs => {
       dispatch({
         type: ActionTypes.REPLICATION_STATUS,
@@ -201,7 +198,7 @@ export const clearSelectedReplicates = () => {
   };
 };
 
-export const deleteDocs = (docs) => dispatch => {
+export const deleteDocs = (docs, pageLimit) => dispatch => {
   const bulkDocs = docs.map(({raw: doc}) => {
     doc._deleted = true;
     return doc;
@@ -237,7 +234,7 @@ export const deleteDocs = (docs) => dispatch => {
       });
 
       dispatch(clearSelectedDocs());
-      dispatch(getReplicationActivity());
+      dispatch(getReplicationActivity(pageLimit));
     })
     .catch(resp => {
       resp.json()
@@ -419,4 +416,12 @@ export const checkForNewApi = () => dispatch => {
       options: newApi
     });
   });
+};
+
+export const setPageLimit = (limit) => dispatch => {
+  dispatch({
+    type: ActionTypes.REPLICATION_SET_PAGE_LIMIT,
+    options: limit,
+  });
+  getReplicationActivity(limit)(dispatch);
 };

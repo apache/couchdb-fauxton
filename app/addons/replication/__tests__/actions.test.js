@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import {replicate, getReplicationStateFrom, deleteDocs} from '../actions';
+import {replicate, getReplicationStateFrom, deleteDocs, setPageLimit} from '../actions';
 import ActionTypes from '../actiontypes';
 import fetchMock from 'fetch-mock';
 import FauxtonAPI from '../../../core/api';
@@ -33,6 +33,7 @@ describe("Replication Actions", () => {
 
     it('creates a new database if it does not exist', () => {
       const dispatch = () => {};
+      const pageLimit = 20;
       fetchMock.postOnce('./_replicator', {
         status: 404,
         body: {
@@ -66,7 +67,8 @@ describe("Replication Actions", () => {
         replicationTarget: "REPLICATION_TARGET_NEW_LOCAL_DATABASE",
         replicationType: "",
         username: "tester"
-      })(dispatch).then(() => {
+      }, pageLimit)(dispatch).then(() => {
+        finalPost.calls('./_replicator');
         expect(finalPost.calls('./_replicator').length).toBe(3);
 
         //fetchMock.done();
@@ -75,6 +77,7 @@ describe("Replication Actions", () => {
 
     it('does not try to create new database if it already exist', () => {
       const dispatch = () => {};
+      const pageLimit = 20;
       const mockPost = fetchMock.postOnce('./_replicator', {
         status: 200,
         body: {
@@ -93,7 +96,8 @@ describe("Replication Actions", () => {
         replicationTarget: "REPLICATION_TARGET_NEW_LOCAL_DATABASE",
         replicationType: "",
         username: "tester"
-      })(dispatch).then(() => {
+      }, pageLimit)(dispatch).then(() => {
+        mockPost.calls('./_replicator');
         expect(mockPost.calls('./_replicator').length).toBe(1);
         fetchMock.done();
       });
@@ -255,14 +259,14 @@ describe("Replication Actions", () => {
           }
         }
       ];
+      const pageLimit = 20;
 
       fetchMock.getOnce('./_scheduler/jobs', 404);
-      fetchMock.getOnce('./_replicator/_all_docs?include_docs=true&limit=100', {rows: []});
+      fetchMock.getOnce(`./_replicator/_all_docs?include_docs=true&limit=${pageLimit + 1}`, {rows: []});
       fetchMock.postOnce('./_replicator/_bulk_docs', {
         status: 200,
         body: resp
       });
-
 
       const dispatch = ({type}) => {
         if (ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS === type) {
@@ -270,7 +274,29 @@ describe("Replication Actions", () => {
         }
       };
 
-      deleteDocs(docs)(dispatch);
+      deleteDocs(docs, pageLimit)(dispatch);
+    });
+  });
+
+  describe('setPageLimit', () => {
+    afterEach(() => {
+      fetchMock.reset();
+    });
+
+    it('sends request for new replications list', (done) => {
+      const pageLimit = 20;
+
+      fetchMock.getOnce('./_scheduler/jobs', 404);
+      fetchMock.getOnce(`./_replicator/_all_docs?include_docs=true&limit=${pageLimit + 1}`, {rows: []});
+
+      const dispatch = ({type, options}) => {
+        if (ActionTypes.REPLICATION_SET_PAGE_LIMIT === type) {
+          expect(options).toEqual(pageLimit);
+          done();
+        }
+      };
+
+      setPageLimit(pageLimit)(dispatch);
     });
   });
 });

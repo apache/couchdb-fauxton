@@ -89,7 +89,8 @@ const initialState = {
   replicateInfo: [],
 
   checkingAPI: true,
-  activitySort: loadActivitySort()
+  activitySort: loadActivitySort(),
+  pageLimit: 100,
 };
 
 const clearForm = (state) => {
@@ -348,6 +349,12 @@ const replication = (state = initialState, {type, options}) => {
         allReplicateSelected: false
       };
 
+    case ActionTypes.REPLICATION_SET_PAGE_LIMIT:
+      return {
+        ...state,
+        pageLimit: options
+      };
+
     default:
       return state;
   }
@@ -405,5 +412,7 @@ export const getReplicateInfo = (state) => {
     }).length > 0;
   });
 };
+
+export const getPageLimit = (state) => state.pageLimit;
 
 export default replication;

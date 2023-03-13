@@ -577,10 +577,11 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs and ignores all design docs", () => {
+        const pageLimit = 20;
         fetchMock.getOnce('./_scheduler/jobs', 404);
-        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
+        fetchMock.get(`./_replicator/_all_docs?include_docs=true&limit=${pageLimit + 1}`, _repDocs);
         return supportNewApi(true)
-          .then(fetchReplicationDocs)
+          .then(() => fetchReplicationDocs(pageLimit))
           .then(docs => {
             expect(docs.length).toBe(1);
             expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
@@ -594,11 +595,12 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs", () => {
+        const pageLimit = 20;
         fetchMock.getOnce('./_scheduler/jobs', 200);
-        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
+        fetchMock.get(`./_replicator/_all_docs?include_docs=true&limit=${pageLimit + 1}`, _repDocs);
         fetchMock.get('./_scheduler/docs?include_docs=true', _schedDocs);
         return supportNewApi(true)
-          .then(fetchReplicationDocs)
+          .then(() => fetchReplicationDocs(pageLimit))
           .then(docs => {
             expect(docs.length).toBe(1);
             expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
