@@ -1,0 +1,17 @@
+github:
+  description: "Fauxton is the new Web UI for CouchDB"
+  homepage: https://github.com/apache/couchdb-fauxton
+  labels:
+    - apache
+    - couchdb
+    - fauxton
+    - erlang
+    - network-client
+    - http
+    - big-data
+    - cloud
+    - database
+    - javascript
+  protected_branches:
+    main
+
