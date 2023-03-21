@@ -1,8 +1,6 @@
 const axios = require('axios');
 
 const customAxios = axios.create({
-  // The 3 configs below are to make 'got' behave mostly like the old 'request' package.
-  // This was done to minimize the changes needed to migrate from 'request' to 'got'.
   responseType: 'json',
   validateStatus: undefined,
 });
