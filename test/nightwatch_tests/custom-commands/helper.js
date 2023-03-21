@@ -2,6 +2,10 @@ const axios = require('axios');
 
 const customAxios = axios.create({
   responseType: 'json',
+  transitional: {
+    silentJSONParsing: false,
+    forcedJSONParsing: false
+  },
   validateStatus: undefined,
 });
 
