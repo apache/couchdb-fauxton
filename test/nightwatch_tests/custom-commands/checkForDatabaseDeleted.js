@@ -13,6 +13,7 @@
 var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js');
+const { axiosRequest } = require('./helper');
 
 function CheckForDatabaseDeleted () {
   events.EventEmitter.call(this);
@@ -33,7 +34,7 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   }, timeout);
 
   var intervalId = setInterval(function () {
-    helpers.axiosRequest({
+    axiosRequest({
         url: couchUrl + '/_all_dbs',
         responseType: 'text',
      }, function (er, res, body) {

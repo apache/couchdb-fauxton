@@ -13,6 +13,7 @@
 var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js');
+const { axiosRequest } = require('./helper');
 
 function CheckForStringNotPresent () {
   events.EventEmitter.call(this);
@@ -35,7 +36,7 @@ CheckForStringNotPresent.prototype.command = function (path, string, timeout) {
   var intervalId = setInterval(function () {
     var url = [couchUrl, path].join('/');
 
-    helpers.axiosRequest({
+    axiosRequest({
         url,
         responseType: 'text',
     }, function (er, res, body) {

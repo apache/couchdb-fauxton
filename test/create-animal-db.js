@@ -1,4 +1,4 @@
-const helpers = require('./nightwatch_tests/custom-commands/helper');
+const { axiosRequest } = require('./nightwatch_tests/custom-commands/helper');
 const async = require('async');
 
 const animals = require('../test/animal-db.json');
@@ -13,7 +13,7 @@ function createAnimalDb (url, cb) {
 
 
   function deleteDatabase (db, cb) {
-    helpers.axiosRequest({
+    axiosRequest({
       url: `${url}/${db}`,
       method: 'DELETE'
     }, (err, res, body) => {
@@ -26,7 +26,7 @@ function createAnimalDb (url, cb) {
   }
 
   function createAnimalDatabase () {
-    helpers.axiosRequest({
+    axiosRequest({
       url: `${url}/animaldb/`,
       method: 'PUT',
       data: {}
@@ -40,7 +40,7 @@ function createAnimalDb (url, cb) {
   }
 
   function bulkLoadDocs () {
-    helpers.axiosRequest({
+    axiosRequest({
       url: `${url}/animaldb/_bulk_docs`,
       method: 'POST',
       data: {
@@ -77,7 +77,7 @@ function createAnimalDb (url, cb) {
           deleteDatabase('animaldb-copy-2', cb);
         },
         (cb) => {
-          helpers.axiosRequest({
+          axiosRequest({
             url: `${url}/animaldb/${encodeURIComponent('_design/conflicts')}`,
             method: 'PUT',
             data: {
@@ -101,7 +101,7 @@ function createAnimalDb (url, cb) {
   }
 
   function replicate (source, target, createTarget, cb) {
-    helpers.axiosRequest({
+    axiosRequest({
       url: `${url}/_replicate`,
       method: 'POST',
       data: {
@@ -119,7 +119,7 @@ function createAnimalDb (url, cb) {
   }
 
   function getRev (db, id, cb) {
-    helpers.axiosRequest({
+    axiosRequest({
       url: `${url}/${db}/${id}`
     }, (err, res, body) => {
       cb(null, body._rev);
@@ -135,7 +135,7 @@ function createAnimalDb (url, cb) {
   function alterDoc (db, id, data, rev, cb) {
     data._rev = rev;
 
-    helpers.axiosRequest({
+    axiosRequest({
       url: `${url}/${db}/${id}`,
       method: 'PUT',
       data: data

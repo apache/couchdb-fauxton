@@ -15,6 +15,7 @@ var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js'),
     whilst = require('async/whilst');
+const { axiosRequest } = require('./helper');
 
 function PopulateDatabase () {
   events.EventEmitter.call(this);
@@ -106,7 +107,7 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
   }
 
   function createConflictDesignDoc (err, db_url, cb) {
-    helpers.axiosRequest({
+    axiosRequest({
       url: db_url + '/' + databaseName + '/_index',
       method: 'PUT',
       data: {
@@ -125,7 +126,7 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
   }
 
   function createMangoIndex (err, db_url, cb) {
-    helpers.axiosRequest({
+    axiosRequest({
       url: db_url + '/' + databaseName + '/_index',
       method: 'POST',
       data: {

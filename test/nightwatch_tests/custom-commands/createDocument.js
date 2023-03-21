@@ -13,6 +13,7 @@
 var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js');
+const { axiosRequest } = require('./helper');
 
 const commandHelper = require('./helper.js');
 const checkForDocumentCreated = commandHelper.checkForDocumentCreated;
@@ -32,7 +33,7 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
   }
   docContents._id = documentName;
 
-  helpers.axiosRequest({
+  axiosRequest({
     method: 'POST',
     url: couchUrl + '/' + databaseName + '?w=3',
     data: docContents,
