@@ -1,4 +1,4 @@
-const axios = require('axios/lib/axios');
+const axios = require('axios');
 
 const customAxios = axios.create({
   responseType: 'json',
