@@ -12,8 +12,7 @@
 
 var util = require('util'),
     events = require('events'),
-    helpers = require('../helpers/helpers.js'),
-    request = require('request');
+    helpers = require('../helpers/helpers.js');
 
 const commandHelper = require('./helper.js');
 const checkForDocumentCreated = commandHelper.checkForDocumentCreated;
@@ -33,11 +32,10 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
   }
   docContents._id = documentName;
 
-  request({
+  helpers.axiosRequest({
     method: 'POST',
-    uri: couchUrl + '/' + databaseName + '?w=3',
-    body: docContents,
-    json: true
+    url: couchUrl + '/' + databaseName + '?w=3',
+    data: docContents,
   }, (err, res, body) => {
     if (err) {
       console.log('Error in nano CreateDocument Function: ' + documentName + ', in database: ' + databaseName, err.message);
