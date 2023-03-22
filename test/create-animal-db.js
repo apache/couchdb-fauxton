@@ -1,4 +1,4 @@
-const request = require('request');
+const { axiosRequest } = require('./nightwatch_tests/custom-commands/helper');
 const async = require('async');
 
 const animals = require('../test/animal-db.json');
@@ -8,16 +8,14 @@ module.exports = createAnimalDb;
 function createAnimalDb (url, cb) {
 
   deleteDatabase('animaldb', () => {
-    createAnimalDb();
+    createAnimalDatabase();
   });
 
 
   function deleteDatabase (db, cb) {
-    request({
-      uri: `${url}/${db}`,
-      method: 'DELETE',
-      json: true,
-      body: {}
+    axiosRequest({
+      url: `${url}/${db}`,
+      method: 'DELETE'
     }, (err, res, body) => {
       if (err) {
         throw err;
@@ -27,12 +25,11 @@ function createAnimalDb (url, cb) {
     });
   }
 
-  function createAnimalDb () {
-    request({
-      uri: `${url}/animaldb/`,
+  function createAnimalDatabase () {
+    axiosRequest({
+      url: `${url}/animaldb/`,
       method: 'PUT',
-      json: true,
-      body: {}
+      data: {}
     }, (err, res, body) => {
       if (err) {
         throw err;
@@ -43,11 +40,10 @@ function createAnimalDb (url, cb) {
   }
 
   function bulkLoadDocs () {
-    request({
-      uri: `${url}/animaldb/_bulk_docs`,
+    axiosRequest({
+      url: `${url}/animaldb/_bulk_docs`,
       method: 'POST',
-      json: true,
-      body: {
+      data: {
         docs: animals
       }
     }, (err, res, body) => {
@@ -66,7 +62,7 @@ function createAnimalDb (url, cb) {
           alterZebraDocs(cb);
         },
         (cb) => {
-            alterAnimalDesignDoc(cb)
+          alterAnimalDesignDoc(cb)
         },
         (cb) => {
           replicate(`${url}/animaldb-copy`, `${url}/animaldb`, false, cb);
@@ -81,12 +77,10 @@ function createAnimalDb (url, cb) {
           deleteDatabase('animaldb-copy-2', cb);
         },
         (cb) => {
-
-          request({
-            uri: `${url}/animaldb/${encodeURIComponent('_design/conflicts')}`,
+          axiosRequest({
+            url: `${url}/animaldb/${encodeURIComponent('_design/conflicts')}`,
             method: 'PUT',
-            json: true,
-            body: {
+            data: {
               _id: "_design/conflicts",
               language: "javascript",
               "views":{"new-view":{"map":"function (doc) {\n  emit(doc._id, 1);\n}"}}
@@ -107,11 +101,10 @@ function createAnimalDb (url, cb) {
   }
 
   function replicate (source, target, createTarget, cb) {
-    request({
-      uri: `${url}/_replicate`,
+    axiosRequest({
+      url: `${url}/_replicate`,
       method: 'POST',
-      json: true,
-      body: {
+      data: {
         source: source,
         target: target,
         create_target: createTarget
@@ -122,21 +115,18 @@ function createAnimalDb (url, cb) {
       }
 
       cb(null);
-
     });
   }
 
   function getRev (db, id, cb) {
-    request({
-      uri: `${url}/${db}/${id}`,
-      json: true
+    axiosRequest({
+      url: `${url}/${db}/${id}`
     }, (err, res, body) => {
       cb(null, body._rev);
     });
   }
 
   function updateDoc (db, id, data, cb) {
-
     getRev(db, id, (err, rev) => {
       alterDoc(db,id, data, rev, cb);
     });
@@ -145,18 +135,16 @@ function createAnimalDb (url, cb) {
   function alterDoc (db, id, data, rev, cb) {
     data._rev = rev;
 
-    request({
-      uri: `${url}/${db}/${id}`,
-      json: true,
+    axiosRequest({
+      url: `${url}/${db}/${id}`,
       method: 'PUT',
-      body: data
+      data: data
     }, (err, res, body) => {
       cb(null);
     });
   }
 
   function alterZebraDocs (cb) {
-
     updateDoc('animaldb','zebra', {
       color: 'black & white'
     }, () => {
@@ -171,7 +159,6 @@ function createAnimalDb (url, cb) {
 }
 
     function alterAnimalDesignDoc (cb) {
-
         updateDoc('animaldb','_design/animals', {
             color: 'black & white'
         }, () => {
@@ -186,3 +173,4 @@ function createAnimalDb (url, cb) {
     }
 
 }
+

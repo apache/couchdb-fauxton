@@ -12,8 +12,7 @@
 
 var util = require('util'),
     events = require('events'),
-    helpers = require('../helpers/helpers.js'),
-    request = require('request');
+    helpers = require('../helpers/helpers.js');
 
 const commandHelper = require('./helper.js');
 const checkForDatabaseCreated = commandHelper.checkForDatabaseCreated;

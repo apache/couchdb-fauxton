@@ -14,8 +14,8 @@
 var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js'),
-    whilst = require('async/whilst'),
-    request = require('request');
+    whilst = require('async/whilst');
+const { axiosRequest } = require('./helper');
 
 function PopulateDatabase () {
   events.EventEmitter.call(this);
@@ -107,11 +107,10 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
   }
 
   function createConflictDesignDoc (err, db_url, cb) {
-    request({
-      uri: db_url + '/' + databaseName + '/_index',
+    axiosRequest({
+      url: db_url + '/' + databaseName + '/_index',
       method: 'PUT',
-      json: true,
-      body: {
+      data: {
         _id: "_design/conflicts",
         language: "javascript",
         "views":{"new-view":{"map":"function (doc) {\n  emit(doc._id, 1);\n}"}}
@@ -127,11 +126,10 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
   }
 
   function createMangoIndex (err, db_url, cb) {
-    request({
-      uri: db_url + '/' + databaseName + '/_index',
+    axiosRequest({
+      url: db_url + '/' + databaseName + '/_index',
       method: 'POST',
-      json: true,
-      body: {
+      data: {
         index: {
           fields: ['ente_ente_mango_ananas']
         },

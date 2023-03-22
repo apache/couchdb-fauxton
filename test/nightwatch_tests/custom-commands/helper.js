@@ -1,4 +1,24 @@
-const request = require('request');
+const axios = require('axios');
+
+const customAxios = axios.create({
+  responseType: 'json',
+  transitional: {
+    silentJSONParsing: false,
+    forcedJSONParsing: false
+  },
+  validateStatus: undefined,
+});
+
+function axiosRequest(url, cb) {
+  customAxios.request(url).then(resp => {
+    cb(null, resp, resp.data);
+  }).catch(err => {
+    cb(err, null, null);
+  });
+};
+
+exports.axiosRequest = axiosRequest;
+
 
 exports.checkForDocumentCreated = function checkForDocumentCreated (url, timeout, cb) {
 
@@ -7,9 +27,8 @@ exports.checkForDocumentCreated = function checkForDocumentCreated (url, timeout
   }, timeout);
 
   const intervalId = setInterval(() => {
-
-    request(url, (er, res, body) => {
-      if (res && /^2..$/.test(res.statusCode)) {
+    axiosRequest(url, (er, res, body) => {
+      if (res && res.status >= 200 && res.status < 300) {
         clearTimeout(timeOutId);
         clearInterval(intervalId);
 
@@ -25,7 +44,10 @@ exports.checkForDatabaseCreated = function checkForDatabaseCreated (couchUrl, da
   }, timeout);
 
   const intervalId = setInterval(() => {
-    request(couchUrl + '/_all_dbs', function (er, res, body) {
+    axiosRequest({
+      url: couchUrl + '/_all_dbs',
+      responseType: 'text',
+    }, function (er, res, body) {
       if (body) {
         const reg = new RegExp('"' + databaseName + '"', 'g');
         if (reg.test(body)) {
@@ -44,8 +66,8 @@ exports.checkForDocumentDeleted = function checkForDocumentDeleted (couchUrl, ti
   }, timeout);
 
   const intervalId = setInterval(() => {
-    request(couchUrl, function (er, res, body) {
-      if (res.statusCode === 404) {
+    axiosRequest(couchUrl, function (er, res, body) {
+      if (res.status === 404) {
         clearTimeout(timeOutId);
         clearInterval(intervalId);
         cb(null);

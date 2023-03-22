@@ -13,7 +13,7 @@
 const util = require('util');
 const events = require('events');
 const helpers = require('../helpers/helpers.js');
-const request = require('request');
+const { axiosRequest } = require('./helper');
 
 function PopulateDatabaseWithConflicts () {
   events.EventEmitter.call(this);
@@ -36,11 +36,10 @@ PopulateDatabaseWithConflicts.prototype.command = function (databaseName) {
   }.bind(this));
 
   function createConflictingDoc (err, cb) {
-    request({
-      uri: dbUrl + '/' + databaseName + '/conflictingdoc',
+    axiosRequest({
+      url: dbUrl + '/' + databaseName + '/conflictingdoc',
       method: 'PUT',
-      json: true,
-      body: {
+      data: {
         id: 'conflictingdoc',
         rocko: 'dances'
       }
@@ -50,11 +49,10 @@ PopulateDatabaseWithConflicts.prototype.command = function (databaseName) {
           'Error in nano populateDatabase Function: ' + err.message
         );
       }
-      request({
-        uri: dbUrl + '/' + databaseName + '/conflictingdoc?new_edits=false',
+      axiosRequest({
+        url: dbUrl + '/' + databaseName + '/conflictingdoc?new_edits=false',
         method: 'PUT',
-        json: true,
-        body: {
+        data: {
           _rev: '4-afae890a0310210db079b0f49fb2569d',
           rocko: 'jumps'
         }
