@@ -1,0 +1,578 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+@import 'variables';
+
+@import '~bootstrap/scss/bootstrap';
+@import '~react-select/dist/react-select.css';
+@import '~rc-slider/assets/index.css';
+
+@import 'mixins';
+@import 'layouts';
+@import 'prettyprint';
+@import 'icons';
+@import 'code-editors';
+@import 'templates';
+@import 'formstyles';
+@import 'pagination';
+@import 'trays';
+@import 'animations';
+@import 'react-animations';
+@import 'notification-center';
+
+// Defines new button variants
+.btn-cf-primary {
+  @include button-variant(
+    // background
+    $cf-btn-primary-bg,
+    // border
+    $cf-btn-primary-border,
+    // color
+    $cf-btn-primary-color,
+    // hover background
+    $cf-btn-primary-bg-hover,
+    // hover border
+    $cf-btn-primary-bg-hover,
+    // hover color
+    $cf-btn-primary-color-hover,
+    // active background
+    shade-color($cf-btn-primary-bg, $cf-btn-active-bg-shade-amount),
+    // active border
+    shade-color($cf-btn-primary-bg, $cf-btn-active-bg-shade-amount),
+    // active color
+    $cf-btn-primary-color,
+    // disabled background
+    $cf-btn-primary-bg-disabled,
+    // disabled border
+    $cf-btn-primary-bg-disabled,
+    // disabled color
+    $cf-btn-primary-color-disabled
+  );
+}
+
+.btn-cf-secondary {
+  @include button-variant(
+    $cf-btn-secondary-bg,
+    $cf-btn-secondary-border,
+    $cf-btn-secondary-color,
+    $cf-btn-secondary-bg-hover,
+    $cf-btn-secondary-bg-hover,
+    $cf-btn-secondary-color-hover,
+    shade-color($cf-btn-secondary-bg, $cf-btn-active-bg-shade-amount),
+    shade-color($cf-btn-secondary-bg, $cf-btn-active-bg-shade-amount),
+    $cf-btn-secondary-color,
+    $cf-btn-secondary-bg-disabled,
+    $cf-btn-secondary-bg-disabled,
+    $cf-btn-secondary-color-disabled
+  );
+}
+
+.btn-cf-danger {
+  @include button-variant(
+    $cf-btn-danger-bg,
+    $cf-btn-danger-border,
+    $cf-btn-danger-color,
+    $cf-btn-danger-bg-hover,
+    $cf-btn-danger-bg-hover,
+    $cf-btn-danger-color-hover,
+    shade-color($cf-btn-danger-bg, $cf-btn-active-bg-shade-amount),
+    shade-color($cf-btn-danger-bg, $cf-btn-active-bg-shade-amount),
+    $cf-btn-danger-color,
+    $cf-btn-danger-bg-disabled,
+    $cf-btn-danger-bg-disabled,
+    $cf-btn-danger-color-disabled
+  );
+}
+
+.btn-cf-cancel {
+  @include button-variant(
+    $cf-btn-cancel-bg,
+    $cf-btn-cancel-border,
+    $cf-btn-cancel-color,
+    $cf-btn-cancel-bg-hover,
+    $cf-btn-cancel-bg-hover,
+    $cf-btn-cancel-color-hover,
+    shade-color($cf-btn-cancel-bg, $cf-btn-active-bg-shade-amount),
+    shade-color($cf-btn-cancel-bg, $cf-btn-active-bg-shade-amount),
+    $cf-btn-cancel-color,
+    $cf-btn-cancel-bg-disabled,
+    $cf-btn-cancel-bg-disabled,
+    $cf-btn-cancel-color-disabled
+  );
+}
+
+.page-header {
+  border-bottom: 1px solid $cf-page-header-border;
+  margin-bottom: 10px;
+
+  h3 {
+    text-transform: capitalize;
+    margin-bottom: 0;
+  }
+}
+
+/* bootstrap overrides */
+
+.dropdown-toggle::after {
+  /* removes caret from dropdown toggle - a Bootstrap default */
+  display: none !important;
+}
+
+/*TABLE STYLES*/
+// Not in use yet but it can be used to add borders only between columns
+table.table.column-bordered {
+  th {
+    border-left-width: 1px;
+  }
+  th:first-child {
+    border-left-width: 0px;
+  }
+  td {
+    border-left-width: 1px;
+  }
+  td:first-child {
+    border-left-width: 0px;
+  }
+}
+
+// Icons in buttons
+.btn > i[class*='fonticon-'] {
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.btn {
+  // focus styling should use the same color for all button types
+  &.btn-cf-primary:focus,
+  &.btn-cf-secondary:focus,
+  &.btn-cf-cancel:focus,
+  &.btn-cf-danger:focus {
+    box-shadow: 0 0 0 0.15rem #{$cf-brand-hightlight-hover}88;
+  }
+}
+
+#dashboard-upper-content {
+  .tab-content {
+    padding-top: 70px;
+  }
+
+  .well {
+    padding: 20px;
+    @include border-radius(0);
+    box-shadow: none;
+  }
+}
+
+#dashboard-content .scrollable {
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  position: absolute;
+  padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+/*ONE PANEL TEMPLATE ONLY STYLES  AKA _all_dbs */
+#db-views-tabs-nav {
+  position: fixed;
+  z-index: 1;
+  margin-top: 19px;
+  margin-bottom: 0;
+  padding: 0 20px;
+}
+
+.db-views-smaller {
+  max-width: 500px;
+}
+
+/** table row selector thing **/
+.select {
+  > a {
+    display: block;
+    padding: 5px 15px 5px 5px;
+    border: 1px solid $cf-border-color02;
+    position: relative;
+    background-color: $cf-white;
+    color: $cf-text01;
+    &:after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid $cf-border-color02;
+      position: absolute;
+      right: 9px;
+      top: 12px;
+    }
+    &:before {
+      content: '';
+      border-left: 1px solid $cf-border-color02;
+      height: 30px;
+      position: absolute;
+      right: 30px;
+      top: 0;
+    }
+  }
+}
+
+/*documents and databases */
+
+// legacy - remove when soft migration to header toggles is complete
+// missing: add_config_option
+.header-icon {
+  font-size: 20px;
+  &:before {
+    float: left;
+    margin: 10px 6px 0px 0px;
+  }
+}
+
+//---header--//
+#dashboard > header {
+  background-color: $cf-topheader-bg;
+  color: $cf-topheader-color;
+  height: 64px;
+
+  /* the position absolute is necessary to allow the 6px box shadow overlap the panels below. The parent <header>
+   ensures the flexbox height is respected */
+  & > div {
+    height: 65px;
+    @include bottom-border();
+    position: absolute;
+    width: 100%;
+    z-index: 2; /* needed because ace's selected row has a z-index of 1 & can't be overridden */
+  }
+}
+
+.header-right {
+  .well {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.faux-header__searchboxwrapper {
+  overflow: visible;
+  height: 64px;
+  width: 235px;
+}
+
+.faux-header__searchboxcontainer {
+  overflow: visible;
+  position: absolute;
+  padding: 12px;
+
+  /* Async Select overrides to (somewhat) match Bootstrap styling */
+  .Select-control {
+    border: 1px solid $cf-border-color01 !important;
+    border-radius: $cf-border-radius !important;
+
+    .Select-placeholder {
+      color: $cf-text01-muted;
+    }
+  }
+
+  .Select-control {
+    width: 210px;
+  }
+  .Select-menu-outer {
+    max-width: 450px;
+  }
+}
+
+// this allows the results expand as much as need be when the component is used in the header
+.Select-menu-outer {
+  & > div > div {
+    padding-right: 25px; // prevents overlapping of auto-generated scrollbar
+  }
+  min-width: 210px;
+  max-width: 450px;
+  width: auto;
+}
+
+// react-select color design
+.Select div.Select-control {
+  border-radius: $cf-border-radius;
+  overflow: unset; // hack to fix an issue where after clicking the dropdown, the text shifts up
+}
+
+.Select .Select-menu-outer {
+  border-radius: $cf-border-radius;
+  border: none;
+  margin-top: 2px; // so the menu doesn't cover the border of the input
+}
+
+.Select .is-focused {
+  background-color: $cf-dropdown-item-bg-hover;
+  color: $cf-dropdown-item-color-hover;
+}
+
+.Select .is-focused:not(.is-open) > .Select-control {
+  box-shadow: transparent;
+}
+
+.Select .Select-menu {
+  max-height: 291px;
+  border-radius: $cf-border-radius;
+  border: 1px solid $cf-border-color01;
+}
+
+.Select-arrow-zone > .Select-arrow {
+  border-top-color: $cf-text01;
+}
+
+.Select-arrow-zone:hover > .Select-arrow {
+  border-top-color: $cf-brand-hightlight-hover;
+}
+
+#primary-nav-right-shadow {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 6px;
+  z-index: 6;
+}
+
+.simple-header {
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+}
+
+// left navigationbar is opened
+@media (max-width: 730px) {
+  .closeMenu {
+    .one-pane {
+      .faux-header__searchboxwrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 860px) {
+  .closeMenu {
+    .with-sidebar {
+      .faux-header__searchboxwrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+// left navigationbar is closed
+@media (max-width: 875px) {
+  #main:not(.closeMenu) {
+    .one-pane {
+      .faux-header__searchboxwrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1015px) {
+  #main:not(.closeMenu) {
+    .with-sidebar {
+      .faux-header__searchboxwrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+body .control-toggle-include-docs span {
+  margin-left: 0;
+  &::before {
+    content: 'Include Docs';
+  }
+}
+
+@media (max-width: 1177px) {
+  #main.closeMenu {
+    .with-sidebar {
+      .two-panel-header {
+        .control-toggle-include-docs span::before {
+          content: ' Docs';
+        }
+        .right-header button i:before {
+          margin: 2px 0 0 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1120px) {
+  #main.closeMenu {
+    .with-sidebar {
+      .two-panel-header {
+        .right-header-wrapper {
+          .control-toggle-include-docs span::before {
+            content: 'Docs';
+          }
+          button:not(.control-toggle-include-docs) span {
+            display: none;
+          }
+          button i:before {
+            float: none;
+          }
+          .right-header button i:before {
+            margin: 2px 0 0 0;
+          }
+          #query-options-tray:before {
+            right: 180px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1339px) {
+  #main:not(.closeMenu) {
+    .with-sidebar {
+      .two-panel-header {
+        .control-toggle-include-docs span::before {
+          content: 'Docs';
+        }
+        .right-header button i:before {
+          margin: 2px 0 0 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1090px) {
+  #main:not(.closeMenu) {
+    .with-sidebar {
+      .two-panel-header {
+        .control-toggle-include-docs span::before {
+          content: 'Docs';
+        }
+        button:not(.control-toggle-include-docs) span {
+          display: none;
+        }
+        button i:before {
+          float: none;
+        }
+        #query-options-tray:before {
+          right: 180px;
+        }
+        .right-header button i:before {
+          margin: 2px 0 0 0;
+        }
+      }
+    }
+  }
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.fauxton-table-list {
+  a.db-actions,
+  a.db-actions:visited {
+    color: $cf-brand-highlight;
+    border: 1px solid $cf-border-color01;
+    padding: 5px 7px;
+    @include border-radius(6px);
+    text-decoration: none;
+    font-size: 19px;
+    &:hover {
+      background-color: $cf-brand-hightlight-hover;
+      color: $cf-white;
+    }
+  }
+  td {
+    vertical-align: middle;
+  }
+}
+
+.btn-space {
+  margin-right: 5px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.noscript-warning {
+  padding: 1px 30px 10px 30px;
+  color: $cf-white;
+  background: $cf-brand-highlight;
+  margin: 100px;
+  box-shadow: 2px 2px 5px $cf-border-color02;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Generic dropdown Bootstrap overrides */
+.dropdown-menu {
+  box-shadow: $cf-box-shadow;
+  padding: 0;
+  border-radius: 0;
+
+  .icon:before {
+    padding-right: 10px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  a,
+  button {
+    background-color: $cf-dropdown-item-bg;
+    color: $cf-dropdown-item-color;
+    &:hover {
+      background-color: $cf-dropdown-item-bg-hover;
+      color: $cf-dropdown-item-color-hover;
+    }
+  }
+
+  .dropdown-item {
+    margin-bottom: 1px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .dropdown-header {
+    color: $cf-dropdown-heading-color;
+    background-color: $cf-dropdown-heading-bg;
+  }
+}
+
+// Modals
+.modal-dialog {
+  .modal-footer {
+    // remove divider between modal content and footer
+    border-top: none;
+  }
+}

@@ -12,7 +12,7 @@
 
 import FauxtonAPI from "../../core/api";
 import Activetasks from "./routes";
-import "./assets/less/activetasks.less";
+import "./assets/scss/activetasks.scss";
 import reducers from './reducers';
 
 Activetasks.initialize = function () {

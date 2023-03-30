@@ -1,4 +1,4 @@
-import FauxtonAPI from "../../core/api";
+
 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
@@ -13,13 +13,9 @@ import FauxtonAPI from "../../core/api";
 // the License.
 
 import PropTypes from 'prop-types';
-
 import React from "react";
-import ReactDOM from "react-dom";
-import { Modal } from "react-bootstrap";
-
-// import "velocity-animate/velocity";
-// import "velocity-animate/velocity.ui";
+import { Button, Modal } from "react-bootstrap";
+import FauxtonAPI from "../../core/api";
 
 
 // formats a block of code and pretty-prints it in the page. Currently uses the prettyPrint plugin
@@ -95,7 +91,7 @@ class Pagination extends React.Component {
   createItemsForPage = (visiblePages) => {
     return _.range(visiblePages.from, visiblePages.to).map((i) => {
       return (
-        <li key={i} className={(this.props.page === i ? 'active' : null)}>
+        <li key={i} className={'page-item ' + (this.props.page === i ? 'active' : '')}>
           {this.getLink(i, i)}
         </li>
       );
@@ -111,14 +107,15 @@ class Pagination extends React.Component {
     };
   }
 
-  getLink = (i, label) => {
+  getLink = (i, label, fontIcon) => {
+    const linkClass = fontIcon ? `page-link ${fontIcon}` : 'page-link';
     if (this.props.onClick) {
       return (
-        <a onClick={this.getOnPageClick(i)} dangerouslySetInnerHTML={{__html: label}}></a>
+        <a className={linkClass} onClick={this.getOnPageClick(i)}>{label}</a>
       );
     }
     return (
-      <a href={this.props.urlPrefix + i + this.props.urlSuffix} dangerouslySetInnerHTML={{__html: label}}></a>
+      <a className={linkClass} href={this.props.urlPrefix + i + this.props.urlSuffix}>{label}</a>
     );
   };
 
@@ -135,12 +132,12 @@ class Pagination extends React.Component {
 
     return (
       <ul className="pagination">
-        <li className={(this.props.page === 1 ? "disabled" : null)}>
-          {this.getLink(prevPage, '&laquo;')}
+        <li className={'page-item ' + (this.props.page === 1 ? "disabled" : '')}>
+          {this.getLink(prevPage, '', 'fonticon-left-open')}
         </li>
         {rangeItems}
-        <li className={(this.props.page < totalPages ? null : "disabled")}>
-          {this.getLink(nextPage, '&raquo;')}
+        <li className={'page-item ' + (this.props.page < totalPages ? '' : "disabled")}>
+          {this.getLink(nextPage, '', 'fonticon-right-open')}
         </li>
       </ul>
     );
@@ -161,10 +158,10 @@ class ConfirmationModal extends React.Component {
 
   static defaultProps = {
     visible: false,
-    title: 'Please confirm',
+    title: 'Confirmation',
     text: '',
-    successButtonLabel: 'Okay',
-    buttonClass: 'btn-primary'
+    successButtonLabel: 'Ok',
+    buttonVariant: 'cf-primary'
   };
 
   close = (e) => {
@@ -179,14 +176,13 @@ class ConfirmationModal extends React.Component {
     if (!_.isString(this.props.text)) {
       content = this.props.text;
     }
-    const btnClasses = 'btn ' + this.props.buttonClass;
     const closeButton = this.props.onClose ? (
-      <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
+      <Button href="#" data-bypass="true" variant="cf-cancel" className="cancel-link" onClick={this.close}>Cancel</Button>
     ) : null;
     const submitButton = this.props.onSubmit ? (
-      <button className={btnClasses} onClick={this.props.onSubmit}>
+      <Button variant={this.props.buttonVariant} onClick={this.props.onSubmit}>
         <i className="fonticon-ok-circled"></i> {this.props.successButtonLabel}
-      </button>
+      </Button>
     ) : null;
     return (
       <Modal dialogClassName="confirmation-modal" show={this.props.visible} onHide={this.close}>

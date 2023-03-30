@@ -41,7 +41,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
 
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel button#save-doc-btn')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')
@@ -86,7 +86,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
 
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel button#save-doc-btn')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
 
@@ -119,7 +119,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.tableview-checkbox-cell', waitTime, false)
-      .clickWhenVisible('.document-result-screen__toolbar-create-btn')
+      .clickWhenVisible('#create-new-doc-btn')
       .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl + '/#database/' + newDatabaseName + '/_new')
       .waitForElementPresent('.ace_gutter-active-line', waitTime, false)
@@ -135,7 +135,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
 
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel button#save-doc-btn')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')

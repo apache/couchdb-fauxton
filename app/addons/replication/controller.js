@@ -71,7 +71,8 @@ export default class ReplicationController extends React.Component {
       hideConflictModal, isConflictModalVisible, filterDocs,
       filterReplicate, replicate, clearReplicationForm, selectAllDocs, changeActivitySort, selectDoc,
       deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate,
-      sourceAuthType, sourceAuth, targetAuthType, targetAuth, targetDatabasePartitioned, allowNewPartitionedLocalDbs
+      sourceAuthType, sourceAuth, targetAuthType, targetAuth, targetDatabasePartitioned, allowNewPartitionedLocalDbs,
+      pageLimit
     } = this.props;
 
     if (tabSection === 'new replication') {
@@ -107,6 +108,7 @@ export default class ReplicationController extends React.Component {
         checkReplicationDocID={checkReplicationDocID}
         authenticated={authenticated}
         submittedNoChange={submittedNoChange}
+        pageLimit={pageLimit}
       />;
     }
 
@@ -251,7 +253,7 @@ export default class ReplicationController extends React.Component {
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">
             {this.getTabs()}
-            <div className="replication__page flex-layout flex-col">
+            <div className="replication__page">
               {this.showSection()}
             </div>
           </div>

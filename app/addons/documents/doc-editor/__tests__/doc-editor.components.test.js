@@ -27,6 +27,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import actiontypes from '../actiontypes';
 import docEditorReducer from '../reducers';
+import { act } from 'react-dom/test-utils';
 
 import '../../base';
 
@@ -95,7 +96,7 @@ const defaultProps = {
 describe('DocEditorScreen', () => {
 
   it('loading indicator appears on load', () => {
-    const el = mount(<DocEditorScreen {...defaultProps} />);
+    const el = mount(<DocEditorScreen {...defaultProps} isSaving={false} />);
     expect(el.find('.loading-lines').length).toBe(1);
   });
 
@@ -105,13 +106,14 @@ describe('DocEditorScreen', () => {
       {...defaultProps}
       isLoading={false}
       isNewDoc={true}
+      isSaving={false}
       database={database}
       doc={doc} />);
 
     expect(el.find('.loading-lines').length).toBe(0);
-    expect(el.find('.icon-circle-arrow-up').length).toBe(0);
-    expect(el.find('.icon-repeat').length).toBe(0);
-    expect(el.find('.icon-trash').length).toBe(0);
+    expect(el.find('.fonticon-fonticon-up-circled').length).toBe(0);
+    expect(el.find('.fonticon-cw').length).toBe(0);
+    expect(el.find('.fonticon-trash').length).toBe(0);
   });
 
   it('view attachments button does not appear with no attachments', () => {
@@ -119,6 +121,7 @@ describe('DocEditorScreen', () => {
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={false}
       database={database}
       doc={doc} />);
@@ -131,6 +134,7 @@ describe('DocEditorScreen', () => {
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={false}
       database={database}
       doc={doc} />);
@@ -138,31 +142,42 @@ describe('DocEditorScreen', () => {
     expect(el.find('.view-attachments-section').length).toBe(1);
   });
 
-  it('view attachments dropdown contains right number of docs', () => {
+  it('view attachments dropdown contains right number of docs', async () => {
     const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={false}
       database={database}
       doc={doc} />);
 
-    expect(el.find('.view-attachments-section .dropdown-menu li').length).toBe(2);
+    const dropdownButton = el.find('.view-attachments-section button.dropdown-toggle');
+    dropdownButton.simulate('click');
+    await act(async () => {
+      el.update();
+    });
+    const menuItems = el.find('.view-attachments-section a.dropdown-item');
+    expect(menuItems.length).toBe(2);
   });
 
-  it('view attachments dropdown contains correct urls', () => {
+  it('view attachments dropdown contains correct urls', async () => {
     const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={false}
       database={database}
       doc={doc} />);
 
-    const $attachmentNode = el.find('.view-attachments-section .dropdown-menu li');
-    const attachmentURLactual = $attachmentNode.find('a').first().prop('href');
-
-    expect(attachmentURLactual).toBe('./a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
+    const dropdownButton = el.find('.view-attachments-section button.dropdown-toggle');
+    dropdownButton.simulate('click');
+    await act(async () => {
+      el.update();
+    });
+    const menuItems = el.find('.view-attachments-section a.dropdown-item');
+    expect(menuItems.first().prop('href')).toBe('./a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
   });
 
   it('auto-generated ID for new docs starts with colon for partitioned databases', () => {
@@ -170,6 +185,7 @@ describe('DocEditorScreen', () => {
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={true}
       isDbPartitioned={true}
       database={database}
@@ -184,6 +200,7 @@ describe('DocEditorScreen', () => {
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={true}
       isDbPartitioned={true}
       database={database}
@@ -198,6 +215,7 @@ describe('DocEditorScreen', () => {
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={true}
       isDbPartitioned={true}
       database={database}
@@ -315,6 +333,7 @@ describe("Custom Extension Buttons", () => {
     const el = mount(<DocEditorScreen
       {...defaultProps}
       isLoading={false}
+      isSaving={false}
       isNewDoc={false}
       database={database} />);
     expect(/Oh\sno\sshe\sdi'n't!/.test(el.html())).toBe(true);

@@ -50,7 +50,7 @@ export class Beautify extends React.Component {
       <OverlayTrigger placement="right" overlay={tooltip}>
         <button
           onClick={this.beautify}
-          className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
+          className="beautify beautify_map btn btn-cf-primary btn-small beautify-tooltip"
           type="button"
         >
           Format Code

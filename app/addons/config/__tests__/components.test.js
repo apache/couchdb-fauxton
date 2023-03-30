@@ -11,8 +11,12 @@
 // the License.
 
 import React from 'react';
+import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
+import { createStore, combineReducers } from 'redux';
 import {mount} from 'enzyme';
 import sinon from 'sinon';
+import reducer from '../reducers';
 import FauxtonAPI from '../../../core/api';
 import AddOptionButton from '../components/AddOptionButton';
 import ConfigOption from '../components/ConfigOption';
@@ -40,44 +44,62 @@ describe('Config Components', () => {
       node,
       options
     };
+    let store;
+    beforeEach(() => {
+      store = createStore(
+        combineReducers({ permissions: reducer})
+      );
+    });
 
     it('deletes options', () => {
       const spy = sinon.stub();
-      const wrapper = mount(<ConfigTableScreen
-        {...defaultProps}
-        deleteOption={spy}/>
+      const wrapper = mount(
+        <Provider store={store}>
+          <ConfigTableScreen
+            {...defaultProps}
+            deleteOption={spy}/>
+        </Provider>
       );
-      wrapper.instance().deleteOption({});
+      wrapper.find(ConfigTableScreen).instance().deleteOption({});
       sinon.assert.called(spy);
     });
 
     it('saves options', () => {
       const spy = sinon.stub();
-      const wrapper = mount(<ConfigTableScreen
-        {...defaultProps}
-        saveOption={spy}/>
+      const wrapper = mount(
+        <Provider store={store}>
+          <ConfigTableScreen
+            {...defaultProps}
+            saveOption={spy}/>
+        </Provider>
       );
-      wrapper.instance().saveOption({});
+      wrapper.find(ConfigTableScreen).instance().saveOption({});
       sinon.assert.called(spy);
     });
 
     it('edits options', () => {
       const spy = sinon.stub();
-      const wrapper = mount(<ConfigTableScreen
-        {...defaultProps}
-        editOption={spy}/>
+      const wrapper = mount(
+        <Provider store={store}>
+          <ConfigTableScreen
+            {...defaultProps}
+            editOption={spy}/>
+        </Provider>
       );
-      wrapper.instance().editOption({});
+      wrapper.find(ConfigTableScreen).instance().editOption({});
       sinon.assert.called(spy);
     });
 
     it('cancels editing', () => {
       const spy = sinon.stub();
-      const wrapper = mount(<ConfigTableScreen
-        {...defaultProps}
-        cancelEdit={spy}/>
+      const wrapper = mount(
+        <Provider store={store}>
+          <ConfigTableScreen
+            {...defaultProps}
+            cancelEdit={spy}/>
+        </Provider>
       );
-      wrapper.instance().cancelEdit();
+      wrapper.find(ConfigTableScreen).instance().cancelEdit();
       sinon.assert.called(spy);
     });
   });
@@ -143,7 +165,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      expect(el.find('input.config-value-input').length).toBe(1);
+      expect(el.find('input.form-control').length).toBe(1);
       expect(el.find('button.btn-config-cancel').length).toBe(1);
       expect(el.find('button.btn-config-save').length).toBe(1);
     });
@@ -155,7 +177,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      expect(el.find('input.config-value-input').prop('disabled')).toBe(true);
+      expect(el.find('input.form-control').prop('disabled')).toBe(true);
     });
 
     it('saves changed value of input when save clicked', () => {
@@ -167,7 +189,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      el.find('input.config-value-input').simulate('change', change);
+      el.find('input.form-control').simulate('change', change);
       el.find('button.btn-config-save').simulate('click');
       expect(spy.calledWith('new_value')).toBeTruthy();
     });
@@ -197,7 +219,7 @@ describe('Config Components', () => {
         <table><tbody><tr><ConfigOptionTrash {...defaultProps}/></tr></tbody></table>
       );
 
-      el.find('i.icon').simulate('click');
+      el.find('i.fonticon-trash').simulate('click');
       expect(el.find('div.confirmation-modal').length).toBe(1);
     });
 
@@ -207,57 +229,69 @@ describe('Config Components', () => {
         <table><tbody><tr><ConfigOptionTrash {...defaultProps} onDelete={spy}/></tr></tbody></table>
       );
 
-      el.find('i.icon').simulate('click');
-      el.find('div.confirmation-modal .btn').simulate('click');
+      el.find('i.fonticon-trash').simulate('click');
+      el.find('div.confirmation-modal .btn-cf-primary').simulate('click');
       sinon.assert.calledOnce(spy);
     });
   });
 
   describe('AddOptionButton', () => {
-    it('displays add option controls when clicked', () => {
+    it('displays add option controls when clicked', async() => {
       const el = mount(
         <AddOptionButton onAdd={() => {}}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      expect(el.find('div#add-option-popover .input-section-name').length).toBe(1);
-      expect(el.find('div#add-option-popover .input-option-name').length).toBe(1);
-      expect(el.find('div#add-option-popover .input-value').length).toBe(1);
-      expect(el.find('div#add-option-popover .btn-create').length).toBe(1);
+      await act(async () => {
+        el.update();
+      });
+      expect(el.find('div#add-option-popover input[name="section"]').length).toBe(1);
+      expect(el.find('div#add-option-popover input[name="name"]').length).toBe(1);
+      expect(el.find('div#add-option-popover input[name="value"]').length).toBe(1);
+      expect(el.find('div#add-option-popover .btn').length).toBe(1);
     });
 
-    it('does not hide popover if create clicked with invalid input', () => {
+    it('does not hide popover if create clicked with invalid input', async() => {
       const el = mount(
         <AddOptionButton onAdd={() => {}}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      el.find('div#add-option-popover .btn-create').simulate('click');
+      el.find('div#add-option-popover .btn').simulate('click');
+      await act(async () => {
+        el.update();
+      });
       expect(el.find('div#add-option-popover').length).toBe(1);
     });
 
-    it('does not add option if create clicked with invalid input', () => {
+    it('does not add option if create clicked with invalid input', async() => {
       const spy = sinon.spy();
       const el = mount(
         <AddOptionButton onAdd={spy}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      el.find('div#add-option-popover .btn-create').simulate('click');
+      el.find('div#add-option-popover .btn').simulate('click');
+      await act(async () => {
+        el.update();
+      });
       sinon.assert.notCalled(spy);
     });
 
-    it('adds option when create clicked with valid input', () => {
+    it('adds option when create clicked with valid input', async() => {
       const spy = sinon.spy();
       const el = mount(
         <AddOptionButton onAdd={spy}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      el.find('div#add-option-popover .input-section-name').simulate('change', { target: { value: 'test_section' } });
-      el.find('div#add-option-popover .input-option-name').simulate('change', { target: { value: 'test_option' } });
-      el.find('div#add-option-popover .input-value').simulate('change', { target: { value: 'test_value' } });
-      el.find('div#add-option-popover .btn-create').simulate('click');
+      el.find('div#add-option-popover input[name="section"]').simulate('change', { target: { value: 'test_section' } });
+      el.find('div#add-option-popover input[name="name"]').simulate('change', { target: { value: 'test_option' } });
+      el.find('div#add-option-popover input[name="value"]').simulate('change', { target: { value: 'test_value' } });
+      el.find('div#add-option-popover .btn').simulate('click');
+      await act(async () => {
+        el.update();
+      });
       sinon.assert.calledWithMatch(spy, {
         sectionName: 'test_section',
         optionName: 'test_option',

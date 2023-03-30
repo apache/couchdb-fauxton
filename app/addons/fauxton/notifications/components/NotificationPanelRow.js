@@ -40,14 +40,9 @@ export default class NotificationPanelRow extends React.Component {
     // we can safely do this because the store ensures all notifications are of known types
     const rowIconClasses = 'fonticon ' + iconMap[this.props.item.type];
     const hidden = (this.props.filter === 'all' || this.props.filter === this.props.item.type) ? false : true;
-    const {style} = this.props;
-    const {opacity, height} = style;
-    if (opacity === 0 && height === 0) {
-      return null;
-    }
     // N.B. wrapper <div> needed to ensure smooth hide/show transitions
     return (
-      <li style={{opactiy: opacity, height: height + 'px', borderBottomColor: `rgba(34, 34, 34, ${opacity})`}} aria-hidden={hidden}>
+      <li aria-hidden={hidden}>
         <div className="flex-layout flex-row">
           <span className={rowIconClasses}></span>
           <div className="flex-body">

@@ -1,0 +1,120 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/mixins";
+
+.component-tab-element-wrapper {
+  margin-left: 0;
+  padding-left: 0;
+  margin-bottom: 0;
+  height: 60px;
+  background-color: $cf-tab-wrapper-bg;
+  padding-left: 20px;
+  overflow: hidden;
+  width: 100%;
+  min-width: 770px;
+}
+
+.component-tab-list-element {
+  list-style-type: none;
+  padding: 11px;
+}
+
+.component-tab-element {
+  background-color: $cf-tab-element-bg;
+  color: $cf-tab-element-color;
+  margin-top: 10px;
+  margin-right: 5px;
+  margin-bottom: -1px;
+  float: left;
+  list-style-type: none;
+  line-height: 40px;
+
+  input {
+    display: none;
+  }
+
+  label {
+    cursor: pointer;
+    margin-right: 0;
+    margin-bottom: 0;
+    line-height: 25px;
+    font-size: 1rem;
+    @include noselect();
+  }
+
+  .tab-element-content {
+    padding: 8px 12px 12px 12px;
+  }
+
+  .tab-element-indicator-wrapper {
+    height: 5px;
+  }
+
+  .tab-element-badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    line-height: 1;
+    color: $cf-white;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: $cf-tab-element-badge;
+    border-radius: 10px;
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .tab-element-indicator {
+    height: 0px;
+    transition: all 0.25s linear;
+  }
+
+  &.tab-element-checked .tab-element-indicator {
+    height: 5px;
+    background-color: $cf-tab-element-indicator-active;
+  }
+
+  &.tab-element-checked {
+    background-color: $cf-tab-element-bg-active;
+    color: $cf-tab-element-color-active;
+    label {
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  &.tab-element-checked .tab-element-content {
+    font-weight: bold;
+  }
+
+  transition: all 0.25s linear;
+
+  &:hover {
+    background-color: $cf-tab-element-bg-hover;
+    color: $cf-tab-element-color-hover;
+  }
+
+  &.tab-element-checked .tab-element-content:hover {
+    color: initial;
+  }
+
+  &.tab-element-checked:hover {
+    color: initial;
+  }
+
+  &:hover .tab-element-indicator {
+    height: 5px;
+    background-color: $cf-tab-element-indicator-hover;
+  }
+}

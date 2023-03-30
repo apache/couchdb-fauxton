@@ -121,7 +121,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     getReplicateActivity: () => dispatch(getReplicateActivity()),
     getReplicationStateFrom: (id) => dispatch(getReplicationStateFrom(id)),
     getDatabasesList: () => dispatch(getDatabasesList()),
-    replicate: (params) => dispatch(replicate(params, ownProps.pageLimit)),
+    replicate: (params, pageLimit) => dispatch(replicate(params, pageLimit)),
     showConflictModal: () => dispatch(showConflictModal()),
     hideConflictModal: () => dispatch(hideConflictModal()),
     filterReplicate: (filter) => dispatch(filterReplicate(filter)),

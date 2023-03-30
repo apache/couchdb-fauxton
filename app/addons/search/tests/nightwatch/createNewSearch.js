@@ -31,10 +31,7 @@ module.exports = {
       .click('#new-design-docs-button a')
       .click('#new-design-docs-button a[href="#/database/' + newDatabaseName + '/new_search"]')
       .waitForElementVisible('.faux-header__doc-header-title', client.globals.maxWaitTime, true)
-
-      .clickWhenVisible('.styled-select select')
-      .keys(['_design/keyview', '\uE006'])
-
+      .clickWhenVisible('select[id="faux__edit-view__design-doc"] option[value="_design/keyview"]')
       .clearValue('#search-name')
       .setValue('#search-name', 'fancy_search')
       .execute('\
@@ -60,8 +57,7 @@ module.exports = {
       .waitForElementPresent('#new-design-docs-button', client.globals.maxWaitTime, false)
       .click('#new-design-docs-button a')
       .click('#new-design-docs-button a[href="#/database/' + newDatabaseName + '/new_search"]')
-      .clickWhenVisible('.styled-select select')
-      .keys(['_design/keyview', '\uE006'])
+      .clickWhenVisible('select[id="faux__edit-view__design-doc"] option[value="_design/keyview"]')
 
       .clearValue('#search-name')
       .setValue('#search-name', 'clean-slate-test')
@@ -75,8 +71,8 @@ module.exports = {
       .waitForElementPresent('#new-design-docs-button', client.globals.maxWaitTime, false)
       .click('#new-design-docs-button a')
       .click('#new-design-docs-button a[href="#/database/' + newDatabaseName + '/new_search"]')
-      .waitForElementVisible('.styled-select select', client.globals.maxWaitTime, false)
-      .assert.value('.styled-select select', 'new-doc')
+      .waitForElementVisible('select.form-select#faux__edit-view__design-doc', client.globals.maxWaitTime, false)
+      .assert.value('select.form-select#faux__edit-view__design-doc', 'new-doc')
       .end();
   },
 

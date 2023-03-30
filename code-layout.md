@@ -5,10 +5,7 @@ This page documents a little practical information about the Fauxton codebase to
 
 ## Backbone and React 
 
-Fauxton was originally written in [Backbone](http://backbonejs.org), but in 2015 we're in the process of upgrading 
-the codebase to build it around [React](https://facebook.github.io/react/). We're replacing all Backbone Views with 
-(unit-tested!) React components. Backbone models and collections are still being used for server-side data retrieval 
-and storage as is URL routing, but the plan is to phase out all Backbone over time. 
+Fauxton was originally written in [Backbone](http://backbonejs.org), but has since been rebuilt around [React](https://facebook.github.io/react/). Backbone models and collections are still being used for server-side data retrieval, storage, and URL routing. However, the plan is to completely phase out Backbone over time. 
 
 ### React and the Flux pattern
 
@@ -67,20 +64,20 @@ point is required for the view.
 Check out [writing_addons.md](writing_addons.md) for more information on writing your own addons.
 
 
-## CSS / Less
+## CSS / SCSS
 
-We use Less for generating our CSS. The bulk of the shared CSS used throughout the application is found in 
-[assets/less/](assets/less), but any addon may contain its own `assets/less` subfolder containing whatever unique
+We use SCSS for generating our CSS. The bulk of the shared CSS used throughout the application is found in 
+[assets/scss/](assets/scss), but any addon may contain its own `assets/scss` subfolder containing whatever unique
 styles are needed.
 
 ## Icons
 
-Fauxton uses icon fonts which are packaged as font files in the [assets/fonts](assets/fonts) folder.
+Fauxton uses icon fonts, which are packaged as font files in the [assets/fonts](assets/fonts) folder.
 As the name implies, these are fonts that contain icons instead of letters and numbers.
 
-To use an icon, you simply add the corresponding `fonticon-<icon_name>` CSS class to the HTML element. E.g. `<i className="fonticon-attention-circled"></i>`.
+To use an icon, simply add the corresponding `fonticon-<icon_name>` CSS class to the HTML element. E.g. `<i className="fonticon-attention-circled"></i>`.
 
-The CSS classes are defined in [assets/less/icon.less](assets/less/icon.less), which is a generated file. In order to add, update or remove icons, follow the steps outlined at [assets/iconfontgenerator/README.md](assets/iconfontgenerator/README.md). The source SVG files for each icon are located at [assets/icons](assets/icons).
+The CSS classes are defined in [assets/scss/icon.scss](assets/scss/icon.scss) - a generated file. In order to add, update or remove icons, follow the steps outlined at [assets/iconfontgenerator/README.md](assets/iconfontgenerator/README.md). The source SVG files for each icon are located at [assets/icons](assets/icons).
 
 
 ## app/addons/components / app/addons/fauxton

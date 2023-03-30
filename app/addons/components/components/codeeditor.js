@@ -372,7 +372,7 @@ export class CodeEditor extends React.Component {
           title="Edit string"
           disabled={!this.state.stringEditIconVisible || this.props.disabled}
           style={this.state.stringEditIconStyle} onClick={this.openStringEditModal}>
-          <i className="icon icon-edit"></i>
+          <i className="icon fonticon-pencil"></i>
         </button>
         <StringEditModal
           ref={node => this.stringEditModal = node}

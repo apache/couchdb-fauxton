@@ -1,0 +1,282 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/mixins";
+
+#sidebar-content {
+  .loading-lines {
+    margin-top: 20px;
+  }
+}
+
+.sidenav {
+  a {
+    text-decoration: none;
+  }
+
+  // selected nav item row styles
+  .nav .active > a {
+    text-shadow: none;
+    background-color: $cf-sidebar-bg-active;
+    color: $cf-sidebar-color-active;
+    &:hover {
+      color: $cf-sidebar-color-hover;
+    }
+  }
+
+  .dropdown-toggle {
+    color: $cf-sidebar-icon-color;
+
+    &:hover {
+      color: $cf-sidebar-icon-color-hover;
+    }
+  }
+
+  // ugly! This styles the (+) icon to make it white when a user hovers over a row. Better solution would be to move the
+  // active class to the <li> instead of the child <a>
+  .accordion-list-item:hover,
+  .nav > li a:hover {
+    & + div.add-dropdown .dropdown-toggle,
+    & + span.index-menu-toggle {
+      color: $cf-sidebar-color-hover;
+    }
+  }
+
+  li {
+    position: relative;
+    a {
+      text-shadow: none;
+    }
+  }
+
+  .design-doc-section {
+    border-bottom: 1px solid $cf-border-color01;
+    .accordion-list-item:hover {
+      p,
+      .fonticon-play {
+        color: $cf-sidebar-color-hover;
+      }
+      p {
+        background-color: $cf-sidebar-bg-hover;
+      }
+    }
+    .accordion-list-item p {
+      @include transition(all 0.25s linear);
+    }
+    .fonticon-play {
+      font-size: 12px;
+      top: 12px;
+      left: 12px;
+    }
+    &.down .fonticon-play {
+      @include rotate(90deg);
+    }
+    .add-dropdown {
+      right: 15px;
+    }
+  }
+
+  li.nav-header {
+    margin-top: 0;
+    position: relative;
+
+    .index-list {
+      li {
+        a.toggle-view {
+          padding-left: 46px;
+        }
+      }
+    }
+
+    .accordion-body {
+      margin-left: 0;
+
+      li {
+        cursor: pointer;
+        &.active > a {
+          background-color: $cf-sidebar-bg-active;
+          color: $cf-sidebar-color-active;
+        }
+        > a.down .fonticon-play {
+          @include rotate(90deg);
+        }
+        &:hover .fonticon-play {
+          color: $cf-sidebar-color-hover;
+        }
+        a {
+          font-size: 14px;
+          background-color: $cf-sidebar-subitem-bg;
+          color: $cf-sidebar-subitem-color;
+          border-top: none;
+
+          &:hover {
+            color: $cf-sidebar-subitem-color-hover;
+            text-decoration: none;
+            background-color: $cf-sidebar-subitem-bg-hover;
+          }
+          &.accordion-header {
+            padding: 8px 5px 8px 36px;
+          }
+
+          &.icon {
+            background-color:$cf-transparent;
+
+            &:hover {
+              color: $cf-sidebar-icon-color-hover;
+            }
+          }
+        }
+      }
+    }
+
+    .toggle-view {
+      padding: 4px 5px 4px 36px;
+    }
+    .fonticon-play {
+      font-size: 8px;
+      top: 16px;
+      left: 15px;
+      color: $cf-sidebar-subitem-color;
+      position: absolute;
+      display: block;
+      @include transition(all 0.25s linear);
+    }
+    .fonticon:before {
+      margin-right: 6px;
+      font-size: 20px;
+      top: 3px;
+      position: relative;
+    }
+    .accordion-header:hover .fonticon-play {
+      color: $cf-sidebar-color-hover;
+    }
+  }
+
+  .design-doc-name {
+    cursor: pointer;
+    margin: 0;
+    span {
+      width: $cf-sidebar-width - 30px;
+      display: block;
+      padding: 10px 13px 10px 36px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    i {
+      padding-right: 6px;
+    }
+  }
+
+  .index-group-header {
+    font-weight: bold;
+  }
+
+  li.nav-header .index-menu-toggle.fonticon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $cf-sidebar-icon-color;
+    height: 30px;
+    width: 40px;
+    padding-top: 2px;
+    padding-left: 4px;
+    @include transition(all 0.25s linear);
+    &:hover {
+      color: $cf-sidebar-icon-color-hover;
+    }
+    &:before {
+      font-size: 17px;
+      margin-right: 0;
+    }
+  }
+}
+
+#index-menu-component-popover {
+  @include border-radius(0);
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  background-color: $cf-navbar-bg;
+  color: $cf-white;
+  font-size: 12px;
+  padding: 0;
+  margin-left: -7px;
+  margin-top: 5px;
+  ul {
+    list-style-type: none;
+    margin: 0;
+  }
+  li {
+    padding: 10px;
+    background-color: $cf-dropdown-item-bg;
+    margin-bottom: 2px;
+    cursor: pointer;
+    @include transition(all 0.25s linear);
+    &:hover {
+      background-color: $cf-brand-hightlight-hover;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .arrow {
+    &:after {
+      border-bottom-color: $cf-black;
+      border-top-color: $cf-black;
+    }
+  }
+  .fonticon {
+    margin-right: 7px;
+  }
+  .popover-content {
+    padding: 0;
+  }
+}
+
+.clone-index-modal {
+  .modal-body {
+    padding: 20px;
+  }
+  /* the index label ("view" / "search index", etc.) is passed dynamically to the clone index modal. This fixes the text case */
+  .modal-title,
+  .btn-success,
+  .new-index-title-label {
+    text-transform: capitalize;
+  }
+  select {
+    width: 230px;
+  }
+  .row {
+    margin: 0;
+    padding-top: 10px;
+    #new-ddoc-section {
+      width: 262px;
+
+      label {
+        width: 40px;
+        margin-top: 27px;
+        float: left;
+      }
+      div.controls {
+        margin-left: 0;
+        float: right;
+        margin-top: 15px;
+      }
+    }
+
+    select {
+      width: 100%;
+    }
+  }
+  .ddoc-selector-partitioned {
+    padding-top: 0px;
+    padding-bottom: 16px;
+  }
+}

@@ -56,13 +56,13 @@ export default class SplitScreenArea extends React.Component {
 
     return (
       <div className="revision-split-area">
-        <div data-id="ours" style={{width: '50%'}}>
-          <div style={{marginBottom: '20px'}}>{ours._rev} (Server-Selected Rev)</div>
+        <div data-id="ours" className="ours-area">
+          <div className="doc-title">{ours._rev} (Server-Selected Rev)</div>
           <pre ref={node => this.revLeftOurs = node}></pre>
         </div>
 
-        <div data-id="theirs" style={{width: '50%'}}>
-          <div style={{marginBottom: '20px'}}>{theirs._rev}</div>
+        <div data-id="theirs" className="theirs-area">
+          <div className="doc-title">{theirs._rev}</div>
           <pre ref={node => this.revRightTheirs = node}></pre>
         </div>
       </div>

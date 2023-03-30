@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import Helpers from '../../../helpers';
 import Components from "../../components/react-components";
 const { Polling } = Components;
 
@@ -27,12 +26,8 @@ export default class ActiveTasksPollingWidgetController extends React.Component 
 
 
   render() {
-    let activePollingClass = "active-tasks__polling-wrapper";
-    if (Helpers.isIE1X()) {
-      activePollingClass += " " + activePollingClass + "--ie1X";
-    }
     return (
-      <div className={activePollingClass}>
+      <div>
         <Polling
           min={1}
           max={30}

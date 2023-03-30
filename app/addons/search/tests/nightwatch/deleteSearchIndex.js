@@ -39,9 +39,9 @@ module.exports = {
       .waitForElementVisible('#test1_test1-index', waitTime, true)
 
       // now delete it and confirm that the entire design doc gets removed (because it's the last index)
-      .clickWhenVisible('.index-list li span', waitTime, true)
-      .clickWhenVisible('.popover-content .fonticon-trash', waitTime, true)
-      .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
+      .clickWhenVisible('a.dropdown-toggle.fonticon-wrench', waitTime, true)
+      .clickWhenVisible('div.dropdown-menu span.fonticon-trash', waitTime, true)
+      .clickWhenVisible('.confirmation-modal button.btn.btn-cf-primary')
 
       // now wait for the sidebar to have removed the design doc
       .waitForElementNotPresent('#testdesigndoc', waitTime, true)
@@ -70,11 +70,11 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       // now delete the search index. Since there's a view in this design doc, the design doc should not be removed
-      .clickWhenVisible('#nav-design-function-testdesigndocindexes .index-list li span', waitTime, true)
-      .clickWhenVisible('.popover-content .fonticon-trash', waitTime, true)
+      .clickWhenVisible('#nav-design-function-testdesigndocindexes a.dropdown-toggle.fonticon-wrench', waitTime, true)
+      .clickWhenVisible('div.dropdown-menu span.fonticon-trash', waitTime, true)
       .waitForElementVisible('div.confirmation-modal', waitTime, false)
-      .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
-      .waitForElementNotPresent('.confirmation-modal button.btn.btn-primary', waitTime, true)
+      .clickWhenVisible('.confirmation-modal button.btn.btn-cf-primary')
+      .waitForElementNotPresent('.confirmation-modal button.btn.btn-cf-primary', waitTime, true)
 
       // just assert the search indexes section has been removed, but the design doc still exists
       .waitForElementNotPresent('#nav-design-function-testdesigndocindexes', waitTime, true)

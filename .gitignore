@@ -30,6 +30,7 @@ i18n.json
 !i18n.json.default.json
 test/test.config.js
 app/initialize.js
+assets/scss/_variable_overrides.scss
 .module-cache
 test/nightwatch_tests/nightwatch.json
 test/nightwatch_tests/reports/*
@@ -45,5 +46,6 @@ test/dashboard.assets
 # test coverage dir
 coverage
 
-# Jetbrains IDE
+# IDEs
 .idea/
+.vscode

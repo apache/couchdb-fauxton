@@ -42,7 +42,7 @@ module.exports = {
       ')
 
       .checkForStringPresent(newDatabaseName + '/_all_docs', '"total_rows":0')
-      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel button#save-doc-btn')
       .checkForStringPresent(newDatabaseName + '/_all_docs', '"total_rows":1')
 
       .end();

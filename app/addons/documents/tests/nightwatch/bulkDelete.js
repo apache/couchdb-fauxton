@@ -33,7 +33,7 @@ module.exports = {
       .waitForElementVisible('.prettyprint', waitTime, false)
 
       .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
       .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
@@ -67,7 +67,7 @@ module.exports = {
       .waitForElementVisible('.table-view-docs', waitTime, false)
 
       .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
       .waitForElementNotPresent('.table-view-docs ', waitTime, false)

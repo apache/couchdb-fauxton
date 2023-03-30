@@ -14,6 +14,7 @@ import React from "react";
 import {mount} from 'enzyme';
 
 const noop = () => {};
+const SELECTOR_BTN_DELETE_DB = 'button#delete-db-btn';
 
 describe('DeleteDatabaseModal', function () {
 
@@ -24,7 +25,7 @@ describe('DeleteDatabaseModal', function () {
         modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />
     );
 
-    expect(modal.find('button.delete').first().prop('disabled')).toBe(true);
+    expect(modal.find(SELECTOR_BTN_DELETE_DB).first().prop('disabled')).toBe(true);
   });
 
   it('submitting is disabled when garbage entered', function () {
@@ -37,7 +38,7 @@ describe('DeleteDatabaseModal', function () {
     const input = modal.find('input');
 
     input.simulate('change', {target: {value: 'Hello, world'}});
-    expect(modal.find('button.delete').prop('disabled')).toBe(true);
+    expect(modal.find(SELECTOR_BTN_DELETE_DB).prop('disabled')).toBe(true);
   });
 
   it('submitting is enabled when same db name entered', function () {
@@ -50,7 +51,7 @@ describe('DeleteDatabaseModal', function () {
     var input = modal.find('.modal').find('input');
 
     input.simulate('change', {target: {value: 'fooo'}});
-    expect(modal.find('button.delete').prop('disabled')).toBeFalsy();
+    expect(modal.find(SELECTOR_BTN_DELETE_DB).prop('disabled')).toBeFalsy();
   });
 
 

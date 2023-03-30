@@ -11,10 +11,10 @@
 // the License.
 
 import React from 'react';
-import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
+import { Form } from 'react-bootstrap';
 import app from '../../../../app';
-import ReactComponents from "../../../components/react-components";
+import ReactComponents from '../../../components/react-components';
 import ConflictingRevisionsDropDown from './conflictingrevisiondropdown';
 import ConfirmModal from './confirmmodal';
 
@@ -22,24 +22,29 @@ const ConfirmButton = ReactComponents.ConfirmButton;
 const storageKeyDeleteConflictsModal = 'deleteConflictsHideModal';
 
 export default class RevisionBrowserControls extends React.Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    this.state = {showModal: false};
+    this.state = { showModal: false };
     this.selectAsWinner = this.selectAsWinner.bind(this);
-    this.onSelectAsWinnerClickOurs = this.onSelectAsWinnerClick.bind(this, this.props.ours);
-    this.onSelectAsWinnerClickTheirs = this.onSelectAsWinnerClick.bind(this, this.props.theirs);
+    this.onSelectAsWinnerClickOurs = this.onSelectAsWinnerClick.bind(
+      this,
+      this.props.ours
+    );
+    this.onSelectAsWinnerClickTheirs = this.onSelectAsWinnerClick.bind(
+      this,
+      this.props.theirs
+    );
     this.onRevisionClick = this.onRevisionClick.bind(this);
     this.onForwardClick = this.onForwardClick.bind(this);
     this.onBackwardClick = this.onBackwardClick.bind(this);
   }
 
-  onRevisionClick (revTheirs) {
+  onRevisionClick(revTheirs) {
     this.props.chooseLeaves(this.props.ours, revTheirs.value);
   }
 
-  onForwardClick () {
+  onForwardClick() {
     const conflictingRevs = this.props.conflictingRevs;
     const index = conflictingRevs.indexOf(this.props.theirs._rev);
 
@@ -52,7 +57,7 @@ export default class RevisionBrowserControls extends React.Component {
     this.props.chooseLeaves(this.props.ours, next);
   }
 
-  onBackwardClick () {
+  onBackwardClick() {
     const conflictingRevs = this.props.conflictingRevs;
     const index = conflictingRevs.indexOf(this.props.theirs._rev);
 
@@ -65,7 +70,7 @@ export default class RevisionBrowserControls extends React.Component {
     this.props.chooseLeaves(this.props.ours, next);
   }
 
-  selectAsWinner (docToWin, doNotShowModalAgain) {
+  selectAsWinner(docToWin, doNotShowModalAgain) {
     if (doNotShowModalAgain) {
       app.utils.localStorageSet(storageKeyDeleteConflictsModal, true);
     }
@@ -73,7 +78,7 @@ export default class RevisionBrowserControls extends React.Component {
     this.props.selectRevAsWinner(docToWin._id, docToWin._rev, this.props.tree);
   }
 
-  onSelectAsWinnerClick (docToWin) {
+  onSelectAsWinnerClick(docToWin) {
     if (app.utils.localStorageGet(storageKeyDeleteConflictsModal) !== true) {
       this.props.toggleConfirmModal(true, docToWin);
       return;
@@ -82,9 +87,8 @@ export default class RevisionBrowserControls extends React.Component {
     this.selectAsWinner(docToWin);
   }
 
-  render () {
-    const {tree} = this.props;
-    const cellStyle = {paddingRight: '30px'};
+  render() {
+    const { tree } = this.props;
 
     return (
       <div className="revision-browser-controls">
@@ -94,48 +98,43 @@ export default class RevisionBrowserControls extends React.Component {
           docToWin={this.props.docToWin}
           show={this.props.showConfirmModal}
         />
-        <table style={{margin: '10px 60px', width: '100%'}}>
-          <tbody>
-            <tr style={{height: '60px'}}>
-              <td style={cellStyle}>Server-Selected Rev: </td>
-              <td style={cellStyle}>
-                <div style={{lineHeight: '36px', height: '36px', width: '337px', color: '#000', backgroundColor: '#ffbbbb'}}>
-                  <b style={{paddingLeft: '10px'}}>{tree.winner}</b>
-                </div>
-              </td>
-              <td>
-                <ConfirmButton
-                  onClick={this.onSelectAsWinnerClickOurs}
-                  style={{marginRight: '10px', width: '220px'}}
-                  text="Delete Other Conflicts"
-                  buttonType="btn-secondary"
-                  customIcon="icon-trophy" />
-              </td>
-            </tr>
-            <tr style={{height: '60px'}}>
-              <td style={cellStyle}>Conflicting Revisions: </td>
-              <td style={cellStyle}>
-                <ConflictingRevisionsDropDown
-                  onRevisionClick={this.onRevisionClick}
-                  onForwardClick={this.onForwardClick}
-                  onBackwardClick={this.onBackwardClick}
-                  options={this.props.dropdownData}
-                  selected={this.props.theirs._rev} />
-              </td>
-              <td>
-                <ConfirmButton
-                  data-id="button-select-theirs"
-                  onClick={this.onSelectAsWinnerClickTheirs}
-                  style={{marginRight: '10px', width: '220px'}}
-                  text="Select as Winner"
-                  buttonType="btn-secondary"
-                  customIcon="icon-trophy" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
 
+        <div className="row align-items-center mb-3">
+          <div className="revision-browser-controls-label-col col-auto">Server-Selected Rev:</div>
+          <div className="col-5 col-xl-4">
+            <Form.Control type="text" placeholder={tree.winner} readOnly /></div>
+          <div className="col">
+            <ConfirmButton
+              onClick={this.onSelectAsWinnerClickOurs}
+              text="Delete Other Conflicts"
+              variant="secondary"
+              customIcon="fonticon-trophy"
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="revision-browser-controls-label-col col-auto">Conflicting Revisions:</div>
+          <div className="col-5 col-xl-4">
+            <ConflictingRevisionsDropDown
+              onRevisionClick={this.onRevisionClick}
+              onForwardClick={this.onForwardClick}
+              onBackwardClick={this.onBackwardClick}
+              options={this.props.dropdownData}
+              selected={this.props.theirs._rev}
+            />
+          </div>
+          <div className="col-3">
+            <ConfirmButton
+              data-id="button-select-theirs"
+              onClick={this.onSelectAsWinnerClickTheirs}
+              text="Select as Winner"
+              variant="secondary"
+              customIcon="fonticon-trophy"
+            />
+          </div>
+        </div>
+      </div>
     );
   }
 }

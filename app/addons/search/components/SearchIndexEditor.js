@@ -14,6 +14,7 @@ import FauxtonAPI from '../../../core/api';
 import app from '../../../app';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button, Form } from 'react-bootstrap';
 import GeneralComponents from '../../components/react-components';
 import IndexEditorComponents from '../../documents/index-editor/components';
 import Analyzer from './Analyzer';
@@ -118,8 +119,8 @@ export default class SearchIndexEditor extends React.Component {
     const pageHeader = this.props.isCreatingIndex ? 'New Search Index' : 'Edit Search Index';
     const btnLabel = this.props.isCreatingIndex ? 'Create Document and Build Index' : 'Save Document and Build Index';
     return (
-      <form className="form-horizontal search-query-save" id="search-index">
-        <h3 className="simple-header">{pageHeader}</h3>
+      <form id="search-index">
+        <h3 className='simple-header'>{pageHeader}</h3>
 
         <DesignDocSelector
           ref={node => this.designDocSelector = node}
@@ -135,14 +136,20 @@ export default class SearchIndexEditor extends React.Component {
           onChangeNewDesignDocPartitioned={this.props.updateNewDesignDocPartitioned}
           docLink={app.helpers.getDocUrl('DOC_URL_DESIGN_DOCS')} />
 
-        <div className="control-group">
-          <label htmlFor="search-name">Index name</label>
-          <input type="text" id="search-name" value={this.props.searchIndexName} onChange={this.updateSearchIndexName} />
+        <div className="row">
+          <div className="mb-3 col-12 col-lg-6 col-xxl-4  ">
+            <label htmlFor="search-name">Index name</label>
+            <Form.Control type="text"
+              id="search-name"
+              value={this.props.searchIndexName}
+              onChange={this.updateSearchIndexName}
+            />
+          </div>
         </div>
 
         <GeneralComponents.CodeEditorPanel
           id={'search-function'}
-          className="ace-editor-section"
+          className="ace-editor-section mb-3"
           ref={node => this.searchIndexEditor = node}
           title={"Search index function"}
           allowZenMode={false}
@@ -152,11 +159,15 @@ export default class SearchIndexEditor extends React.Component {
 
         <Analyzer ref={node => this.analyzer = node} {...this.props}/>
 
-        <div className="control-group">
-          <button id="save-index" className="btn btn-primary save" onClick={this.saveIndex}>
-            <i className="icon fonticon-ok-circled" />{btnLabel}
-          </button>
-          <a href={this.getCancelLink()} className="index-cancel-link">Cancel</a>
+        <div className="row">
+          <div className="col-12">
+            <Button id="save-index" variant="cf-primary" onClick={this.saveIndex}>
+              <i className="fonticon-ok-circled" />{btnLabel}
+            </Button>
+            <Button href={this.getCancelLink()} variant="cf-cancel" className="index-cancel-link">
+              Cancel
+            </Button>
+          </div>
         </div>
       </form>
     );

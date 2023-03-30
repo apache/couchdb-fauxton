@@ -14,9 +14,7 @@ import FauxtonAPI from '../../../core/api';
 import app from '../../../app';
 import React from 'react';
 import Constants from '../constants';
-import Components from '../../components/react-components';
-
-const { StyledSelect } = Components;
+import Form from 'react-bootstrap/Form';
 
 export class ReplicationAuth extends React.Component {
 
@@ -87,30 +85,30 @@ export class ReplicationAuth extends React.Component {
     }
 
     return (
-      <div className="replication__section">
-        <div className="replication__input-label"></div>
-        <div className="replication__help-tile">{helpText[0]}</div>
-      </div>);
+      <span id="replications-auth-help-span" className="form-text">{helpText[0]}</span>
+    );
   }
 
   render () {
     const {credentials, authType, authId} = this.props;
-    return (<React.Fragment>
-      <div className="replication__section">
-        <div className="replication__input-label">
-          Authentication:
-        </div>
-        <div className="replication__input-select">
-          <StyledSelect
-            selectContent={this.getAuthOptions()}
-            selectChange={(e) => this.onChangeType(e.target.value)}
-            selectId={'select-' + authId}
-            selectValue={authType} />
+
+    return (
+      <div className="row">
+        <div className="col-12 col-md-2">Authentication:</div>
+        <div className="col-12 col-md mt-1 mt-md-0">
+          <Form.Select
+            onChange={(e) => this.onChangeType(e.target.value)}
+            id={'select-' + authId}
+            value={authType}
+          >
+            {this.getAuthOptions()}
+          </Form.Select>
+
+          {this.getAuthInputFields(credentials, authType)}
+          {this.getHelpText(authType)}
         </div>
       </div>
-      {this.getAuthInputFields(credentials, authType)}
-      {this.getHelpText(authType)}
-    </React.Fragment>);
+    );
   }
 }
 
@@ -162,25 +160,22 @@ export class UserPasswordAuthInput extends React.Component {
     const { authId } = this.props;
     return (
       <React.Fragment>
-        <div className="replication__section">
-          <div className="replication__input-label"></div>
-          <div>
-            <input
+        <div className="row">
+          <div className="col-12 mt-2">
+            <Form.Control
               id={authId + '-username'}
               type="text"
+              className="form-control"
               placeholder={usernamePlaceholder}
               value={this.state.username}
               onChange={(e) => this.updateUsername(e.target.value)}
-              readOnly={this.props.usernameReadOnly}
             />
           </div>
-        </div>
-        <div className="replication__section">
-          <div className="replication__input-label"></div>
-          <div>
-            <input
+          <div className="col-12 mt-2">
+            <Form.Control
               id={authId + '-password'}
               type="password"
+              className="form-control"
               placeholder={passwordPlaceholder}
               value={this.state.password}
               onChange={(e) => this.updatePassword(e.target.value)}

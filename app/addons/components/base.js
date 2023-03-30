@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import "./assets/less/components.less";
+import "./assets/scss/components.scss";
 
 export default {
-  initialize () {}
+  initialize() {},
 };

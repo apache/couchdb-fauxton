@@ -13,6 +13,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Form } from 'react-bootstrap';
 
 export default class OptionalSettings extends React.Component {
   handleIpChange = (event) => {
@@ -25,22 +26,20 @@ export default class OptionalSettings extends React.Component {
 
   render() {
     return (
-      <div className="setup-opt-settings">
-        <p>Bind address the node will listen on</p>
-        <input
-          className="setup-input-ip"
-          value={this.props.ip}
-          onChange={this.handleIpChange}
-          placeholder="IP Address"
-          type="text"/>
-
-        <div className="setup-port">
-          <p>Port that the node will use</p>
-          <input
-            className="setup-input-port"
+      <div className="row">
+        <div className="col-12 col-md-5 col-xl-4 mb-3">
+          <label>Bind address the node will listen on</label>
+          <Form.Control type="text"
+            value={this.props.ip}
+            onChange={this.handleIpChange}
+            placeholder="IP Address" />
+        </div>
+        <div className="col-12 col-md-5 col-xl-4 mb-3">
+          <label>Port that the node will use</label>
+          <Form.Control type="text"
             value={this.props.port}
             onChange={this.handlePortChange}
-            type="text"/>
+            placeholder="IP Address" />
         </div>
       </div>
     );

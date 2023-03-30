@@ -26,7 +26,7 @@ describe('AdditionalParams', () => {
       updateSkip={spy}
     />);
 
-    wrapper.find('#qoSkip').simulate('change');
+    wrapper.find('input#qoSkip').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -39,7 +39,7 @@ describe('AdditionalParams', () => {
       updateLimit={spy}
     />);
 
-    wrapper.find('#qoLimit').simulate('change');
+    wrapper.find('select#qoLimit').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -52,7 +52,7 @@ describe('AdditionalParams', () => {
       toggleDescending={spy}
     />);
 
-    wrapper.find('#qoDescending').simulate('change');
+    wrapper.find('input#qoDescending').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 });

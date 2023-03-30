@@ -1,0 +1,54 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+/* site-wide Ace Editor theme overrides */
+.ace_scrollbar-h {
+  right: 0 !important;
+  height: 15px !important;
+}
+
+body {
+  .ace-idle-fingers .ace_marker-layer .ace_selection {
+    background: $cf-code-selection-bg;
+  }
+  .ace-idle-fingers .ace_gutter {
+    background: $cf-code-gutter-bg;
+  }
+  .ace-idle-fingers {
+    background-color: $cf-code-bg;
+  }
+  .ace-idle-fingers .ace_cursor {
+    color: $cf-code-cursor-color;
+  }
+  .ace-idle-fingers.ace_multiselect .ace_selection.ace_start {
+    box-shadow: 0 0 3px 0 $cf-code-bg;
+  }
+  .ace-idle-fingers .ace_marker-layer .ace_active-line {
+    background: $cf-code-active-bg;
+    opacity: 0.4;
+  }
+  .ace-idle-fingers .ace_constant {
+    color: $cf-code-token-constant-color;
+  }
+  .ace-idle-fingers .ace_boolean {
+    color: $cf-code-token-boolean-color;
+  }
+  .ace-idle-fingers .ace_string {
+    color: $cf-code-token-string-color;
+  }
+  .ace-idle-fingers .ace_variable {
+    color: $cf-code-token-variable-color;
+  }
+  .ace-idle-fingers .ace_collab.ace_user1 {
+    color: $cf-code-bg;
+  }
+}

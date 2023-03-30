@@ -25,7 +25,7 @@ describe('String Edit Modal', () => {
       const el = mount(
         <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} value={string} />
       );
-      el.find('#string-edit-save-btn').simulate('click');
+      el.find('button#string-edit-save-btn').simulate('click');
       sinon.assert.calledOnce(spy);
       sinon.assert.calledWith(spy, string);
     });

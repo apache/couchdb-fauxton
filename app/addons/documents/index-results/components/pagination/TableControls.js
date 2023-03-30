@@ -24,14 +24,14 @@ export default class TableControls extends React.Component {
 
     if (fields.shown === fields.allFieldCount) {
       return (
-        <div className="pull-left shown-fields">
+        <div className="float-start shown-fields">
           Showing {fields.shown} columns.
         </div>
       );
     }
 
     return (
-      <div className="pull-left shown-fields">
+      <div className="float-start shown-fields">
         Showing {fields.shown} of {fields.allFieldCount} columns.
       </div>
     );
@@ -43,7 +43,7 @@ export default class TableControls extends React.Component {
     return (
       <div className="footer-table-control">
         {this.getAmountShownFields()}
-        <div className="footer-doc-control-prioritized-wrapper pull-left">
+        <div className="footer-doc-control-prioritized-wrapper float-start">
           <label htmlFor="footer-doc-control-prioritized">
             <input
               id="footer-doc-control-prioritized"

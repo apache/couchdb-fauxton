@@ -67,15 +67,17 @@ export class Badge extends React.Component {
 
   render() {
     return (
-      <li className="component-badge">
-        <span className="label label-info">{this.props.label}</span>
-        <a
-          href="#"
-          className="label label-info remove-filter"
-          onClick={this.remove} data-bypass="true"
-        >
-          &times;
-        </a>
+      <li className="badge">
+        <div className="remove-filter">
+          <span>{this.props.label}</span>
+          <a
+            href="#"
+            onClick={this.remove}
+            data-bypass="true"
+            className="ms-1">
+            &times;
+          </a>
+        </div>
       </li>
     );
   }

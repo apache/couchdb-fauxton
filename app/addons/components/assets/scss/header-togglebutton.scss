@@ -1,0 +1,61 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+
+.header-control-box {
+  color: $cf-topheader-color;
+  font-size: 13px;
+  line-height: 33px;
+  padding: 12px 20px 12px 20px;
+  height: $cf-navbar-width-collapsed;
+  background-color: transparent;
+  border: none;
+  border-left: 1px solid $cf-border-color01;
+  text-decoration: none;
+  .icon {
+    font-size: 20px;
+    &:before {
+      float: left;
+      margin: 10px 0 0 0;
+    }
+  }
+  span {
+    margin-left: 6px;
+  }
+}
+
+.header-control-square {
+  height: $cf-navbar-width-collapsed;
+  width: $cf-navbar-width-collapsed;
+  float: left;
+  .icon {
+    &:before {
+      margin: 0;
+      float: none;
+    }
+  }
+}
+
+.header-control-box:hover {
+  background-color: $cf-topheader-bg-hover;
+
+  .icon, span {
+    color: $cf-topheader-color-hover;
+  }
+}
+
+.js-headerbar-togglebutton-selected {
+  .icon, span {
+    color: $cf-brand-highlight;
+  }
+}

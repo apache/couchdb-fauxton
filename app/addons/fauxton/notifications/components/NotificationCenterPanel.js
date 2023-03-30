@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import {TransitionMotion, spring, presets} from 'react-motion';
 import NotificationPanelRow from './NotificationPanelRow';
 
@@ -130,11 +131,9 @@ export default class NotificationCenterPanel extends React.Component {
           </div>
 
           <footer>
-            <input
-              type="button"
-              value="Clear All"
-              className="btn btn-small btn-secondary"
-              onClick={this.props.clearAllNotifications} />
+            <Button type="button" variant="cf-secondary" onClick={this.props.clearAllNotifications}>
+              Clear All
+            </Button>
           </footer>
         </div>
 

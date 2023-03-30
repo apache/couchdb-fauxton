@@ -25,11 +25,11 @@ module.exports = {
       .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.textContains('.prettyprint', 'stub')
-      .clickWhenVisible('.index-list .active span', waitTime, true)
-      .clickWhenVisible('.popover-content .fonticon-files-o', waitTime, true)
+      .clickWhenVisible('.index-list .active div.sidebar-sub-item', waitTime, true)
+      .clickWhenVisible('.dropdown-menu span.fonticon-files-o', waitTime, true)
       .waitForElementVisible('#new-index-name', waitTime, true)
       .setValue('#new-index-name', 'cloned-view')
-      .clickWhenVisible('.clone-index-modal .btn-primary', waitTime, true)
+      .clickWhenVisible('.clone-index-modal .btn-cf-primary', waitTime, true)
 
       // now wait for the sidebar to be updated with the new view
       .waitForElementVisible('#testdesigndoc_cloned-view', waitTime, true)

@@ -79,7 +79,7 @@ export default class DesignDocList extends React.Component {
 
   render() {
     return (
-      <ul className="nav nav-list">
+      <ul className="nav flex-column">
         {this.designDocList()}
       </ul>
     );

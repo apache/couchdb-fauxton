@@ -12,10 +12,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Form } from 'react-bootstrap';
 import FauxtonAPI from '../../../../core/api';
-import ReactComponents from '../../../components/react-components';
 
-const { StyledSelect } = ReactComponents;
 
 export default class DesignDocSelector extends Component {
 
@@ -59,13 +58,13 @@ export default class DesignDocSelector extends Component {
       return;
     }
     return (
-      <div id="new-ddoc-section" className="span5">
+      <div id="new-ddoc-section" className={this.props.className}>
         <label className="control-label" htmlFor="new-ddoc">_design/</label>
-        <div className="controls">
-          <input type="text" id="new-ddoc" placeholder="newDesignDoc"
-            ref={(el) => { this.newDesignDocInput = el; }}
-            onChange={this.updateDesignDocName.bind(this)} />
-        </div>
+        <Form.Control type="text"
+          id="new-ddoc"
+          placeholder="newDesignDoc"
+          ref={(el) => { this.newDesignDocInput = el; }}
+          onChange={this.updateDesignDocName.bind(this)} />
       </div>
     );
   }
@@ -76,7 +75,7 @@ export default class DesignDocSelector extends Component {
     }
     return (
       <a className="help-link" data-bypass="true" href={this.props.docLink} target="_blank" rel="noopener noreferrer">
-        <i className="icon-question-sign" />
+        <i className="fonticon-help-circled" />
       </a>
     );
   }
@@ -93,23 +92,20 @@ export default class DesignDocSelector extends Component {
     const checked = isExistingDDoc ?
       this.props.selectedDesignDocPartitioned :
       this.props.newDesignDocPartitioned;
-    const labelClass = isExistingDDoc ? 'check--disabled' : '';
     const inputTitle = isExistingDDoc ?
       (this.props.selectedDesignDocPartitioned ? 'Design document is partitioned' : 'Design document is not partitioned') :
       (this.props.newDesignDocPartitioned ? 'New document will be partitioned' : 'New document will not be partitioned');
     return (
-      <div className="ddoc-selector-partitioned">
-        <label className={labelClass} title={inputTitle}>
-          <input
+      <div className="row">
+        <div className={"ddoc-selector-partitioned " + this.props.className}>
+          <Form.Check type="checkbox"
             id="js-ddoc-selector-partitioned"
-            type="checkbox"
             title={inputTitle}
+            label="Partitioned"
             checked={checked}
             onChange={this.onTogglePartitioned}
-            style={{margin: '0px 10px 0px 0px'}}
-            disabled={isExistingDDoc}/>
-          Partitioned
-        </label>
+            disabled={isExistingDDoc} />
+        </div>
       </div>
     );
   }
@@ -122,21 +118,26 @@ export default class DesignDocSelector extends Component {
       </optgroup>;
 
     return (
-      <div className="design-doc-group control-group">
-        <div className="span3">
-          <label htmlFor="ddoc">{this.props.designDocLabel}
-            {this.getDocLink()}
-          </label>
-          <StyledSelect
-            selectChange={this.selectDesignDoc.bind(this)}
-            selectValue={this.props.selectedDesignDocName}
-            selectId={"faux__edit-view__design-doc"}
-            selectContent={selectContent}
-          />
+      <>
+        <div className="row">
+          <div className={this.props.className}>
+            <label htmlFor="ddoc">{this.props.designDocLabel}
+              {this.getDocLink()}
+            </label>
+            <Form.Select
+              onChange={this.selectDesignDoc.bind(this)}
+              value={this.props.selectedDesignDocName}
+              id="faux__edit-view__design-doc"
+            >
+              {selectContent}
+            </Form.Select>
+          </div>
+
+
+          {this.getNewDDocField()}
         </div>
-        {this.getNewDDocField()}
         {this.getPartitionedCheckbox()}
-      </div>
+      </>
     );
   }
 }
@@ -144,7 +145,8 @@ export default class DesignDocSelector extends Component {
 DesignDocSelector.defaultProps = {
   designDocLabel: 'Design Document',
   selectedDesignDocName: '',
-  newDesignDocName: ''
+  newDesignDocName: '',
+  className: 'mb-3 col-12 col-lg-6 col-xxl-4'
 };
 
 DesignDocSelector.propTypes = {

@@ -1,0 +1,305 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+/* ajax loader */
+.loader {
+  background: url('../img/loader.gif') center center no-repeat;
+  min-height: 100px;
+}
+
+#main {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+#app-container {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+
+  &.app-container__with-perm-notification {
+    height: calc(100vh - 3.5rem);
+  }
+}
+
+@media screen and (max-height: 600px) {
+  #primary-navbar {
+    overflow-y: auto;
+  }
+}
+
+@media screen and (min-height: 600px) {
+  #primary-navbar {
+    overflow-y: hidden;
+  }
+}
+
+.bottom-border {
+  border-bottom: 1px solid $cf-border-color02;
+}
+
+.bottom-left-border {
+  border-bottom: 1px solid $cf-border-color02;
+  border-left: 1px solid $cf-border-color02;
+}
+
+#dashboard {
+  position: relative;
+  left: $cf-navbar-width;
+  padding-left: 0;
+  height: 100%;
+  width: 100%;
+  .closeMenu & {
+    left: $cf-navbar-width-collapsed;
+  }
+}
+
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.one-pane {
+  #dashboard-content {
+    top: $cf-navbar-width-collapsed;
+    .view {
+      padding-bottom: 30px;
+    }
+  }
+}
+
+.two-pane {
+  .inner {
+    padding-bottom: $cf-navbar-width-collapsed;
+  }
+}
+
+#sidebar-content {
+  width: $cf-sidebar-width;
+  background-color: $cf-sidebar-bg;
+  > div.inner {
+    display: block;
+  }
+  .nav:last-child {
+    margin-bottom: 30px;
+  }
+}
+
+.scrollable {
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  position: absolute;
+  padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.pusher {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  left: 0;
+  padding-right: $cf-navbar-width;
+  .closeMenu & {
+    padding-right: $cf-navbar-width-collapsed;
+  }
+}
+
+.right-header-wrapper {
+  overflow-x: hidden;
+  height: $cf-navbar-width-collapsed;
+}
+
+.header-wrapper {
+  @include bottom-border();
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  /*z-index: 50; */
+}
+
+#app-container > div {
+  position: relative;
+  height: 100%;
+}
+
+/* SIDEBAR TEMPLATE STYLES */
+@mixin topmenu-defaults() {
+  height: 70px;
+  padding: 12px 10px 0;
+  @include box-sizing(border-box);
+}
+
+/* used in addons/changes */
+.dashboard-upper-menu {
+  border-left: 1px solid $cf-border-color02;
+  right: 0;
+  left: $cf-sidebar-width + $cf-navbar-width;
+  position: fixed;
+  display: block;
+
+  @include topmenu-defaults;
+  background-color: $cf-background01;
+  .closeMenu & {
+    left: $cf-sidebar-width + $cf-navbar-width-collapsed;
+  }
+}
+
+#dashboard-lower-content {
+  padding: $cf-main-content-padding;
+  background-color: $cf-background01;
+  position: relative;
+}
+
+#dashboard-content {
+  & > div {
+    padding: $cf-main-content-padding;
+  }
+
+  &.row-fluid {
+    /*remove gutter without rewriting variable*/
+    margin-left: 0px;
+  }
+
+  .with-sidebar & {
+    border-left: 1px solid $cf-border-color02;
+    @include left-border();
+    width: auto;
+    padding: 15px;
+    bottom: 0px;
+    top: $cf-navbar-width-collapsed;
+    position: absolute;
+    left: $cf-sidebar-width;
+    right: 0;
+    @include box-sizing(border-box);
+  }
+  .with-tabs-sidebar & {
+    overflow: hidden;
+  }
+
+  > div.inner {
+    display: block;
+  }
+}
+
+/*
+  Sidenav:
+  USED IN DOCUMENT ADDON & EXTERNAL ADDONS
+*/
+.sidenav {
+  padding: 0;
+  .nav {
+    > li > a:hover {
+      background-color: $cf-sidebar-bg-hover;
+      color: $cf-sidebar-color-hover;
+    }
+    li.active > a {
+      color: $cf-sidebar-color-active;
+    }
+    li > a {
+      color: $cf-sidebar-color;
+      padding: 10px 13px 10px 24px;
+      border-bottom: 1px solid $cf-border-color01;
+      span {
+        margin-right: 8px;
+        width: 14px;
+        display: inline-block;
+        text-align: center;
+      }
+    }
+    a {
+      display: block;
+    }
+    .nav-header {
+      padding: 0px;
+      text-shadow: none;
+      color: $cf-sidebar-color;
+      & > span:hover {
+        color: $cf-brand-highlight;
+      }
+    }
+  }
+}
+
+.row-fluid.content-area {
+  background-color: $cf-background01;
+}
+
+.two-pane {
+  .content-area {
+    height: 100%;
+    top: $cf-navbar-width-collapsed;
+    position: relative;
+  }
+
+  #right-content {
+    .view {
+      padding: 0 0 40px;
+    }
+    border-left: 1px solid $cf-border-color02;
+  }
+  .right-header-wrapper {
+    border-left: 1px solid $cf-border-color02;
+    .faux-header__searchboxwrapper {
+      display: none;
+    }
+  }
+}
+
+.notification-wrapper {
+  opacity: 0;
+  height: 0;
+}
+
+.toastify-toast-container {
+  padding: 0;
+  right: 0;
+}
+
+.Toastify__toast {
+  border: 1px solid $cf-border-color02;
+  background-color: $cf-alert-bg;
+  border-right: 0;
+  color: $cf-alert-color;
+}
+
+.Toastify__toast-icon {
+  display: None;
+}
+
+.Toastify__toast--info {
+  &,
+  .Toastify__close-button--info {
+    border-left: 6px solid $cf-alert-info-color;
+  }
+}
+
+.Toastify__toast--success {
+  &,
+  .Toastify__close-button--success {
+    border-left: 6px solid $cf-alert-success-color;
+  }
+}
+
+.Toastify__toast--error {
+  &,
+  .Toastify__close-button--error {
+    border-left: 6px solid $cf-alert-error-color;
+  }
+}

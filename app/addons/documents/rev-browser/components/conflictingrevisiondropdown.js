@@ -11,33 +11,37 @@
 // the License.
 
 import React from 'react';
-import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import ReactSelect from "react-select";
+import { Form } from 'react-bootstrap';
 
 const BackForwardControls = ({onClick, forward}) => {
   const icon = forward ? 'fonticon-right-open' : 'fonticon-left-open';
-  const style = {height: '20px', width: '11px', marginTop: '7px'};
-
-  return <div style={style} className={icon} onClick={onClick}></div>;
+  return <div className={icon} onClick={onClick}></div>;
 };
 
 BackForwardControls.propTypes = {
   onClick: PropTypes.func.isRequired,
+  forward: PropTypes.bool,
+};
+
+BackForwardControls.defaultProps = {
+  forward: false,
 };
 
 const ConflictingRevisionsDropDown = ({options, selected, onRevisionClick, onBackwardClick, onForwardClick}) => {
+  const selectOptions = !options ? undefined :
+    options.map(el => <option value={el.value} key={el.value}>{el.label}</option>);
+
   return (
     <div className="conflicting-revs-dropdown">
-      <BackForwardControls backward onClick={onBackwardClick} />
-      <div style={{width: '345px', margin: '0 5px'}}>
-        <ReactSelect
-          name="form-field-name"
-          value={selected}
-          options={options}
-          clearable={false}
-          onChange={onRevisionClick} />
-      </div>
+      <BackForwardControls onClick={onBackwardClick} />
+      <Form.Select
+        name="form-field-name"
+        value={selected}
+        onChange={onRevisionClick}>
+        {selectOptions}
+      </Form.Select>
+
       <BackForwardControls forward onClick={onForwardClick} />
     </div>
   );

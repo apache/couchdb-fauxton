@@ -13,7 +13,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import Helpers from '../../../../helpers';
 
 
@@ -71,6 +71,8 @@ export default class CloneDocModal extends React.Component {
       return false;
     }
 
+    this.nodeRef = React.createRef();
+
     return (
       <Modal dialogClassName="clone-doc-modal" show={this.props.visible} onHide={this.closeModal}>
         <Modal.Header closeButton={true}>
@@ -84,15 +86,23 @@ export default class CloneDocModal extends React.Component {
             <p>
               You can modify the following generated ID for your new document.
             </p>
-            <input ref={node => this.newDocId = node} type="text" autoFocus={true} className="input-block-level"
-              onChange={this.docIDChange} value={this.state.uuid} />
+            <Form.Control
+              type="text"
+              autoFocus={true}
+              className="form-control"
+              onChange={this.docIDChange}
+              ref={this.nodeRef}
+              value={this.state.uuid} />
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          <button className="btn btn-primary save" onClick={this.cloneDoc}>
-            <i className="icon-repeat"></i> Clone Document
-          </button>
+          <Button href="#" data-bypass="true" variant="cf-cancel" className="cancel-link" onClick={this.closeModal}>Cancel</Button>
+          <Button
+            variant="cf-primary"
+            onClick={this.cloneDoc}
+          >
+            <i className="fonticon-cw"></i> Clone Document
+          </Button>
         </Modal.Footer>
       </Modal>
     );

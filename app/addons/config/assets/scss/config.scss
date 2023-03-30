@@ -1,0 +1,75 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/mixins";
+
+.config-item {
+  height: 65px;
+  vertical-align: middle;
+
+  .btn-config-save {
+    margin-right: 4px;
+  }
+
+  .config-show-value,
+  .config-delete-value {
+    cursor: pointer;
+    overflow-wrap: anywhere;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  transition: background-color 100ms;
+}
+
+.config-item-trash:hover {
+  color: $cf-danger;
+}
+
+.config-item-deleting {
+  text-decoration: line-through;
+  text-decoration-color: $cf-danger;
+}
+
+#config-trash {
+  width: 5%;
+}
+
+#add-option-popover {
+  display: block;
+  width: 300px;
+}
+
+.config-warning-cluster-wrapper {
+  .config-warning-cluster-container {
+    margin-left: -50px;
+  }
+  margin: 40px auto;
+  width: 70%;
+  .fonticon-attention-circled {
+    font-size: 40px;
+  }
+  .config-warning-icon-container {
+    width: 50px;
+    margin-top: -5px;
+  }
+  .config-warning-other-text {
+    margin-left: 50px;
+  }
+}
+
+div.faux__config-breadcrumbs {
+  flex: 0 0 331px !important;
+}

@@ -15,7 +15,7 @@ import Views from "../components";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import sinon from "sinon";
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 const { restore } = utils;
@@ -32,7 +32,7 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      const wrapper = shallow(<Views.CORSScreen
+      const wrapper = mount(<Views.CORSScreen
         corsEnabled={true}
         isAllOrigins={false}
         origins={['https://localhost']}
@@ -42,7 +42,7 @@ describe('CORS Components', () => {
         hideDeleteDomainConfirmation={sinon.stub()}
       />);
 
-      wrapper.find('.enable-disable.btn').simulate('click');
+      wrapper.find('button#enable-disable-cors').simulate('click');
       sinon.assert.calledOnce(spy);
     });
 
@@ -50,7 +50,7 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      const wrapper = shallow(<Views.CORSScreen
+      const wrapper = mount(<Views.CORSScreen
         corsEnabled={true}
         isAllOrigins={true}
         origins={[]}
@@ -59,7 +59,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
         hideDeleteDomainConfirmation={sinon.stub()}
       />);
-      wrapper.find('.enable-disable.btn').simulate('click');
+      wrapper.find('button#enable-disable-cors').simulate('click');
       sinon.assert.notCalled(spy);
     });
 
@@ -133,7 +133,7 @@ describe('CORS Components', () => {
 
     it('calls validates each domain', () => {
       const spyValidateDomain = sinon.spy(Helpers, 'validateDomain');
-      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()} />);
+      const wrapper = mount(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()} />);
 
       wrapper.find('input').simulate('change', { target: { value: newOrigin } });
       wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
@@ -151,7 +151,7 @@ describe('CORS Components', () => {
 
     it('shows notification if origin is not valid', () => {
       const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
-      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()} />);
+      const wrapper = mount(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()} />);
 
       wrapper.find('input').simulate('change', { target: { value: 'badOrigin' } });
       wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
@@ -167,14 +167,14 @@ describe('CORS Components', () => {
     });
 
     it('calls changeOrigin() when you switch from "Select List of Origins" to "Allow All Origins"', () => {
-      const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={false} originChange={spyChangeOrigin} />);
+      const wrapper = mount(<Views.Origins corsEnabled={true} isAllOrigins={false} originChange={spyChangeOrigin} />);
 
       wrapper.find('input[value="all"]').simulate('change', { target: { checked: true, value: 'all' } });
       expect(spyChangeOrigin.calledWith(true)).toBeTruthy();
     });
 
     it('calls changeOrigin() when you switch from "Allow All Origins" to "Select List of Origins"', () => {
-      const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={spyChangeOrigin} />);
+      const wrapper = mount(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={spyChangeOrigin} />);
 
       wrapper.find('input[value="selected"]').simulate('change', { target: { checked: true, value: 'selected' } });
       expect(spyChangeOrigin.calledWith(false)).toBeTruthy();

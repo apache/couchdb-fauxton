@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import app from '../../../../app';
 import FauxtonAPI from '../../../../core/api';
 import ReactComponents from '../../../components/react-components';
@@ -137,41 +138,46 @@ export default class IndexEditor extends Component {
               docLink={getDocUrl('DESIGN_DOCS')} />
           </div>
 
-          <div className="control-group">
-            <label htmlFor="index-name">
-              <span>Index name</span>
-              <a
-                className="help-link"
-                data-bypass="true"
-                href={getDocUrl('VIEW_FUNCS')}
-                target="_blank"
-                rel="noopener noreferrer">
-                <i className="icon-question-sign"></i>
-              </a>
-            </label>
-            <input
-              type="text"
-              id="index-name"
-              value={this.props.viewName}
-              onChange={this.viewChange}
-              placeholder="Index name" />
+          <div className="row">
+            <div className="mb-3 col-12 col-lg-6 col-xxl-4">
+              <label htmlFor="index-name">
+                <span>Index name</span>
+                <a
+                  className="help-link"
+                  data-bypass="true"
+                  href={getDocUrl('VIEW_FUNCS')}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <i className="fonticon-help-circled"></i>
+                </a>
+              </label>
+              <Form.Control type="text"
+                id="index-name"
+                value={this.props.viewName}
+                onChange={this.viewChange}
+                placeholder="Index name" />
+            </div>
           </div>
-          <CodeEditorPanel
-            id={'map-function'}
-            ref={(el) => { this.mapEditor = el; }}
-            title={"Map function"}
-            docLink={getDocUrl('MAP_FUNCS')}
-            blur={this.updateMapCode}
-            allowZenMode={false}
-            defaultCode={this.props.map} />
+
+          <div className="mb-3">
+            <CodeEditorPanel
+              id={'map-function'}
+              ref={(el) => { this.mapEditor = el; }}
+              title={"Map function"}
+              docLink={getDocUrl('MAP_FUNCS')}
+              blur={this.updateMapCode}
+              allowZenMode={false}
+              defaultCode={this.props.map} />
+          </div>
+
           <ReduceEditor
             ref={(el) => { this.reduceEditor = el; }}
             customReducerSupported={this.isCustomReduceSupported()}
             {...this.props} />
-          <div className="padded-box">
-            <div className="control-group">
+          <div className="row mt-3">
+            <div className="col-12">
               <ConfirmButton id="save-view" text={btnLabel} />
-              <a href={this.getCancelLink()} className="index-cancel-link">Cancel</a>
+              <Button href={this.getCancelLink()} variant="cf-cancel" className="index-cancel-link">Cancel</Button>
             </div>
           </div>
         </form>

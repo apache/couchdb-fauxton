@@ -46,8 +46,7 @@ Fixes apache/couchdb#XXX (if there is a CouchDB project GH Issue)
 Before you submit the Pull Request, please [run our test suite](#tests.md) and make sure that it passes.
 
 We regularly check the PR list for Fauxton and should get back
-to you with a code review. If no one has responded to you yet, you can find us on [Freenode IRC in #couchdb-dev][8].
-Ping **garren**, **robertkowalski** or **michellep** though anyone in the room should be able to help you.
+to you with a code review.
 
 ## Get in Touch
 

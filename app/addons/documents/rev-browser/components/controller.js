@@ -45,27 +45,29 @@ export default class DiffyController extends React.Component {
 
     // no conflicts happened for this doc
     if (!theirs || !conflictingRevs.length) {
-      return <div style={{textAlign: 'center', color: '#fff'}}><h2>No conflicts</h2></div>;
+      return <div className="revision-browser-no-conflict"><h2>No conflicts</h2></div>;
     }
 
     return (
       <div className="revision-wrapper scrollable">
         <RevisionBrowserControls {...this.props} />
-        <div className="revision-view-controls">
+        <div className="revision-view-controls text-center">
           <ButtonGroup className="two-sides-toggle-button">
             <Button
-              style={{width: '120px'}}
+              style={{width: '130px'}}
+              variant='cf-secondary'
               className={isDiffViewEnabled ? 'active' : ''}
               onClick={this.toggleDiffViewTrue}
             >
-              <i className="icon-columns" /> Diff
+              <i className="fonticon-columns" /> Diff
             </Button>
             <Button
-              style={{width: '120px'}}
+              style={{width: '130px'}}
+              variant='cf-secondary'
               className={isDiffViewEnabled ? '' : 'active'}
               onClick={this.toggleDiffViewFalse}
             >
-              <i className="icon-file-text" /> Document
+              <i className="fonticon-document" /> Document
             </Button>
           </ButtonGroup>
         </div>

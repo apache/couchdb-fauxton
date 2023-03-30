@@ -82,7 +82,7 @@ class App extends React.Component {
     return (
       <div>
         <ToastContainer
-          className='toast-container'
+          className='toastify-toast-container'
           position="top-right"
           autoClose={5000}
           closeButton={false}

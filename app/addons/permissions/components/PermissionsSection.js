@@ -11,7 +11,7 @@
 // the License.
 
 import React from 'react';
-
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import FauxtonAPI from '../../../core/api';
 import app from '../../../app';
 import _ from 'lodash';
@@ -112,40 +112,60 @@ class PermissionsSection extends React.Component {
     const { section } = this.props;
 
     return (
-      <div className={"permissions__" + section}>
+      <div id={"permissions__" + section}>
         <header className="page-header">
           <h3>{section}</h3>
           <p className="help">
             {this.getHelp()}
             <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank" rel="noopener noreferrer">
-              <i className="icon-question-sign"></i>
+              <i className="fonticon-help-circled"></i>
             </a>
           </p>
         </header>
-        <div className="row-fluid">
-          <div className="span6">
+
+        <div className="row mt-2">
+          <div className="col-lg-6">
             <header>
               <h4>Users</h4>
               <p>Specify users who will have {this.props.section} access to this database.</p>
             </header>
-            <form onSubmit={this.addNames} className="permission-item-form permissions-add-user form-inline">
-              <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
-              <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add User</button>
+
+            <form onSubmit={this.addNames} id="form-users-permissions">
+              <InputGroup>
+                <Form.Control
+                  placeholder="Username"
+                  onChange={this.nameChange}
+                  aria-label="Username"
+                  type="text" />
+
+                <Button type="submit" variant="cf-primary" aria-label="Add username"><i className="fonticon-plus-circled" />Add User</Button>
+              </InputGroup>
             </form>
-            <ul className="unstyled permission-items span10">
+
+            <ul className="list-unstyled permission-items">
               {this.getNames()}
             </ul>
           </div>
-          <div className="span6">
+          <div className="col-lg-6">
             <header>
               <h4>Roles</h4>
               <p>Users with any of the following role(s) will have {this.props.section} access.</p>
             </header>
-            <form onSubmit={this.addRoles} className="permission-item-form permissions-add-role form-inline">
-              <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
-              <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add Role</button>
+
+            <form onSubmit={this.addRoles}>
+              <InputGroup>
+                <Form.Control
+                  placeholder="Role"
+                  value={this.state.newRole}
+                  onChange={this.roleChange}
+                  aria-label="Role"
+                  type="text" />
+
+                <Button type="submit" variant="cf-primary" aria-label="Add role"><i className="fonticon-plus-circled" />Add Role</Button>
+              </InputGroup>
             </form>
-            <ul className="unstyled permission-items span10">
+
+            <ul className="list-unstyled permission-items">
               {this.getRoles()}
             </ul>
           </div>

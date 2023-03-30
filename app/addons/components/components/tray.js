@@ -83,7 +83,7 @@ export class TrayContents extends React.Component {
         show={this.props.contentVisible}
         onHide={this.props.closeTray}
         placement={"bottom"}
-        container={this.props.container}
+        target={this.props.container}
         rootClose={true}
         onEnter={this.props.onEnter}
       >

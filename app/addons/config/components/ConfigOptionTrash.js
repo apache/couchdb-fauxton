@@ -13,6 +13,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import FauxtonComponents from '../../fauxton/components';
+import ReactComponents from '../../components/react-components';
 
 export default class ConfigOptionTrash extends React.Component {
   constructor (props) {
@@ -44,12 +45,13 @@ export default class ConfigOptionTrash extends React.Component {
   render() {
     return (
       <td className="text-center config-item-trash config-delete-value">
-        <i className="icon icon-trash" onClick={this.showModal}></i>
         <FauxtonComponents.ConfirmationModal
+          title="Confirm Deletion"
           text={`Are you sure you want to delete ${this.props.sectionName}/${this.props.optionName}?`}
           onClose={this.hideModal}
           onSubmit={this.onDelete}
           visible={this.state.show}/>
+        <ReactComponents.ToolbarButton icon="fonticon-trash" onClick={this.showModal}/>
       </td>
     );
   }

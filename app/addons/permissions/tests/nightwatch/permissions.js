@@ -23,17 +23,17 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/permissions')
 
-      .waitForElementVisible('.permissions__admins', waitTime, false)
+      .waitForElementVisible('div#permissions__admins', waitTime, false)
 
-      .setValue('.permissions__admins [placeholder="Username"]', 'blergie')
-      .clickWhenVisible('.permissions__admins .permissions-add-user button')
+      .setValue('div#permissions__admins [placeholder="Username"]', 'blergie')
+      .clickWhenVisible('div#permissions__admins #form-users-permissions button')
 
-      .waitForElementVisible('.permissions__admins .permissions__entry', waitTime, false)
-      .assert.textContains('.permissions__entry span', 'blergie')
+      .waitForElementVisible('.permission-items li', waitTime, false)
+      .assert.textContains('.permission-items li span', 'blergie')
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/permissions')
-      .waitForElementVisible('.permissions__admins .permissions__entry', waitTime, false)
-      .assert.textContains('.permissions__entry span', 'blergie')
+      .waitForElementVisible('.permission-items li', waitTime, false)
+      .assert.textContains('.permission-items li span', 'blergie')
 
       .end();
   }

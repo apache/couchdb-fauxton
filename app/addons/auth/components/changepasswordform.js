@@ -11,7 +11,7 @@
 // the License.
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { Button, Form } from 'react-bootstrap';
 import FauxtonAPI from '../../../core/api';
 import {
   changePassword
@@ -52,35 +52,33 @@ export class ChangePasswordForm extends React.Component {
         <h3>Change Password</h3>
 
         <form id="change-password" onSubmit={this.changePassword.bind(this)}>
-          <p>
-            Enter your new password.
-          </p>
-
-          <input
-            id="password"
-            type="password"
-            ref={node => this.passwordField = node}
-            name="password"
-            placeholder="Password"
-            size="24"
-            onChange={this.onChangePassword.bind(this)}
-            value={this.state.password}
-          />
-          <br />
-          <input
-            id="password-confirm"
-            type="password"
-            name="password_confirm"
-            placeholder="Verify Password"
-            size="24"
-            onChange={this.onChangePasswordConfirm.bind(this)}
-            value={this.state.passwordConfirm}
-          />
-
-          <br />
-          <p>
-            <button type="submit" className="btn btn-primary">Change</button>
-          </p>
+          <div className='row'>
+            <div className='col-12 col-md-5 col-xl-4 mb-3'>
+              <label>Enter your new password</label>
+              <Form.Control type="password"
+                id="password"
+                ref={node => this.passwordField = node}
+                name="password"
+                placeholder="Password"
+                onChange={this.onChangePassword.bind(this)}
+                value={this.state.password} />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-12 col-md-5 col-xl-4 mb-3'>
+              <Form.Control type="password"
+                id="password-confirm"
+                name="password_confirm"
+                placeholder="Verify Password"
+                onChange={this.onChangePasswordConfirm.bind(this)}
+                value={this.state.passwordConfirm} />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-12 mb-3'>
+              <Button type="submit" variant="cf-primary">Change</Button>
+            </div>
+          </div>
         </form>
       </div>
     );

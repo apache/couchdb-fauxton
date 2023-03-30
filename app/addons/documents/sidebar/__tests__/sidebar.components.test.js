@@ -19,6 +19,7 @@ import '../../base';
 import DesignDoc from '../components/DesignDoc';
 import IndexSection from '../components/IndexSection';
 import MainSidebar from '../components/MainSidebar';
+import { act } from 'react-dom/test-utils';
 
 const { restore} = utils;
 
@@ -48,14 +49,22 @@ describe('DesignDoc', () => {
     restore(FauxtonAPI.urls);
   });
 
-  it('confirm URLs are properly encoded when design doc name has special chars', () => {
+  it('confirm URLs are properly encoded when design doc name has special chars', async() => {
     const wrapper = mount(<DesignDoc
       {...defaultProps}
       designDocName={'doc-$-#-.1'}
     />);
 
-    expect(wrapper.find('a.icon.fonticon-plus-circled').at(1).props()['href']).toContain('/doc-%24-%23-.1');
     expect(wrapper.find('a.toggle-view.accordion-header').props()['href']).toContain('/doc-%24-%23-.1');
+    const dropdownBtn = wrapper.find('a.icon.fonticon-plus-circled').at(0);
+    dropdownBtn.simulate('click');
+
+    await act(async () => {
+      wrapper.update();
+    });
+
+    const menuItem = wrapper.find('a.dropdown-item');
+    expect(menuItem.first().prop('href')).toContain('/doc-%24-%23-.1');
   });
 
   it('check toggle() works when design doc name has special characters', () => {
@@ -159,7 +168,7 @@ describe('DesignDoc', () => {
     expect(wrapper2.find('i.fonticon-documents').exists()).toBeTruthy();
   });
 
-  it('confirms links only include the partition key when one is selected', () => {
+  it('confirms links only include the partition key when one is selected', async() => {
     const wrapper = mount(<DesignDoc
       {...defaultProps}
       selectedPartitionKey={'part-key-$-%1'}
@@ -167,14 +176,32 @@ describe('DesignDoc', () => {
     // Metadata link
     expect(wrapper.find('a.toggle-view.accordion-header').props()['href']).toContain('/_partition/part-key-%24-%251/');
     // New View link
-    expect(wrapper.find('li > a.icon.fonticon-plus-circled').props()['href']).toContain('/_partition/part-key-%24-%251/');
+    const dropdownBtn = wrapper.find('a.icon.fonticon-plus-circled').at(0);
+    dropdownBtn.simulate('click');
+
+    await act(async () => {
+      wrapper.update();
+    });
+
+    const menuItem = wrapper.find('a.dropdown-item');
+    expect(menuItem.first().prop('href')).toContain('/doc-%24-%23-.1');
 
     const wrapper2 = mount(<DesignDoc
       {...defaultProps}
     />);
 
+    // Metadata link (ii)
     expect(wrapper2.find('a.toggle-view.accordion-header').props()['href']).not.toContain('/_partition/');
-    expect(wrapper2.find('li > a.icon.fonticon-plus-circled').props()['href']).not.toContain('/_partition/');
+    // New View link (ii)
+    const dropdownBtn2 = wrapper2.find('a.icon.fonticon-plus-circled').at(0);
+    dropdownBtn2.simulate('click');
+
+    await act(async () => {
+      wrapper2.update();
+    });
+
+    const menuItem2 = wrapper2.find('a.dropdown-item');
+    expect(menuItem2.first().prop('href')).not.toContain('/_partition/');
   });
 });
 

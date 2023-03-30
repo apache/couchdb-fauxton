@@ -1,0 +1,80 @@
+@import "../../../../../assets/scss/variables";
+
+.faux-header__doc-header-left {
+  top: 0;
+  right: 0;
+  height: $cf-navbar-width-collapsed;
+  border-right: 1px solid $cf-border-color02;
+  width: $cf-sidebar-width + 1px;
+
+  @include display-flex();
+  @include flex-direction(row);
+}
+
+.faux-header__doc-header-title {
+  height: $cf-navbar-width-collapsed;
+  width: 247px;
+  color: $cf-topheader-title-color;
+  font-size: 24px;
+  line-height: 24px;
+  padding: 22px 10px;
+  border-right: 1px solid $cf-border-color01;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#faux-header__doc-header-dropdown-toggle {
+  border: none;
+  height: $cf-navbar-width-collapsed;
+  right: 0;
+  padding: 10px 16px;
+  width: 43px;
+  background-color: $cf-topheader-bg;
+  color: $cf-topheader-color;
+  border: none;
+  box-shadow: none !important;
+
+  > i {
+    margin:0 !important;
+
+    &:before {
+      width: 6px;
+      font-size: 20px;
+      padding-top: 4px;
+    }
+  }
+
+  &:focus{
+    color: $cf-topheader-color-hover;
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none !important;
+  }
+
+  &:hover{
+    color: $cf-topheader-color-hover;
+    background-color: $cf-topheader-bg-hover;
+  }
+}
+
+.faux-header__doc-header-backlink {
+  font-size: 24px;
+  border: none;
+  background-color: transparent;
+  border-right: 1px solid $cf-border-color01;
+  width: 40px;
+  padding: 11px;
+  color: $cf-topheader-title-color;
+}
+
+.faux-header__doc-header-backlink__icon:before {
+  width: 18px;
+}
+
+.faux-header__doc-header-backlink:hover {
+  text-decoration: none;
+  color: $cf-topheader-color-hover;
+  background-color: $cf-topheader-bg-hover;
+}
+

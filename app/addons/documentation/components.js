@@ -12,84 +12,63 @@
 
 import React from "react";
 
-const docLinks = [
-  {
-    title: 'CouchDB Official Documentation — Online',
-    link: 'http://docs.couchdb.org/en/latest/',
-    iconClassName: 'couchdb-icon'
-  },
-  {
-    title: 'CouchDB Official Documentation — Offline',
-    link: './docs/index.html',
-    iconClassName: 'couchdb-icon'
-  },
-  {
-    title: 'CouchDB Weekly News',
-    link: 'http://blog.couchdb.org/',
-    iconClassName: 'couchdb-icon'
-  },
-  {
-    title: 'CouchDB Homepage',
-    link: 'https://couchdb.apache.org/',
-    iconClassName: 'couchdb-icon'
-  },
-  {
-    title: 'CouchDB on GitHub',
-    link: 'https://github.com/apache/couchdb',
-    iconClassName: 'github-icon'
-  },
-  {
-    title: 'Fauxton on GitHub',
-    link: 'https://github.com/apache/couchdb-fauxton',
-    iconClassName: 'github-icon'
-  },
-  {
-    title: 'Fauxton Visual Guide',
-    link: 'https://couchdb.apache.org/fauxton-visual-guide/index.html',
-    iconClassName: 'couchdb-icon'
-  },
-  {
-    title: 'The Apache Software Foundation',
-    link: 'http://www.apache.org/',
-    iconClassName: 'asf-feather-icon'
-  },
-  {
-    title: 'Follow CouchDB on Twitter',
-    link: 'https://twitter.com/couchdb',
-    iconClassName: 'twitter-icon'
-  },
-  {
-    title: 'Follow CouchDB on LinkedIn',
-    link: 'https://www.linkedin.com/company/apache-couchdb',
-    iconClassName: 'linkedin-icon'
-  }
-];
+const DocumentationItem = ({iconClassName, link, title}) => {
+  return <div className="col-12 col-sm-6 col-lg-4 mb-4">
+    <div className={'logo ' + iconClassName}>
+      <a href={link} target="_blank" rel="noopener noreferrer" data-bypass="true">{title}</a>
+    </div>
+  </div>;
+};
 
-const DocumentationPage = ({links = docLinks}) => {
-
-  function createLinkRows (linkList) {
-    return linkList.map(function (linkObject) {
-      return (
-        <tr key={linkObject.title}>
-          <td className="icons-container">
-            <div className={"icon " + linkObject.iconClassName}> </div>
-          </td>
-          <td>
-            <a href={linkObject.link} target="_blank" rel="noopener noreferrer" data-bypass="true">{linkObject.title}</a>
-          </td>
-        </tr>
-      );
-    });
-  }
-
+const DocumentationPage = () => {
   return (
     <div id="documentation-page" className="scrollable">
-      <div className="links">
-        <table>
-          <tbody>
-            {createLinkRows(links)}
-          </tbody>
-        </table>
+      <div className="links row mb-4">
+        <DocumentationItem
+          iconClassName='couchdb-icon'
+          link='http://docs.couchdb.org/en/latest/'
+          title='CouchDB Official Documentation — Online' />
+        <DocumentationItem
+          iconClassName='couchdb-icon'
+          link='./docs/index.html'
+          title='CouchDB Official Documentation — Offline' />
+        <DocumentationItem
+          iconClassName='couchdb-icon'
+          link='http://blog.couchdb.org/'
+          title='CouchDB Weekly News' />
+        <DocumentationItem
+          iconClassName='couchdb-icon'
+          link='https://couchdb.apache.org/'
+          title='CouchDB Homepage' />
+        <DocumentationItem
+          iconClassName='couchdb-icon'
+          link='https://couchdb.apache.org/fauxton-visual-guide/index.html'
+          title='Fauxton Visual Guide' />
+      </div>
+      <div className="links row mb-4">
+        <DocumentationItem
+          iconClassName='github-icon'
+          link='https://github.com/apache/couchdb'
+          title='CouchDB on GitHub' />
+        <DocumentationItem
+          iconClassName='github-icon'
+          link='https://github.com/apache/couchdb-fauxton'
+          title='Fauxton on GitHub' />
+      </div>
+
+      <div className="links row mb-4">
+        <DocumentationItem
+          iconClassName='asf-feather-icon'
+          link='http://www.apache.org/'
+          title='The Apache Software Foundation' />
+        <DocumentationItem
+          iconClassName='twitter-icon'
+          link='https://twitter.com/couchdb'
+          title='Follow CouchDB on Twitter' />
+        <DocumentationItem
+          iconClassName='linkedin-icon'
+          link='https://www.linkedin.com/company/apache-couchdb'
+          title='Follow CouchDB on LinkedIn' />
       </div>
     </div>
   );

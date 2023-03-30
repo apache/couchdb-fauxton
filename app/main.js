@@ -14,14 +14,15 @@ import app from './app';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FauxtonAPI from './core/api';
-import LoadAddons from './load_addons';
 import Backbone from 'backbone';
 import $ from 'jquery';
 import AppWrapper from './addons/fauxton/appwrapper';
-
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
+
+import LoadAddons from './load_addons';
+import '../assets/scss/fauxton.scss';
 
 FauxtonAPI.addMiddleware(thunk);
 const store = createStore(

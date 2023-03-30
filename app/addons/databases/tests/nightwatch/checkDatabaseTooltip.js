@@ -31,7 +31,7 @@ module.exports = {
 
       //this opens the alternative header
       .clickWhenVisible('.tableview-checkbox-cell input[type="checkbox"]')
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
 
@@ -43,7 +43,7 @@ module.exports = {
       .moveToElement('.js-db-graveyard', 1, 1)
 
       // confirm the tooltip element has been inserted
-      .waitForElementPresent('.tooltip.fade.top.in', waitTime, false)
+      .waitForElementPresent('.tooltip-inner', waitTime, false)
       .end();
   }
 };

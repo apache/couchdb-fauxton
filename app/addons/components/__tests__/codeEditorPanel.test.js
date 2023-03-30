@@ -24,14 +24,14 @@ describe('CodeEditorPanel', () => {
       const codeEditorEl = mount(
         <ReactComponents.CodeEditorPanel defaultCode={code} />
       );
-      expect(codeEditorEl.find('.icon-question-sign').length).toBe(0);
+      expect(codeEditorEl.find('.fonticon-help-circled').length).toBe(0);
     });
     it('hidden by default', () => {
 
       const codeEditorEl = mount(
         <ReactComponents.CodeEditorPanel defaultCode={code} docLink="http://link.com" />
       );
-      expect(codeEditorEl.find('.icon-question-sign').length).toBe(1);
+      expect(codeEditorEl.find('.fonticon-help-circled').length).toBe(1);
     });
   });
 

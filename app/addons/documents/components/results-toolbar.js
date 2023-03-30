@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import PropTypes from 'prop-types';
-
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import BulkDocumentHeaderController from "../header/header";
 import ResultsOptions from './results-options';
 import Components from "../../components/react-components";
@@ -67,10 +67,10 @@ export class ResultsToolBar extends React.Component {
     let createDocumentLink = null;
     if (databaseName) {
       createDocumentLink = (
-        <div className="document-result-screen__toolbar-flex-container">
-          <a href={Helpers.getNewDocUrl(databaseName, partitionKey)} className="btn save document-result-screen__toolbar-create-btn btn-primary">
+        <div className="ms-auto">
+          <Button id="create-new-doc-btn" href={Helpers.getNewDocUrl(databaseName, partitionKey)} variant="cf-primary">
             Create Document
-          </a>
+          </Button>
         </div>
       );
     }

@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import AddOptionButtonContainer from './components/AddOptionButtonContainer';
 import ConfigTableContainer from './components/ConfigTableContainer';
 import ConfigTabs from './components/ConfigTabs';
 import CORSComponents from '../cors/components';
@@ -19,7 +18,7 @@ import { Breadcrumbs } from '../components/header-breadcrumbs';
 import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
 import { ApiBarWrapper } from '../components/layouts';
 
-export const ConfigHeader = ({ node, crumbs, docURL, endpoint }) => {
+export const ConfigHeader = ({ crumbs, docURL, endpoint }) => {
   return (
     <header className="two-panel-header">
       <div className="flex-layout flex-row">
@@ -28,11 +27,8 @@ export const ConfigHeader = ({ node, crumbs, docURL, endpoint }) => {
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
           <div id="react-headerbar" className="flex-body"> </div>
-          <div id="right-header" className="flex-fill">
-            <AddOptionButtonContainer node={node} />
-          </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
-          <div id="notification-center-btn" className="flex-fill">
+          <div id="notification-center-btn">
             <NotificationCenterButton />
           </div>
         </div>

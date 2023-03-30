@@ -12,6 +12,7 @@
 import React from 'react';
 import ActiveTasksTableBody from './tablebody';
 import ActiveTasksTableHeader from './tableheader';
+import { Table } from 'react-bootstrap';
 
 export default class ActiveTaskTable extends React.Component {
   render() {
@@ -27,7 +28,7 @@ export default class ActiveTaskTable extends React.Component {
 
     return (
       <div id="dashboard-lower-content">
-        <table id="active-tasks-table" className="table table-bordered table-striped active-tasks">
+        <Table striped className="table-active-tasks">
           <ActiveTasksTableHeader
             onTableHeaderClick={onTableHeaderClick}
             sortByHeader={sortByHeader}
@@ -37,7 +38,7 @@ export default class ActiveTaskTable extends React.Component {
             selectedRadio={selectedRadio}
             isLoading={isLoading}
             searchTerm={searchTerm}/>
-        </table>
+        </Table>
       </div>
     );
   }

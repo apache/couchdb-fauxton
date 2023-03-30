@@ -15,7 +15,7 @@ import FauxtonAPI from '../../core/api';
 import * as NavigationActions from './navigation/actions';
 import navigationReducers from './navigation/reducers';
 import notificationsReducer from './notifications/reducers';
-import './assets/less/fauxton.less';
+import './assets/scss/fauxton.scss';
 
 const Fauxton = FauxtonAPI.addon();
 

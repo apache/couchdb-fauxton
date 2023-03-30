@@ -35,7 +35,7 @@ export default class PerPageSelector extends React.Component {
       <div id="per-page">
         <label htmlFor="select-per-page" className="drop-down inline">
           {this.props.label} &nbsp;
-          <select id="select-per-page" onChange={this.perPageChange.bind(this)} value={this.props.perPage.toString()} className="input-small">
+          <select id="select-per-page" onChange={this.perPageChange.bind(this)} value={this.props.perPage.toString()} className="form-select form-select-sm">
             {this.getOptions()}
           </select>
         </label>

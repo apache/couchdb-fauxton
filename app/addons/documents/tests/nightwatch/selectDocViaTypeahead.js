@@ -41,7 +41,7 @@ module.exports = {
           .sendKeys(Key.DOWN)
           .sendKeys(Key.ENTER);
       })
-      .waitForElementPresent('.panel-button.upload', waitTime, false)
+      .waitForElementPresent('.panel-section button[title="Upload Attachment"]', waitTime, false)
       .end();
   },
 
@@ -72,7 +72,7 @@ module.exports = {
           .sendKeys(Key.DOWN)
           .sendKeys(Key.ENTER);
       })
-      .waitForElementPresent('.panel-button.upload', waitTime, false)
+      .waitForElementPresent('.panel-section button[title="Upload Attachment"]', waitTime, false)
       .end();
   }
 };

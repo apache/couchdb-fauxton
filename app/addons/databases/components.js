@@ -23,12 +23,15 @@ import FauxtonComponentsReact from "..//fauxton/components";
 import Stores from "./stores";
 import Actions from "./actions";
 
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Button, Form, ButtonGroup } from 'react-bootstrap';
 
 const databasesStore = Stores.databasesStore;
 const deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
-const { Accordion, AccordionItem, DeleteDatabaseModal, ToggleHeaderButton, TrayContents } = Components;
+const {Accordion, AccordionItem, DeleteDatabaseModal,
+  ToggleHeaderButton,
+  TrayContents,
+  ToolbarButton } = Components;
 
 
 class DatabasesController extends React.Component {
@@ -230,19 +233,9 @@ class DatabaseRow extends React.Component {
         {this.getExtensionColumns(item)}
 
         <td className="database-actions">
-          <a className="db-actions btn fonticon-replicate set-replication-start"
-            aria-label={`Replicate ${id}`}
-            title={"Replicate " + name}
-            href={"#/replication/_create/" + encodedId} />
-          <a
-            aria-label={`Set permissions for ${id}`}
-            className="db-actions btn icon-lock set-permissions"
-            title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />
-          <a
-            aria-label={`Delete ${id}`}
-            className="db-actions btn icon-trash"
-            onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)}
-            title={'Delete ' + id} data-bypass="true" />
+          <ToolbarButton icon="fonticon-replicate" title={`Replicate ${id}`} aria-label={`Replicate ${id}`} onClick={() => FauxtonAPI.navigate("#/replication/_create/" + encodedId)} />
+          <ToolbarButton icon="fonticon-lock" title={`Set permission for ${id}`} aria-label={`Set permission for ${id}`} onClick={() => FauxtonAPI.navigate("#/database/" + encodedId + "/permissions")} />
+          <ToolbarButton icon="fonticon-trash" title={`Delete ${id}`} aria-label={`Delete ${id}`} onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)} />
         </td>
       </tr>
     );
@@ -255,7 +248,7 @@ const GraveyardInfo = ({ docCount, docDelCount }) => {
 
   return (
     <OverlayTrigger placement="top" overlay={tooltip}>
-      <i className="js-db-graveyard icon icon-exclamation-sign" title={graveyardTitle}></i>
+      <i className="js-db-graveyard fonticon fonticon-attention-circled" title={graveyardTitle}></i>
     </OverlayTrigger>
   );
 };
@@ -380,34 +373,28 @@ class AddDatabaseWidget extends React.Component {
       </Accordion>
     ) : null;
     return (
-      <div className='partitioned-db-section' >
-        <label htmlFor="partitioned-db" className='partitioned-db-label'>
-          Partitioning
-        </label>
-        <div className='partitioned-db-options'>
-          <form>
-            <label htmlFor="non-partitioned-option">
-              <input
-                id="non-partitioned-option"
-                type="radio"
-                checked={this.state.partitionedSelected === false}
-                onChange={this.onTogglePartitioned}
-              />
-              Non-partitioned - recommended for most workloads
-            </label>
-            <label htmlFor="partitioned-option">
-              <input
-                id="partitioned-option"
-                type="radio"
-                checked={this.state.partitionedSelected === true}
-                onChange={this.onTogglePartitioned}
-              />
-              Partitioned
-            </label>
-          </form>
+      <Form.Group className="mb-3" controlId="formBasicCheckbox">
+        <Form.Label>Partitioning</Form.Label>
+        <div key="partition-radio" className="mb-3">
+          <Form.Check
+            label="Non-partitioned - recommended for most workloads"
+            name="group1"
+            type="radio"
+            id="non-partitioned-option"
+            checked={this.state.partitionedSelected === false}
+            onChange={this.onTogglePartitioned}
+          />
+          <Form.Check
+            label="Partitioned"
+            name="group1"
+            type="radio"
+            id="partitioned-option"
+            checked={this.state.partitionedSelected === true}
+            onChange={this.onTogglePartitioned}
+          />
         </div>
         {partitionedDbHelp}
-      </div>
+      </Form.Group>
     );
   }
 
@@ -425,6 +412,7 @@ class AddDatabaseWidget extends React.Component {
           title="Create Database"
           fonticon="fonticon-new-database"
           text="Create Database" />
+
         <TrayContents
           className={classNames}
           contentVisible={this.state.isPromptVisible}
@@ -432,31 +420,32 @@ class AddDatabaseWidget extends React.Component {
           onEnter={this.focusInput} >
           <div className='tray-contents'>
             <div className='tray-header'>
-              <h3>Create Database</h3>
+              <h3 >Create Database</h3>
             </div>
             <div className='tray-body'>
-              <label htmlFor="js-new-database-name" className='db-name-label'>
-                Database name
-              </label>
-              <input
-                id="js-new-database-name"
-                ref={node => this.newDbName = node}
-                type="text"
-                value={this.state.databaseName}
-                onChange={this.onChange} onKeyUp={this.onKeyUpInInput}
-                className="input-xxlarge"
-                placeholder="database-name"
-              />
-              {this.partitionedOption()}
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="js-new-database-name">Database name</Form.Label>
+                  <Form.Control
+                    id="js-new-database-name"
+                    ref={node => this.newDbName = node}
+                    type="text"
+                    value={this.state.databaseName}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUpInInput}
+                    placeholder="database-name"/>
+                </Form.Group>
+                {this.partitionedOption()}
+              </Form>
             </div>
-            <div className='tray-footer'>
-              <a className="btn btn-cancel" id="js-cancel-create-database" onClick={this.closeTray}>
-                Cancel
-              </a>
-              <a className="btn btn-primary" id="js-create-database" onClick={this.onAddDatabase}>
+            <ButtonGroup bsPrefix="tray-footer" >
+              <Button variant='cf-cancel' id="js-cancel-create-database" onClick={this.closeTray}>
+               Cancel
+              </Button>
+              <Button variant='cf-primary' id="js-create-database" onClick={this.onAddDatabase}>
                 Create
-              </a>
-            </div>
+              </Button>
+            </ButtonGroup>
           </div>
         </TrayContents>
       </div>

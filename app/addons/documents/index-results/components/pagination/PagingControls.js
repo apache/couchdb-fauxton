@@ -29,11 +29,11 @@ export default function PagingControls ({ nextClicked, previousClicked, canShowP
   return (
     <div className="documents-pagination">
       <ul className="pagination">
-        <li className={canShowPreviousClassName} >
-          <a id="previous" onClick={previousClicked} className="icon fonticon-left-open" href="#" data-bypass="true"></a>
+        <li className={'page-item ' + canShowPreviousClassName} >
+          <a id="previous" onClick={previousClicked} className="page-link fonticon-left-open" href="#" data-bypass="true"></a>
         </li>
-        <li className={canShowNextClassName} >
-          <a id="next" onClick={nextClicked} className="icon fonticon-right-open" href="#" data-bypass="true"></a>
+        <li className={'page-item ' + canShowNextClassName} >
+          <a id="next" onClick={nextClicked} className="page-link fonticon-right-open" href="#" data-bypass="true"></a>
         </li>
       </ul>
     </div>

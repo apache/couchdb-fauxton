@@ -82,7 +82,7 @@ describe('DesignDocSelector component', () => {
         onSelectDesignDoc={spy}
       />);
 
-    selectorEl.find('.styled-select select').first().simulate('change', {
+    selectorEl.find('select#faux__edit-view__design-doc').first().simulate('change', {
       target: {
         value: '_design/test-doc'
       }
@@ -235,7 +235,7 @@ describe('IndexEditor', () => {
       changeViewName={spy}
     />);
 
-    editorEl.find('#index-name').simulate('change', {
+    editorEl.find('input#index-name').simulate('change', {
       target: {
         value: 'newViewName'
       }

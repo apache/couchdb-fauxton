@@ -13,7 +13,7 @@
 import FauxtonAPI from '../../core/api';
 import Config from './routes';
 import reducers from './reducers';
-import './assets/less/config.less';
+import './assets/scss/config.scss';
 
 Config.initialize = function () {
   FauxtonAPI.addHeaderLink({

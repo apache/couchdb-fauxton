@@ -51,9 +51,9 @@ module.exports = {
 
       // turn include_docs on through query options
       .clickWhenVisible('.control-toggle-queryoptions')
-      .waitForElementPresent('#qoIncludeDocsLabel', waitTime, false)
-      .clickWhenVisible('#qoIncludeDocsLabel')
-      .clickWhenVisible('.query-options .btn-secondary')
+      .waitForElementPresent('input#qoIncludeDocs', waitTime, false)
+      .clickWhenVisible('input#qoIncludeDocs')
+      .clickWhenVisible('#query-options-tray #button-options .btn-cf-primary')
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
       .assert.textContains('.two-sides-toggle-button button.active', 'Table')
 
@@ -61,10 +61,10 @@ module.exports = {
       .clickWhenVisible('.fonticon-json')
       .assert.textContains('.two-sides-toggle-button button.active', 'JSON')
       .clickWhenVisible('.control-toggle-queryoptions')
-      .waitForElementPresent('#qoIncludeDocsLabel', waitTime, false)
-      .assert.attributeEquals('#qoIncludeDocs', 'checked', 'true')
-      .clickWhenVisible('#qoIncludeDocsLabel')
-      .clickWhenVisible('.query-options .btn-secondary')
+      .waitForElementPresent('input#qoIncludeDocs', waitTime, false)
+      .assert.attributeEquals('input#qoIncludeDocs', 'checked', 'true')
+      .clickWhenVisible('input#qoIncludeDocs')
+      .clickWhenVisible('#query-options-tray #button-options .btn-cf-primary')
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
       .assert.textContains('.two-sides-toggle-button button.active', 'Metadata')
       .end();

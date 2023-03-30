@@ -1,0 +1,89 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/mixins';
+
+#active-tasks-page {
+  overflow: auto;
+
+  .inner {
+    overflow: auto;
+    height: 100%;
+  }
+
+  .table-active-tasks {
+    font-size: 0.875rem;
+    th {
+      cursor: pointer;
+
+      &.header-type {
+        width: 10%;
+      }
+
+      &.header-database {
+        width: 30%;
+      }
+
+      &.header-tarted-on {
+        width: 13%;
+      }
+
+      &.header-updated-on {
+        width: 13%;
+      }
+
+      &.header-pid {
+        width: 10%;
+      }
+
+      &.header-progress {
+        width: 23%;
+      }
+
+      .fonticon-up-dir,
+      .fonticon-down-dir {
+        color: $cf-brand-highlight;
+      }
+    }
+
+    p.multiline-active-tasks-message {
+      margin: 0;
+      line-height: 1.3;
+      margin-bottom: 3px;
+
+      &.time:nth-child(2) {
+        color: $cf-text01-muted;
+      }
+
+      &.to-from-database {
+        &:first-child {
+          border-bottom: 1px solid $cf-border-color01;
+        }
+        padding-bottom: 15px;
+      }
+    }
+  }
+
+  div#active-tasks-search {
+    margin-top:1.5rem;
+    padding: 0 30px;
+  }
+
+  .component-tab-element-wrapper {
+    #active-tasks-search-box {
+      display: inline;
+      width: 220px;
+      margin-left:8px;
+    }
+  }
+}

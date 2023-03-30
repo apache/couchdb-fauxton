@@ -12,9 +12,12 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Collapse, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Collapse } from 'react-bootstrap';
+import Components from '../../../components/react-components';
 import ReactDOM from 'react-dom';
 import FauxtonAPI from '../../../../core/api';
+
+const { MenuDropDown } = Components;
 
 export default class IndexSection extends React.Component {
   static propTypes = {
@@ -46,8 +49,30 @@ export default class IndexSection extends React.Component {
     this.setState({ placement: placement });
   };
 
-  createItems = () => {
+  getItemLinks = (indexName) => {
+    let listItems =  [{
+      title: 'Edit',
+      icon: 'fonticon-file-code-o',
+      onClick: () => {this.indexAction('edit', { indexName: indexName, onEdit: this.props.onEdit });}
+    },
+    {
+      title: 'Clone',
+      icon: 'fonticon-files-o',
+      onClick: () => {this.indexAction('clone', { indexName: indexName, onClone: this.props.onClone });}
+    },
+    {
+      title: 'Delete',
+      icon: 'fonticon-trash',
+      onClick: () => {this.indexAction('delete', { indexName: indexName, onDelete: this.props.onDelete });}
+    }];
 
+    return [{
+      title: "Manage View",
+      links: listItems
+    }];
+  };
+
+  createItems = () => {
     // sort the indexes alphabetically
     const sortedItems = this.props.items.sort();
 
@@ -61,6 +86,8 @@ export default class IndexSection extends React.Component {
       }
       const className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
+      const links = this.getItemLinks(indexName);
+
       return (
         <li className={className} key={index}>
           <a
@@ -69,42 +96,15 @@ export default class IndexSection extends React.Component {
             className="toggle-view">
             {indexName}
           </a>
-          <OverlayTrigger
-            trigger="click"
-            onEnter={this.setPlacement.bind(this, this.props.designDocName + '_' + indexName)}
-            placement={this.state.placement}
-            rootClose={true}
-            ref={overlay => this.itemOverlay = overlay}
-            overlay={
-              <Popover id="index-menu-component-popover">
-                <ul>
-                  <li onClick={this.indexAction.bind(this, 'edit', { indexName: indexName, onEdit: this.props.onEdit })}>
-                    <span className="fonticon fonticon-file-code-o"></span>
-                    Edit
-                  </li>
-                  <li onClick={this.indexAction.bind(this, 'clone', { indexName: indexName, onClone: this.props.onClone })}>
-                    <span className="fonticon fonticon-files-o"></span>
-                    Clone
-                  </li>
-                  <li onClick={this.indexAction.bind(this, 'delete', { indexName: indexName, onDelete: this.props.onDelete })}>
-                    <span className="fonticon fonticon-trash"></span>
-                    Delete
-                  </li>
-                </ul>
-              </Popover>
-            }>
-            <span className="index-menu-toggle fonticon fonticon-wrench2"></span>
-          </OverlayTrigger>
+          <div className='new-button add-dropdown sidebar-sub-item'>
+            <MenuDropDown links={links} icon={"fonticon-wrench"}/>
+          </div>
         </li>
       );
     });
   };
 
-  indexAction = (action, params, e) => {
-    e.preventDefault();
-
-    this.itemOverlay.hide();
-
+  indexAction = (action, params) => {
     switch (action) {
       case 'delete':
         this.props.showDeleteIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onDelete);
@@ -118,8 +118,7 @@ export default class IndexSection extends React.Component {
     }
   };
 
-  toggle = (e) => {
-    e.preventDefault();
+  toggle = () => {
     this.props.toggle(this.props.designDocName, this.props.title);
   };
 

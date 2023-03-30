@@ -11,9 +11,8 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { Button } from 'react-bootstrap';
 
 export class ConfirmButton extends React.Component {
   static propTypes = {
@@ -21,7 +20,11 @@ export class ConfirmButton extends React.Component {
     id: PropTypes.string,
     customIcon: PropTypes.string,
     style: PropTypes.object,
-    buttonType: PropTypes.string,
+    variant: PropTypes.oneOf([
+      'primary',
+      'secondary',
+      'danger',
+    ]),
     'data-id': PropTypes.string,
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
@@ -31,36 +34,34 @@ export class ConfirmButton extends React.Component {
     disabled: false,
     showIcon: true,
     customIcon: 'fonticon-ok-circled',
-    buttonType: 'btn-primary',
+    variant: 'primary',
     style: {},
     'data-id': null,
-    onClick () { }
+    onClick() {},
   };
 
   getIcon = () => {
     if (!this.props.showIcon) {
       return null;
     }
-    return (
-      <i className={"icon " + this.props.customIcon} />
-    );
+    return <i className={'icon ' + this.props.customIcon} />;
   };
 
   render() {
-    const { onClick, buttonType, id, style, text, disabled } = this.props;
+    const { onClick, variant, id, text, disabled, style } = this.props;
     return (
-      <button
+      <Button
         onClick={onClick}
         type="submit"
-        disabled={disabled}
-        data-id={this.props['data-id']}
-        className={'btn save ' + buttonType}
-        id={id}
         style={style}
+        disabled={disabled}
+        variant={'cf-' + variant}
+        data-id={this.props['data-id']}
+        id={id}
       >
         {this.getIcon()}
         {text}
-      </button>
+      </Button>
     );
   }
 }

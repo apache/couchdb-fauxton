@@ -11,6 +11,7 @@
 // the License.
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Form } from 'react-bootstrap';
 import ReactComponents from "../../components/react-components";
 import CurrentAdminPassword from "./CurrentAdminPassword";
 import OptionalSettings from "./OptionalSettings";
@@ -100,39 +101,46 @@ export default class MultipleNodesController extends React.Component {
             onAlterNodeCount={this._alterNodeCount}
             nodeCount={setupNode.nodeCount}/>
         </div>
-        <hr/>
-        <div className="setup-add-nodes-section">
+
+        <div className="setup-addnode-section">
           <h2>Add Nodes to the Cluster</h2>
-          <p>Remote host</p>
-          <input
-            value={additionalNode.remoteAddress}
-            onChange={this._alterRemoteAddressAdditionalNode}
-            className="input-remote-node"
-            type="text"
-            placeholder="IP Address"/>
+          <div className="row">
+            <div className="col-12 col-md-5 col-xl-4 mb-3">
+              <label>Remote host</label>
+              <Form.Control type="text"
+                onChange={this._alterRemoteAddressAdditionalNode}
+                placeholder="IP Address"
+                value={additionalNode.remoteAddress} />
+
+            </div>
+          </div>
           <OptionalSettings
             {...this.props}
             onAlterPort={this._alterPortAdditionalNode}
             onAlterBindAddress={this._alterBindAddressAdditionalNode}
             ip={additionalNode.bindAddress} port={additionalNode.port}/>
 
-          <div className="setup-add-button">
-            <ConfirmButton
-              onClick={this._addNode}
-              showIcon={false}
-              id="setup-btn-no-thanks"
-              text="Add Node"/>
+          <div className="row">
+            <div className="col12 col-md-5 col-xl-4 mb-3">
+              <ConfirmButton
+                onClick={this._addNode}
+                showIcon={false}
+                variant="secondary"
+                text="Add Node"/>
+            </div>
           </div>
-        </div>
-        <div className="setup-nodelist">
-          {this.getNodeList()}
-        </div>
 
-        <div className="centered setup-finish">
-          <ConfirmButton
-            onClick={this._finishClusterSetup}
-            showIcon={false}
-            text="Configure Cluster"/>
+          <div className="setup-nodelist">
+            {this.getNodeList()}
+          </div>
+
+        </div>
+        <div className="row">
+          <div className="col12 col-md-5 col-xl-4 mb-3">
+            <ConfirmButton
+              onClick={this._finishClusterSetup}
+              text="Configure Cluster"/>
+          </div>
         </div>
       </div>
     );

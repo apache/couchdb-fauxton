@@ -12,6 +12,7 @@
 
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
+import Form from 'react-bootstrap/Form';
 
 export default class AdditionalParams extends React.Component {
   updateSkip (e) {
@@ -41,38 +42,58 @@ export default class AdditionalParams extends React.Component {
 
   render () {
     return (
-      <div className="query-group" id="query-options-additional-params">
-        <div className="add-on additionalParams">Additional Parameters</div>
-        <div className="row-fluid fieldsets">
-          <div className="dropdown inline">
-            <label className="drop-down">
-              Limit
-              <select id="qoLimit" onChange={this.updateLimit.bind(this)} name="limit" value={this.props.limit} className="input-small">
-                <option value="none">None</option>
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={30}>30</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-                <option value={500}>500</option>
-              </select>
-            </label>
+      <>
+        <div className="row m-2 mt-0 mb-3">
+          <div className="col-12">
+            <h5>Additional Parameters</h5>
           </div>
         </div>
-        <div className="row-fluid fieldsets">
-          <div className="checkbox inline">
-            <input id="qoDescending" type="checkbox" onChange={this.toggleDescending.bind(this)} checked={this.props.descending} />
-            <label htmlFor="qoDescending">Descending</label>
+        <div className='row m-2 mt-0 mb-3'>
+          <div className="col-auto">
+            <label htmlFor="qoLimit" className="col-form-label">Limit</label>
           </div>
-          <div className="dropdown inline">
-            <label htmlFor="qoSkip" className="drop-down">
-              Skip
-              <input value={this.props.skip} onChange={this.updateSkip.bind(this)} className="input-small" type="number" id="qoSkip" placeholder="# of rows" />
-            </label>
+          <div className="col">
+            <Form.Select
+              id="qoLimit"
+              onChange={this.updateLimit.bind(this)}
+              value={this.props.limit}
+            >
+              <option value="none">None</option>
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={30}>30</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+              <option value={500}>500</option>
+            </Form.Select>
+          </div>
+          <div className="col-auto">
+            <label htmlFor="qoSkip" className="col-form-label">Skip</label>
+          </div>
+          <div className="col">
+            <Form.Control
+              id="qoSkip"
+              type="number"
+              value={this.props.skip}
+              placeholder="# of rows"
+              onChange={this.updateSkip.bind(this)}
+            />
           </div>
         </div>
-      </div>
+
+        <div className='row m-2 mt-0 mb-3'>
+          <div className="col-6">
+            <Form.Check
+              id="qoDescending"
+              label="Descending"
+              onChange={this.toggleDescending.bind(this)}
+              checked={this.props.descending}
+              type="checkbox"
+            />
+          </div>
+        </div>
+      </>
     );
   }
 }

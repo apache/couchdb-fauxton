@@ -36,15 +36,16 @@ const NavLink = ({link, active, isMinimized}) => {
     linkIcon = (
       <i aria-hidden="true" className={classNames(
         link.icon,
-        'fonticon faux-navbar__icon',
-        {'faux-navbar__icon-badge': link.badge})}>
+        'fonticon faux-navbar__icon')}>
       </i>
     );
   }
 
   return (
     <a aria-current={isActive ? "page" : null } aria-label={link.title} className={linkClass} href={link.href} target={link.target ? '_blank' : null} rel="noreferrer noopener" data-bypass={link.target ? 'true' : null}>
-      <div data-nav-name={link.title} className="faux-navbar__itemarea">
+      <div data-nav-name={link.title} className={classNames(
+        "faux-navbar__itemarea",
+        {'faux-navbar__icon-badge': link.badge})}>
         {linkIcon}
         {linkTitle}
       </div>

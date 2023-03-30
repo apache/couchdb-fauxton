@@ -12,8 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Modal } from 'react-bootstrap';
-import ReactDOM from 'react-dom';
+import { Button, Modal } from 'react-bootstrap';
 import FauxtonAPI from '../../../../core/api';
 import IndexEditorComponents from '../../index-editor/components';
 
@@ -73,7 +72,7 @@ export default class CloneIndexModal extends React.Component {
 
   render() {
     return (
-      <Modal dialogClassName="clone-index-modal" show={this.props.visible} onHide={this.close}>
+      <Modal dialogClassName="clone-index-modal" id="clone-index-modal" show={this.props.visible} onHide={this.close}>
         <Modal.Header closeButton={true}>
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
@@ -85,32 +84,33 @@ export default class CloneIndexModal extends React.Component {
               a name for the cloned {this.props.indexLabel}.
             </p>
 
-            <div className="row">
-              <DesignDocSelector
-                ref={node => this.designDocSelector = node}
-                designDocList={this.props.designDocArray}
-                isDbPartitioned={this.props.isDbPartitioned}
-                selectedDesignDocName={this.props.selectedDesignDoc}
-                selectedDesignDocPartitioned={this.props.selectedDesignDocPartitioned}
-                newDesignDocName={this.props.newDesignDocName}
-                newDesignDocPartitioned={this.props.newDesignDocPartitioned}
-                onSelectDesignDoc={this.props.selectDesignDoc}
-                onChangeNewDesignDocName={this.props.updateNewDesignDocName}
-                onChangeNewDesignDocPartitioned={this.props.updateNewDesignDocPartitioned} />
-            </div>
+            <DesignDocSelector
+              ref={node => this.designDocSelector = node}
+              designDocList={this.props.designDocArray}
+              isDbPartitioned={this.props.isDbPartitioned}
+              selectedDesignDocName={this.props.selectedDesignDoc}
+              selectedDesignDocPartitioned={this.props.selectedDesignDocPartitioned}
+              newDesignDocName={this.props.newDesignDocName}
+              newDesignDocPartitioned={this.props.newDesignDocPartitioned}
+              onSelectDesignDoc={this.props.selectDesignDoc}
+              onChangeNewDesignDocName={this.props.updateNewDesignDocName}
+              onChangeNewDesignDocPartitioned={this.props.updateNewDesignDocPartitioned}
+              className="mb-3 col-12"
+            />
 
-            <div className="clone-index-name-row">
-              <label className="new-index-title-label" htmlFor="new-index-name">{this.props.indexLabel} Name</label>
-              <input type="text" id="new-index-name" value={this.props.newIndexName} onChange={this.setNewIndexName}
-                placeholder="New view name" />
+            <div className="row pt-0">
+              <div className="col-12">
+                <label htmlFor="new-index-name" className="form-label mb-0 text-capitalize">{this.props.indexLabel} Name</label>
+                <input type="text" placeholder={"New view name"} value={this.props.newIndexName} className="form-control" id="new-index-name" onChange={this.setNewIndexName} />
+              </div>
             </div>
           </form>
 
         </Modal.Body>
         <Modal.Footer>
-          <a href="#" className="cancel-link" onClick={this.close} data-bypass="true">Cancel</a>
-          <button onClick={this.submit} data-bypass="true" className="btn btn-primary save">
-            <i className="icon fonticon-ok-circled" /> Clone {this.props.indexLabel}</button>
+          <Button href="#" variant="cf-cancel" className="cancel-link" onClick={this.close} data-bypass="true">Cancel</Button>
+          <Button onClick={this.submit} data-bypass="true" variant="cf-primary" className="save">
+            <i className="icon fonticon-ok-circled" /> Clone {this.props.indexLabel}</Button>
         </Modal.Footer>
       </Modal>
     );

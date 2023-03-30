@@ -12,9 +12,8 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import GeneralComponents from '../../components/react-components';
+import Form from 'react-bootstrap/Form';
 
-const StyledSelect = GeneralComponents.StyledSelect;
 
 export default class AnalyzerDropdown extends React.Component {
   static defaultProps = {
@@ -66,12 +65,13 @@ export default class AnalyzerDropdown extends React.Component {
     return (
       <div className={this.props.classes}>
         {this.getLabel()}
-        <StyledSelect
-          selectChange={this.props.onChange}
-          selectValue={this.props.defaultSelected}
-          selectId={this.props.id}
-          selectContent={[this.getAnalyzers(), languages]}
-        />
+        <Form.Select
+          onChange={this.props.onChange}
+          value={this.props.defaultSelected}
+          id={this.props.id}
+        >
+          {[this.getAnalyzers(), languages]}
+        </Form.Select>
       </div>
     );
   }

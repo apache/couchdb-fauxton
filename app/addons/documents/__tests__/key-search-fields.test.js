@@ -23,16 +23,6 @@ describe('KeySearchFields', () => {
     include: true
   };
 
-  it('keysGroupClass contains \'hide\' when showByKeys and showBetweenKeys are false', () => {
-    const wrapper = mount(<KeySearchFields
-      showByKeys={false}
-      showBetweenKeys={false}
-      betweenKeys={betweenKeys}
-    />);
-
-    expect(wrapper.find('.js-query-keys-wrapper').hasClass('hide')).toBe(true);
-  });
-
   it('byKeysClass contains \'hide\' and byKeysButtonClass contains \'active\' when showByKeys is false', () => {
     const wrapper = mount(<KeySearchFields
       showByKeys={false}
@@ -41,7 +31,7 @@ describe('KeySearchFields', () => {
     />);
 
     expect(wrapper.find('#js-showKeys').hasClass('hide')).toBe(true);
-    expect(wrapper.find('#betweenKeys').hasClass('active')).toBe(true);
+    expect(wrapper.find('label[htmlFor="betweenKeys"]').hasClass('active')).toBe(true);
   });
 
   it('betweenKeysClass contains \'hide\' and betweenKeysButtonClass contains \'active\' when showBetweenKeys is false', () => {
@@ -52,7 +42,7 @@ describe('KeySearchFields', () => {
     />);
 
     expect(wrapper.find('#js-showStartEnd').hasClass('hide')).toBe(true);
-    expect(wrapper.find('#byKeys').hasClass('active')).toBe(true);
+    expect(wrapper.find('label[htmlFor="byKeys"]').hasClass('active')).toBe(true);
   });
 
   it('calls toggleByKeys onClick', () => {
@@ -64,7 +54,7 @@ describe('KeySearchFields', () => {
       toggleByKeys={spy}
     />);
 
-    wrapper.find('#byKeys').simulate('click');
+    wrapper.find('label[htmlFor="byKeys"]').simulate('click');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -77,7 +67,7 @@ describe('KeySearchFields', () => {
       toggleBetweenKeys={spy}
     />);
 
-    wrapper.find('#betweenKeys').simulate('click');
+    wrapper.find('label[htmlFor="betweenKeys"]').simulate('click');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -90,8 +80,8 @@ describe('KeySearchFields', () => {
       updateBetweenKeys={spy}
     />);
 
-    wrapper.find('#startkey').simulate('change');
-    wrapper.find('#endkey').simulate('change');
+    wrapper.find('input#startkey').simulate('change');
+    wrapper.find('input#endkey').simulate('change');
     expect(spy.calledTwice).toBe(true);
   });
 
@@ -104,7 +94,7 @@ describe('KeySearchFields', () => {
       updateBetweenKeys={spy}
     />);
 
-    wrapper.find('#qoIncludeEndKeyInResults').simulate('change');
+    wrapper.find('input#qoIncludeEndKeyInResults').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -117,7 +107,7 @@ describe('KeySearchFields', () => {
       updateByKeys={spy}
     />);
 
-    wrapper.find('#keys-input').simulate('change');
+    wrapper.find('textarea#keys-input').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 });

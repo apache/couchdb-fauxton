@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Table } from 'react-bootstrap';
 import ConfigOption from './ConfigOption';
 
 export default class ConfigTable extends React.Component {
@@ -46,9 +47,8 @@ export default class ConfigTable extends React.Component {
 
   render() {
     const options = this.createOptions();
-
     return (
-      <table className="config table table-striped table-bordered">
+      <Table striped>
         <thead>
           <tr>
             <th id="config-section" width="22%">Section</th>
@@ -60,7 +60,7 @@ export default class ConfigTable extends React.Component {
         <tbody>
           {options}
         </tbody>
-      </table>
+      </Table>
     );
   }
 }

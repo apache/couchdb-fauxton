@@ -22,8 +22,8 @@ module.exports = {
       .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
-      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')
+      .clickWhenVisible('#faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('div[aria-labelledby="faux-header__doc-header-dropdown-toggle"] .fonticon-trash')
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .clickWhenVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
@@ -43,7 +43,11 @@ module.exports = {
 
       .waitForElementPresent('a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .assert.elementPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
-      .clickWhenVisible('[title="Delete ' + newDatabaseName + '"]', waitTime, false)
+
+      .waitForElementPresent('button[aria-label="Delete ' + newDatabaseName + '"]', waitTime, false)
+      .execute('button[aria-label="Delete ' + newDatabaseName + '"]").scrollIntoView();')
+      .clickWhenVisible('button[aria-label="Delete ' + newDatabaseName + '"]', waitTime, false)
+
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .clickWhenVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])

@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button, Form } from 'react-bootstrap';
 import AnalyzerDropdown from './AnalyzerDropdown';
 
 export default class AnalyzerRow extends React.Component {
@@ -30,7 +31,7 @@ export default class AnalyzerRow extends React.Component {
   };
 
   getFieldNameHeading = (analyzerId) => {
-    return (this.props.rowIndex === 0) && <label htmlFor={analyzerId}>Fieldname</label>;
+    return (this.props.rowIndex === 0) && <label htmlFor={analyzerId}>Field name</label>;
   };
 
   changeFieldName = (e) => {
@@ -51,31 +52,31 @@ export default class AnalyzerRow extends React.Component {
     const analyzerId = "analyzer-row-" + this.props.rowIndex;
     const analyzerHeading = (this.props.rowIndex === 0) ? 'Analyzer' : '';
 
-    let fieldNameClasses = 'span12';
+    let fieldNameClasses = '';
     if (this.props.showErrors && !this.props.row.valid) {
-      fieldNameClasses += ' unhappy';
+      fieldNameClasses = 'is-invalid';
     }
 
     return (
-      <li>
-        <div className="row-fluid">
-          <div className="span4">
-            {this.getFieldNameHeading(analyzerId)}
-            <input type="text" value={this.props.row.fieldName} className={fieldNameClasses} onChange={this.changeFieldName} />
-          </div>
-
+      <div className="row align-items-end">
+        <div className="mb-3 col col-lg">
+          {this.getFieldNameHeading(analyzerId)}
+          <Form.Control type="text"
+            value={this.props.row.fieldName}
+            className={fieldNameClasses}
+            onChange={this.changeFieldName} />
+        </div>
+        <div className="mb-3 col-auto col-lg">
           <AnalyzerDropdown
             id={analyzerId}
             label={analyzerHeading}
             defaultSelected={this.props.row.analyzer}
-            classes="span4"
             onChange={this.selectAnalyzer} />
-
-          <div className="span4">
-            <button className="btn btn-danger delete-analyzer" onClick={this.deleteRow}>delete</button>
-          </div>
         </div>
-      </li>
+        <div className="mb-3 col-auto col-lg-auto">
+          <Button variant="cf-danger" onClick={this.deleteRow}>delete</Button>
+        </div>
+      </div>
     );
   }
 }
