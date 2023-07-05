@@ -35,9 +35,7 @@
         "browserName" : "chrome",
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
-        "chromeOptions": {
-          "w3c": false
-        }
+        "chromeOptions": {}
       },
       "exclude": <%= exclude_tests %>,
       "skiptags": <%= skiptags %>
