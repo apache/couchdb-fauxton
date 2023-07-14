@@ -65,6 +65,21 @@ export default {
     };
   },
 
+  checkExecutionStatsSupport: function ({ databaseName }) {
+    return (dispatch) => {
+      return MangoAPI.supportsExecutionStats(databaseName)
+        .then(isSupported => {
+          if (isSupported) {
+            dispatch({
+              type: ActionTypes.MANGO_SET_EXECUTION_STATS_SUPPORTED,
+            });
+          }
+        }).catch(() => {
+          // ignore, assume it's not supported
+        });
+    };
+  },
+
   saveIndex: function ({ databaseName, indexCode, fetchParams }) {
     FauxtonAPI.addNotification({
       msg: 'Saving index for query...',

@@ -12,6 +12,7 @@
 
 import { mount, shallow } from 'enzyme';
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
@@ -205,11 +206,13 @@ describe('MangoQueryEditor', function () {
     queryFindCodeChanged: false,
     databaseName: 'db1',
     partitionKey: '',
+    executionStatsSupported: true,
     runExplainQuery: () => {},
     runQuery: () => {},
     manageIndexes: () => {},
     loadQueryHistory: () => {},
-    clearResults: () => {}
+    clearResults: () => {},
+    checkExecutionStatsSupport: () => {},
   };
 
   it('runs explain query with partition when one is set', function () {
@@ -228,7 +231,7 @@ describe('MangoQueryEditor', function () {
     expect(partitionKey).toBe('part1');
   });
 
-  it('runs explain query with partition when one is set', function () {
+  it('runs query with partition when one is set', function () {
     const runQueryStub = sinon.stub();
     const wrapper = mount(
       <MangoQueryEditor
@@ -242,5 +245,82 @@ describe('MangoQueryEditor', function () {
     sinon.assert.called(runQueryStub);
     const { partitionKey } = runQueryStub.firstCall.args[0];
     expect(partitionKey).toBe('part1');
+  });
+
+  it('opens cheatsheet modal', async () => {
+    const wrapper = mount(
+      <MangoQueryEditor
+        {...defaultProps}
+      />
+    );
+
+    const modalSelector = '.modal-dialog.mango-cheatsheet-modal';
+    // Confirm modal is not open yet
+    expect(wrapper.find(modalSelector).exists()).toBe(false);
+    // Open modal
+    wrapper.find('.cheatsheet-icon').simulate('click');
+    await act(async () => {
+      wrapper.update();
+    });
+    // Confirm modal is open
+    const modal = wrapper.find(modalSelector);
+    expect(modal.exists()).toBe(true);
+    expect(modal.text()).toContain('Query Cheatsheet');
+  });
+
+  it('shows execution stats empty body message', function () {
+    const wrapper = mount(
+      <MangoQueryEditor
+        {...defaultProps}
+        executionStatsSupported
+      />
+    );
+
+    expect(wrapper.find('.execution-stats .execution-stats-empty-body').exists()).toBe(true);
+  });
+
+  it('shows execution stats values without warning', function () {
+    const sampleStats = {
+      total_keys_examined: 1,
+      total_docs_examined: 19,
+      total_quorum_docs_examined: 0,
+      results_returned: 18,
+      execution_time_ms: 3.231,
+    };
+    const wrapper = mount(
+      <MangoQueryEditor
+        {...defaultProps}
+        executionStatsSupported
+        executionStats={sampleStats}
+      />
+    );
+
+    // warning should not be shown
+    expect(wrapper.find('.execution-stats .warning').exists()).toBe(false);
+
+    const statsPanel = wrapper.find('.execution-stats .execution-stats-body');
+    expect(statsPanel.exists()).toBe(true);
+    // Deliberately not checking for exact date values, as they are subject to change due to TZ formatting
+    expect(statsPanel.text()).toContain('Executed at:');
+    expect(statsPanel.text()).toContain('Execution time: 3 ms');
+    expect(statsPanel.text()).toContain('Results returned: 18');
+    expect(statsPanel.text()).toContain('Keys examined: 1');
+    expect(statsPanel.text()).toContain('Documents examined: 19');
+    expect(statsPanel.text()).toContain('Documents examined (quorum): 0');
+  });
+
+  it('shows execution stats warning when provided', function () {
+    const wrapper = mount(
+      <MangoQueryEditor
+        {...defaultProps}
+        executionStatsSupported
+        warning={"sample warning"}
+      />
+    );
+
+    // warning should not be shown
+    const warning = wrapper.find('.execution-stats .warning');
+    expect(warning.exists()).toBe(true);
+    expect(warning.text()).toContain('sample warning');
   });
 });

@@ -1,0 +1,63 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+
+.mango-cheatsheet-modal {
+  max-width: none!important;
+  width: 50%!important;
+
+  .table-wrapper {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+}
+
+.execution-stats {
+  font-size: 13px;
+  padding: 8px 8px 8px 0;
+
+  .execution-stats-header {
+    font-size: 16px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .execution-stats-empty-body {
+    font-style: italic;
+  }
+
+  .execution-stats-body {
+    [data-status="false"] {
+      color: $cf-text01-muted;
+    }
+    [data-status="true"] {
+      .value {
+        font-weight: bold;
+      }
+    }
+  }
+  .warning {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    background-color: $cf-alert-bg;
+    color: $cf-alert-color;
+    border-left: 4px solid $cf-warning;
+    .fonticon-attention-circled {
+      margin-right: 4px;
+    }
+    i::before {
+      color: $cf-warning;
+    }
+  }
+}

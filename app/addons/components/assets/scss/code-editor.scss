@@ -19,6 +19,16 @@
   }
 }
 
+.cheatsheet-icon {
+  float: right;
+  padding-right: 0.5rem;
+  font-size: 13px;
+  margin-top: 3px;
+  &:hover {
+    color: $cf-brand-highlight;
+  }
+}
+
 .full-page-editor-modal-wrapper {
   position: fixed;
   padding: 110px;
