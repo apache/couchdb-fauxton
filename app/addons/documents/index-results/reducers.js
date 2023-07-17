@@ -60,7 +60,9 @@ const initialState = {
     showReduce: false,
     stable: false,
     update: 'true'
-  }
+  },
+  executionStats: null,
+  warning: null,
 };
 
 function loadStyle() {
@@ -95,6 +97,8 @@ export default function resultsState(state = initialState, action) {
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
       return {
         ...initialState,
+        executionStats: state.executionStats,
+        warning: state.warning,
         noResultsWarning: state.noResultsWarning,
         selectedLayout: state.selectedLayout,
         selectedDocs: [],

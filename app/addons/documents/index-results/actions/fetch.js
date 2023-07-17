@@ -100,8 +100,13 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
       if (layout) {
         dispatch(changeLayout(layout));
       }
+      const augmentedStats = executionStats ? {
+        ...executionStats,
+        // inject when stats were fetched
+        ts: new Date().getTime(),
+      } : null;
       // dispatch that we're all done
-      dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType, executionStats, warning));
+      dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType, augmentedStats, warning));
     }).catch((error) => {
       if (error && error.message.includes('`partition` parameter is not supported')) {
         dispatch(partitionParamNotSupported());

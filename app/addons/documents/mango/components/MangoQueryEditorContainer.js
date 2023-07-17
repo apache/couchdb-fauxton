@@ -60,7 +60,8 @@ const mapStateToProps = (state, ownProps) => {
     fetchParams: indexResults.fetchParams,
     executionStats: indexResults.executionStats,
     warning: indexResults.warning,
-    partitionKey: ownProps.partitionKey
+    partitionKey: ownProps.partitionKey,
+    executionStatsSupported: mangoQuery.executionStatsSupported,
   };
 };
 
@@ -68,6 +69,10 @@ const mapDispatchToProps = (dispatch/*, ownProps*/) => {
   return {
     loadQueryHistory: (options) => {
       dispatch(Actions.loadQueryHistory(options));
+    },
+
+    checkExecutionStatsSupport: (options) => {
+      dispatch(Actions.checkExecutionStatsSupport(options));
     },
 
     runExplainQuery: (options) => {

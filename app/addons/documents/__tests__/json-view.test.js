@@ -105,11 +105,7 @@ describe('Docs JSON View', () => {
     testDocs[1].type = 'special';
 
     const idx0 = { ...testDocs[0] };
-    delete idx0.ddoc;
-    delete idx0.name;
     const idx1 = { ...testDocs[1] };
-    delete idx1.ddoc;
-    delete idx1.name;
 
     expect(getJsonViewData(testDocs, {databaseName, docType})).toEqual({
       displayedFields: null,

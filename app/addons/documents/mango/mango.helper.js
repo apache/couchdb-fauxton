@@ -43,14 +43,7 @@ const formatCode = (code) => {
 };
 
 const getIndexContent = (doc) => {
-  const content = {
-    ...doc
-  };
-
-  delete content.ddoc;
-  delete content.name;
-
-  return JSON.stringify(content, null, ' ');
+  return JSON.stringify(doc, null, ' ');
 };
 
 export default {

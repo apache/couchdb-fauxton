@@ -12,6 +12,7 @@
 import ReactComponents from "../react-components";
 import React from "react";
 import {mount} from 'enzyme';
+import sinon from "sinon";
 
 var codeNoNewlines = 'function (doc) {emit(doc._id, 1);}';
 var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
@@ -26,7 +27,7 @@ describe('CodeEditorPanel', () => {
       );
       expect(codeEditorEl.find('.fonticon-help-circled').length).toBe(0);
     });
-    it('hidden by default', () => {
+    it('is displayed when docLink is provided', () => {
 
       const codeEditorEl = mount(
         <ReactComponents.CodeEditorPanel defaultCode={code} docLink="http://link.com" />
@@ -69,6 +70,26 @@ describe('CodeEditorPanel', () => {
 
       // now confirm newlines are found
       expect(codeEditorEl.instance().getValue().match(/\n/g).length).toBe(2);
+    });
+  });
+
+  describe('Cheatsheet icon', () => {
+    it('hidden by default', () => {
+
+      const codeEditorEl = mount(
+        <ReactComponents.CodeEditorPanel defaultCode={code}/>
+      );
+      expect(codeEditorEl.find('.fonticon-help-circled').length).toBe(0);
+    });
+    it('is displayed and onClick handle is called', () => {
+      const onClickMock = sinon.mock();
+
+      const codeEditorEl = mount(
+        <ReactComponents.CodeEditorPanel defaultCode={code} showCheatSheetIcon onCheatsheatIconClick={onClickMock}/>
+      );
+      expect(codeEditorEl.find('.cheatsheet-icon').length).toBe(1);
+      codeEditorEl.find('.cheatsheet-icon').simulate('click');
+      sinon.assert.calledOnce(onClickMock);
     });
   });
 

@@ -195,31 +195,3 @@
     width: 300px;
   }
 }
-
-.execution-stats-popup {
-  font-size: 14px;
-  .execution-stats-popup-component {
-    margin: 0.5rem;
-    [data-status="false"] {
-      color: $cf-text01-muted;
-    }
-    [data-status="true"] {
-      .value {
-        font-weight: bold;
-      }
-    }
-  }
-  .warning {
-    color: $cf-alert-error-color;
-    margin: 0.5rem;
-  }
-}
-
-.execution-stats {
-  font-size: 13px;
-  padding: 8px 8px 8px 0;
-
-  .fonticon-attention-circled {
-    margin-right: 4px;
-  }
-}

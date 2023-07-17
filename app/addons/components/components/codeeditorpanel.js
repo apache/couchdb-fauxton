@@ -34,13 +34,17 @@ export class CodeEditorPanel extends React.Component {
     title: '',
     docLink: '',
     allowZenMode: true,
+    syntaxMode: 'javascript',
+    onCheatsheatIconClick: () => {},
+    showCheatSheetIcon: false,
+    setHeightToLineCount: true,
     blur () {}
   };
 
   getStoreState = () => {
     return {
       zenModeEnabled: false,
-      code: this.props.defaultCode
+      code: this.props.defaultCode,
     };
   };
 
@@ -54,6 +58,13 @@ export class CodeEditorPanel extends React.Component {
     if (this.props.allowZenMode) {
       return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
     }
+  };
+
+  getCheatsheetIcon = () => {
+    if (!this.props.showCheatSheetIcon) {
+      return null;
+    }
+    return <span className="fonticon fonticon-bookmark cheatsheet-icon" title="Show cheatsheet" onClick={this.props.onCheatsheatIconClick}></span>;
   };
 
   getDocIcon = () => {
@@ -119,23 +130,31 @@ export class CodeEditorPanel extends React.Component {
     if (this.props.className) {
       classes = this.props.className;
     }
+    const heightSettings = {};
+    if (this.props.setHeightToLineCount) {
+      heightSettings.setHeightToLineCount = true;
+      heightSettings.maxLines = 1000;
+    } else {
+      heightSettings.setHeightToLineCount = false;
+      heightSettings.minLines = 30;
+    }
     return (
       <div className={classes}>
         <label>
           <span>{this.props.title}</span>
           {this.getDocIcon()}
           {this.getZenModeIcon()}
+          {this.getCheatsheetIcon()}
         </label>
         <CodeEditor
           id={this.props.id}
           ref={node => this.codeEditor = node}
-          mode="javascript"
+          mode={this.props.syntaxMode}
           defaultCode={this.state.code}
           showGutter={true}
           ignorableErrors={ignorableErrors}
-          setHeightToLineCount={true}
-          maxLines={10000}
           blur={this.props.blur}
+          {...heightSettings}
         />
         <Beautify code={this.state.code} beautifiedCode={this.beautify} />
         {this.getZenModeOverlay()}

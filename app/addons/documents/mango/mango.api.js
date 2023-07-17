@@ -59,7 +59,7 @@ export const fetchIndexes = (databaseName, params) => {
 // assume all databases being accessed are on the same
 // host / CouchDB version
 let supportsExecutionStatsCache = null;
-const supportsExecutionStats = (databaseName) => {
+export const supportsExecutionStats = (databaseName) => {
   if (supportsExecutionStatsCache === null) {
     return new FauxtonAPI.Promise((resolve) => {
       mangoQuery(databaseName, '', {
