@@ -95,7 +95,7 @@ export default function MangoQueryCheatsheetModal({isVisible, onHide}) {
             <tr>
               <td><code>$or</code></td>
               <td>Array</td>
-              <td>Matches if ANY the selectors in the array match</td>
+              <td>Matches if ANY of the selectors in the array match</td>
             </tr>
             <tr>
               <td><code>$nor</code></td>
