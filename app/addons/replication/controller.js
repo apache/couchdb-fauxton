@@ -146,6 +146,7 @@ export default class ReplicationController extends React.Component {
       deleteDocs={deleteDocs}
       activitySort={activitySort}
       changeActivitySort={changeActivitySort}
+      pageLimit={pageLimit}
     />;
   }
 

@@ -109,7 +109,7 @@ const mapStateToProps = ({replication, databases}, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     checkForNewApi: () => dispatch(checkForNewApi()),
     updateFormField: (fieldName) => (value) => {
@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     filterReplicate: (filter) => dispatch(filterReplicate(filter)),
     filterDocs: (filter) => dispatch(filterDocs(filter)),
     selectDoc: (doc) => dispatch(selectDoc(doc)),
-    deleteDocs: (docs) => dispatch(deleteDocs(docs, ownProps.pageLimit)),
+    deleteDocs: (docs, pageLimit) => dispatch(deleteDocs(docs, pageLimit)),
     selectAllDocs: () => dispatch(selectAllDocs()),
     changeActivitySort: (sort) => dispatch(changeActivitySort(sort)),
     selectAllReplicates: () => dispatch(selectAllReplicates()),
