@@ -8,6 +8,8 @@
   "moduleNameMapper": {
     "underscore": "lodash",
     "ace-builds": "<rootDir>/node_modules/ace-builds",
+    "./ace-mode-mango.js": "<rootDir>/app/addons/components/components/ace-mode-mango.js",
+    "./ace-worker-mango.js": "<rootDir>/app/addons/components/components/ace-worker-mango.js",
 
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|swf|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
     "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js"

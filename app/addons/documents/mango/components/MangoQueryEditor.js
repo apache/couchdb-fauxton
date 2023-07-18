@@ -112,7 +112,7 @@ export default class MangoQueryEditor extends Component {
               ref={node => this.codeEditor = node}
               title={this.props.editorTitle}
               docLink={getDocUrl('MANGO_SEARCH')}
-              syntaxMode="javascript"
+              syntaxMode="mango"
               defaultCode={this.props.queryFindCode}
               showCheatSheetIcon={true}
               onCheatsheatIconClick={this.showCheatsheetModal}

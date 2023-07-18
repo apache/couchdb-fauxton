@@ -10,7 +10,9 @@ ace.config.setModuleUrl('ace/theme/idle_fingers', require('file-loader?esModule=
 ace.config.setModuleUrl('ace/theme/dawn', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/theme-dawn.js'));
 ace.config.setModuleUrl('ace/mode/json', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/mode-json.js'));
 ace.config.setModuleUrl('ace/mode/json_worker', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/worker-json.js'));
+ace.config.setModuleUrl('ace/mode/mango_worker', require('file-loader?esModule=false&outputPath=dashboard.assets/js!./ace-worker-mango.js'));
 ace.config.setModuleUrl('ace/mode/javascript', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/mode-javascript.js'));
 ace.config.setModuleUrl('ace/mode/javascript_worker', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/worker-javascript.js'));
 ace.config.setModuleUrl('ace/ext/static_highlight', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/ext-static_highlight.js'));
 ace.config.setModuleUrl('ace/ext/searchbox', require('file-loader?esModule=false&outputPath=dashboard.assets/js!ace-builds/src-noconflict/ext-searchbox.js'));
+ace.config.setModuleUrl('ace/mode/mango', require('file-loader?esModule=false&outputPath=dashboard.assets/js!./ace-mode-mango.js'));

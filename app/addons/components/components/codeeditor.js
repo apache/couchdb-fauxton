@@ -286,8 +286,8 @@ export class CodeEditor extends React.Component {
   };
 
   hasErrors = () => {
-    return !_.every(this.getAnnotations(), (error) => {
-      return this.isIgnorableError(error.raw);
+    return !_.every(this.getAnnotations(), (annotation) => {
+      return this.isIgnorableError(annotation.raw) || annotation.type !== 'error';
     });
   };
 
