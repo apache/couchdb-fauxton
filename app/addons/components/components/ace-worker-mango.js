@@ -7,6 +7,9 @@
 
 "no use strict";
 !(function(window) {
+// If condition below was added to fix Jest tests.
+if (typeof window === "undefined")
+	return;
 if (typeof window.window != "undefined" && window.document)
     return;
 if (window.require && window.define)
