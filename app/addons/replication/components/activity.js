@@ -48,7 +48,7 @@ export default class Activity extends React.Component {
       docs = this.props.docs.filter(doc => doc.selected);
     }
 
-    this.props.deleteDocs(docs);
+    this.props.deleteDocs(docs, this.props.pageLimit);
     this.closeModal();
   }
 
@@ -112,5 +112,6 @@ Activity.propTypes = {
   onFilterChange: PropTypes.func.isRequired,
   deleteDocs: PropTypes.func.isRequired,
   activitySort: PropTypes.object.isRequired,
-  changeActivitySort: PropTypes.func.isRequired
+  changeActivitySort: PropTypes.func.isRequired,
+  pageLimit: PropTypes.number.isRequired,
 };
