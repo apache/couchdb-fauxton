@@ -68,6 +68,9 @@
     & > div {
       height: 90%;
     }
+    & > div.full-page-editor-modal-wrapper {
+      height: 100%;
+    }
   }
 }
 
