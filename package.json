@@ -51,7 +51,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "mini-css-extract-plugin": "^2.6.1",
     "mock-local-storage": "^1.1.23",
-    "nightwatch": "^2.3.3",
+    "nightwatch": "^2.6.21",
     "node-fetch": "^2.6.7",
     "redux-mock-store": "^1.5.4",
     "sinon": "^15.0.1",
@@ -102,6 +102,11 @@
     "uuid": "^9.0.0",
     "whatwg-fetch": "^3.6.2",
     "yargs": "^17.5.1"
+  },
+  "overrides": {
+    "nightwatch": {
+      "semver": "^7.5.3"
+    }
   },
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
