@@ -32,7 +32,7 @@ function deleteDatabase (dbId, onDeleteSuccess) {
     this.showDeleteDatabaseModal({ showModal: true });
 
     FauxtonAPI.addNotification({
-      msg: 'The database <code>' + _.escape(dbId) + '</code> has been deleted.',
+      msg: 'The database "' + dbId + '" has been deleted.',
       clear: true,
       escape: false // beware of possible XSS when the message changes
     });

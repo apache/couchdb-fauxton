@@ -39,10 +39,6 @@ function addNotification ({ notifications }, info) {
     info.escape = true;
   }
 
-  info.htmlMsg = {
-    __html: (info.escape ? _.escape(info.cleanMsg) : info.cleanMsg)
-  };
-
   // clear: true causes all visible messages to be hidden
   if (info.clear) {
     const idsToClear = _.map(notifications, 'toastId');
@@ -55,7 +51,7 @@ function addNotification ({ notifications }, info) {
 
   newNotifications.unshift(info);
 
-  toast(<span dangerouslySetInnerHTML={info.htmlMsg}/>, info);
+  toast(<span>{info.msg}</span>, info);
 
   return newNotifications;
 }

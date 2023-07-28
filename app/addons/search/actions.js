@@ -233,7 +233,7 @@ const deleteSearchIndex = (options) => {
     SidebarActions.dispatchUpdateDesignDocs(options.designDocs);
 
     FauxtonAPI.addNotification({
-      msg: 'The <code>' + _.escape(options.indexName) + '</code> search index has been deleted.',
+      msg: 'The "' + options.indexName + '" search index has been deleted.',
       type: 'info',
       escape: false,
       clear: true

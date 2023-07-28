@@ -147,7 +147,7 @@ export default class NewReplicationController extends React.Component {
 
     if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE && _.includes(databases, localTarget)) {
       FauxtonAPI.addNotification({
-        msg: 'The <code>' + localTarget + '</code> database already exists locally. Please enter another database name.',
+        msg: 'The "' + localTarget + '" database already exists locally. Please enter another database name.',
         type: 'error',
         escape: false,
         clear: true

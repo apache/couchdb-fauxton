@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./mango.actiontypes";
 import * as IndexResultActions from "../index-results/actions/fetch";
@@ -93,14 +92,11 @@ export default {
 
       return MangoAPI.createIndex(databaseName, indexCode)
         .then(() => {
-          const runQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app',
-            app.utils.safeURLName(databaseName), '');
-
           const queryIndexes = (params) => { return MangoAPI.fetchIndexes(databaseName, params); };
           dispatch(IndexResultActions.fetchDocs(queryIndexes, fetchParams, {}));
 
           FauxtonAPI.addNotification({
-            msg: 'Index is ready for querying. <a href="' + runQueryURL + '">Run a Query.</a>',
+            msg: 'Index is ready for querying.',
             type: 'success',
             clear: true,
             escape: false

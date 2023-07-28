@@ -132,7 +132,7 @@ const deleteView = (options) => {
     SidebarActions.dispatchUpdateDesignDocs(options.designDocs);
 
     FauxtonAPI.addNotification({
-      msg: 'The <code>' + _.escape(options.indexName) + '</code> view has been deleted.',
+      msg: 'The "' + options.indexName + '" view has been deleted.',
       type: 'info',
       escape: false,
       clear: true
