@@ -30,13 +30,15 @@ export const DeleteModal = ({
     return null;
   }
 
-  let header = "";
+  let header = undefined;
   let btnText = `Delete ${isReplicationDB ? 'Document' : 'Replication Job'}`;
   let infoSection = `Deleting a replication ${isReplicationDB ? 'document' : 'job'} stops continuous replication
           and incomplete one-time replication, but does not affect replicated documents.`;
 
   if (multipleDocs > 1) {
-    header = `You are deleting <strong>${multipleDocs}</strong> replication ${isReplicationDB ? 'documents' : 'jobs'}.`;
+    header = <>
+      You are deleting <strong>{multipleDocs}</strong> replication {isReplicationDB ? 'documents' : 'jobs'}.
+    </>;
     btnText = `Delete ${isReplicationDB ? 'Documents' : 'Replication Jobs'}`;
   }
 
@@ -53,7 +55,7 @@ export const DeleteModal = ({
         <Modal.Title>Confirm Deletion</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p dangerouslySetInnerHTML={{__html: header}}></p>
+        <p>{header}</p>
         <p>{infoSection}</p>
       </Modal.Body>
       <Modal.Footer>
