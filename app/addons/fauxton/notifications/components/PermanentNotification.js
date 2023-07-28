@@ -21,21 +21,18 @@ export default class PermanentNotification extends React.Component {
 
   static propTypes = {
     visible: PropTypes.bool.isRequired,
-    message: PropTypes.string
+    message: PropTypes.node,
   };
 
   constructor (props) {
     super(props);
   }
 
-  // many messages contain HTML, hence the need for dangerouslySetInnerHTML
-  getMsg () {
-    return {__html: this.props.message};
-  }
-
   getContent () {
     return (
-      <p className="perma-warning__content" dangerouslySetInnerHTML={this.getMsg()}></p>
+      <p className="perma-warning__content">
+        {this.props.message}
+      </p>
     );
   }
 

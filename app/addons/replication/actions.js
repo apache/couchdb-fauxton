@@ -79,7 +79,7 @@ export const replicate = (params, pageLimit) => dispatch => {
       }
 
       FauxtonAPI.addNotification({
-        msg: `Replication from <code>${decodeURIComponent(source)}</code> to <code>${decodeURIComponent(target)}</code> has been scheduled.`,
+        msg: `Replication from "${decodeURIComponent(source)}" to "${decodeURIComponent(target)}" has been scheduled.`,
         type: 'success',
         escape: false,
         clear: true
@@ -223,7 +223,7 @@ export const deleteDocs = (docs, pageLimit) => dispatch => {
 
       let msg = 'The selected documents have been deleted.';
       if (docs.length === 1) {
-        msg = `Document <code>${docs[0]._id}</code> has been deleted`;
+        msg = `Document "${docs[0]._id}" has been deleted`;
       }
 
       FauxtonAPI.addNotification({
@@ -261,7 +261,7 @@ export const deleteReplicates = (replicates) => dispatch => {
     .then(() => {
       let msg = 'The selected replications have been deleted.';
       if (replicates.length === 1) {
-        msg = `Replication <code>${replicates[0]._id}</code> has been deleted`;
+        msg = `Replication "${replicates[0]._id}" has been deleted`;
       }
 
       dispatch(clearSelectedReplicates());
