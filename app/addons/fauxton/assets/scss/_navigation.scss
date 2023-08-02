@@ -45,10 +45,20 @@
 
 .faux-navbar--narrow {
   width: $cf-navbar-width-collapsed;
+
+  .faux-navbar__icon-badge:after {
+    bottom: 38px;
+    right: 10px;
+  }
 }
 
 .faux-navbar--wide {
   width: $cf-navbar-width;
+
+  .faux-navbar__icon-badge:after {
+    bottom: 11.5px;
+    right: 107px;
+  }
 }
 
 .faux-navbar__burger:hover .faux-navbar__burger__icon {
@@ -132,16 +142,6 @@
   text-align: center;
   font-size: 0.5rem;
   border-radius: 50%;
-}
-
-.faux-navbar--wide .faux-navbar__icon-badge:after {
-  bottom: 12px;
-  right: 107px;
-}
-
-.faux-navbar--narrow .faux-navbar__icon-badge:after {
-  bottom: 38px;
-  right: 10px;
 }
 
 .faux-navbar__link:hover .faux-navbar__icon-badge:after {
