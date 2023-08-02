@@ -45,10 +45,20 @@
 
 .faux-navbar--narrow {
   width: $cf-navbar-width-collapsed;
+
+  .faux-navbar__icon-badge:after {
+    bottom: 38px;
+    right: 10px;
+  }
 }
 
 .faux-navbar--wide {
   width: $cf-navbar-width;
+
+  .faux-navbar__icon-badge:after {
+    bottom: 11.5px;
+    right: 107px;
+  }
 }
 
 .faux-navbar__burger:hover .faux-navbar__burger__icon {
@@ -125,8 +135,6 @@
   content: "";
   display: inline-block;
   position: relative;
-  top: -42px;
-  right: 8px;
   background: $cf-navbar-item-badge-bg;
   border: 1px solid $cf-navbar-item-badge-bg;
   height: 8px;
