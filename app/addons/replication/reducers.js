@@ -142,6 +142,20 @@ const updateFormField = (state, fieldName, value) => {
     }
   }
 
+  // Set default local source/target database to the first in the list (to match the default dropdown display)
+  if (fieldName === validFieldMap.replicationSource) {
+    const isLocalDB = updateState[validFieldMap.replicationSource] === Constants.REPLICATION_SOURCE.LOCAL;
+    if (isLocalDB && updateState.databases.length > 0) {
+      updateState[validFieldMap.localSource] = updateState.databases[0];
+    }
+  }
+  if (fieldName === validFieldMap.replicationTarget) {
+    const isLocalDB = updateState[validFieldMap.replicationTarget] === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE;
+    if (isLocalDB && updateState.databases.length > 0) {
+      updateState[validFieldMap.localTarget] = updateState.databases[0];
+    }
+  }
+
   return updateState;
 };
 
