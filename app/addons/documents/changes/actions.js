@@ -17,8 +17,8 @@ import { get } from '../../../core/ajax';
 import ActionTypes from './actiontypes';
 import Helpers from '../helpers';
 
-const pollingTimeout = 60000;
-let currentRequest;
+// const pollingTimeout = 60000;
+let currentDatabase, latestSeqNum;
 
 const addFilter = (filter) => (dispatch) => {
   dispatch({
@@ -35,20 +35,21 @@ const removeFilter = (filter) => (dispatch) => {
 };
 
 const loadChanges = (databaseName) => (dispatch) => {
-  currentRequest = null;
   getLatestChanges(dispatch, databaseName);
 };
 
-const getLatestChanges = (dispatch, databaseName, lastSeqNum) => {
+const getLatestChanges = (dispatch, databaseName) => {
   const params = {
     limit: 100
   };
 
-  // after the first request for the changes list has been made, switch to longpoll
-  if (currentRequest) {
-    params.since = lastSeqNum;
-    params.timeout = pollingTimeout;
-    params.feed = 'longpoll';
+
+  if (!currentDatabase || currentDatabase !== databaseName) {
+    currentDatabase = databaseName;
+    latestSeqNum = null;
+  }
+  if (latestSeqNum) {
+    params.since = latestSeqNum;
   }
 
   const query = app.utils.queryParams(params);
@@ -69,11 +70,13 @@ const getLatestChanges = (dispatch, databaseName, lastSeqNum) => {
 };
 
 const updateChanges = (json, dispatch) => {
-  const latestSeqNum = Helpers.getSeqNum(json.last_seq);
+  const resetChanges = !latestSeqNum;
+  latestSeqNum = Helpers.getSeqNum(json.last_seq);
   dispatch({
     type: ActionTypes.UPDATE_CHANGES,
     changes: json.results,
-    seqNum: latestSeqNum
+    seqNum: latestSeqNum,
+    resetChanges: resetChanges
   });
 };
 
