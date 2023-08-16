@@ -26,7 +26,7 @@ export default class ChangesScreen extends React.Component {
     let msg = '';
     if (isShowingSubset) {
       let numChanges = changes.length;
-      msg = <p className="changes-result-limit">Limiting results to latest <b>{numChanges}</b> changes.</p>;
+      msg = <p className="changes-result-limit">Limiting results to <b>{numChanges}</b> changes.</p>;
     }
     return msg;
   }
