@@ -17,7 +17,6 @@ import { get } from '../../../core/ajax';
 import ActionTypes from './actiontypes';
 import Helpers from '../helpers';
 
-// const pollingTimeout = 60000;
 let currentDatabase, latestSeqNum;
 
 const addFilter = (filter) => (dispatch) => {
@@ -43,11 +42,12 @@ const getLatestChanges = (dispatch, databaseName) => {
     limit: 100
   };
 
-
+  // trigger a reset of the state if the current database is switched
   if (!currentDatabase || currentDatabase !== databaseName) {
     currentDatabase = databaseName;
     latestSeqNum = null;
   }
+  // otherwise only query for new changes since the most recent ones
   if (latestSeqNum) {
     params.since = latestSeqNum;
   }
@@ -70,6 +70,7 @@ const getLatestChanges = (dispatch, databaseName) => {
 };
 
 const updateChanges = (json, dispatch) => {
+  // if latestSeqNum is null, the state should be reset
   const resetChanges = !latestSeqNum;
   latestSeqNum = Helpers.getSeqNum(json.last_seq);
   dispatch({

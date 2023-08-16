@@ -24,13 +24,19 @@ const initialState = {
   lastSequenceNum: null
 };
 
-function updateChanges(state, seqNum, changes) {
-  const newState = {
-    ...state,
+function updateChanges(state, seqNum, changes, reset) {
+  // reset to the initial state when switching between databases so changes aren't carried over
+  const newState = (reset) ? {
+    ...initialState,
     // make a note of the most recent sequence number. This is used for a point of reference for polling for new changes
     lastSequenceNum: seqNum,
     isLoaded: true
-  };
+  } :
+    {
+      ...state,
+      lastSequenceNum: seqNum,
+      isLoaded: true
+    };
 
   // mark any additional changes that come after first page load as "new" so we can add a nice highlight effect
   // when the new row is rendered
@@ -108,11 +114,7 @@ export default function changes (state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.UPDATE_CHANGES:
-      // only bother updating the list of changes if the seq num has changed
-      if (state.lastSequenceNum !== action.seqNum) {
-        return updateChanges(state, action.seqNum, action.changes);
-      }
-      return state;
+      return updateChanges(state, action.seqNum, action.changes, action.resetChanges);
 
     case ActionTypes.ADD_CHANGES_FILTER_ITEM:
       return addFilter(state, action.filter);
