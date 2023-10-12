@@ -18,7 +18,8 @@ import ReactDOM from "react-dom";
 export class BadgeList extends React.Component {
   static propTypes = {
     elements: PropTypes.array.isRequired,
-    removeBadge: PropTypes.func.isRequired
+    removeBadge: PropTypes.func.isRequired,
+    showClose: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -28,7 +29,8 @@ export class BadgeList extends React.Component {
 
     getId (el) {
       return el;
-    }
+    },
+    showClose: false,
   };
 
   getBadges = () => {
@@ -37,7 +39,8 @@ export class BadgeList extends React.Component {
         label={this.props.getLabel(el)}
         key={i}
         id={el}
-        remove={this.removeBadge} />;
+        remove={this.removeBadge}
+        showClose={this.props.showClose} />;
     }.bind(this));
   };
 
@@ -57,7 +60,11 @@ export class BadgeList extends React.Component {
 export class Badge extends React.Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
-    remove: PropTypes.func.isRequired
+    remove: PropTypes.func.isRequired,
+    showClose: PropTypes.bool,
+  };
+  static defaultProps = {
+    showClose: false,
   };
 
   remove = (e) => {
@@ -66,17 +73,20 @@ export class Badge extends React.Component {
   };
 
   render() {
+    const className = "badge " + this.props.label.replace(' ', '-');
     return (
-      <li className="badge">
+      <li className={className}>
         <div className="remove-filter">
           <span>{this.props.label}</span>
-          <a
-            href="#"
-            onClick={this.remove}
-            data-bypass="true"
-            className="ms-1">
+          { this.props.showClose ?
+            <a
+              href="#"
+              onClick={this.remove}
+              data-bypass="true"
+              className="ms-1">
             &times;
-          </a>
+            </a>
+            : null}
         </div>
       </li>
     );
