@@ -13,13 +13,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react";
 import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
-// import { TabElementWrapper, TabElement } from '../../../components/components/tabelement';
-// import Components from "../../../components/react-components";
 import IndexPanel from "./IndexPanel";
 import ExplainReasonsLegendModal from './ExplainReasonsLegendModal';
-import sampleIndexCandidates from "./sampleIndexCandidatesNew";
 
-// const { Accordion, AccordionItem } = Components;
 
 export default class ExplainPage extends Component {
   componentDidMount () {
@@ -46,27 +42,6 @@ export default class ExplainPage extends Component {
   showReasonsModal = () => {
     this.setState({isReasonsModalVisible: true});
   };
-
-
-  // getTabs () {
-  //   const { tabSection } = this.state;
-  //   return (
-  //     <TabElementWrapper>
-  //       <TabElement
-  //         key={1}
-  //         selected={tabSection === 'parsed'}
-  //         text={"Parsed"}
-  //         onChange={() => this.onTabChange('parsed')}
-  //       />
-  //       <TabElement
-  //         key={1}
-  //         selected={tabSection === 'json'}
-  //         text={"JSON"}
-  //         onChange={() => this.onTabChange('json')}
-  //       />
-  //     </TabElementWrapper>
-  //   );
-  // }
 
   // Sort candidates indexes to show list JSON indexes not chosen first, then unusable
   // JSON indexes, then all others (text, partial, etc)
@@ -145,11 +120,6 @@ export default class ExplainPage extends Component {
 
   rawJsonResponse () {
     return (
-      // <Accordion className="explain-json-response">
-      //   <AccordionItem title='JSON response'>
-      //     <pre className="prettyprint">{JSON.stringify(this.props.explainPlan, null, ' ')}</pre>
-      //   </AccordionItem>
-      // </Accordion>
       <div className="explain-json-response">
         <span className="explain-plan-section-title">JSON Response</span>
         <pre className="prettyprint">{JSON.stringify(this.props.explainPlan, null, ' ')}</pre>
@@ -178,8 +148,6 @@ export default class ExplainPage extends Component {
     if (!index) {
       return "Invalid explain plan";
     }
-    // TODO: remove me
-    this.props.explainPlan.index_candidates = sampleIndexCandidates;
 
     let extraInfo = this.isKeyRangeUnbounded(mrargs) ?
       <span className='index-extra-info'><span className='fonticon-attention-circled'></span>Full index scan detected. Query time will degrade as documents are added to the index.</span> : null;
@@ -190,6 +158,19 @@ export default class ExplainPage extends Component {
 
     // Candidates
     const {index_candidates} = this.props.explainPlan;
+
+    //only show suitable/unsuitable indexes if index_candidates is defined
+    let usableIndexPanelHeader = null;
+    let notUsableIndexPanelHeader = null;
+    if (index_candidates) {
+      usableIndexPanelHeader = <span className="explain-plan-section-title">
+        Suitable Indexes<InfoIcon tooltip_content={"Other suitable indexes that were not chosen"}/>
+      </span>;
+      notUsableIndexPanelHeader = <span className="explain-plan-section-title">
+        Unsuitable Indexes<InfoIcon tooltip_content={"Indexes that do not match the given query"}/>
+      </span>;
+    }
+
     let usableIndexPanelList = null;
     let notUsableIndexPanelList = null;
     if (index_candidates && index_candidates.length > 0) {
@@ -207,14 +188,15 @@ export default class ExplainPage extends Component {
           index={index} reason={reason} covering={covering}/>;
       });
     }
-    if (!usableIndexPanelList || usableIndexPanelList.length === 0) {
+
+    if ((usableIndexPanelList && usableIndexPanelList.length === 0) || (index_candidates && !usableIndexPanelList)) {
       usableIndexPanelList = <div className='explain-index-panel'>
-          No other suitable indexes found.
+        No other suitable indexes found.
       </div>;
     }
-    if (!notUsableIndexPanelList || notUsableIndexPanelList.length === 0) {
+    if ((notUsableIndexPanelList && notUsableIndexPanelList.length === 0) || (index_candidates && !notUsableIndexPanelList)) {
       notUsableIndexPanelList = <div className='explain-index-panel'>
-          No other indexes found.
+        No other indexes found.
       </div>;
     }
 
@@ -225,14 +207,10 @@ export default class ExplainPage extends Component {
         </span>
         {matchingIndex}
         <br/>
-        <span className="explain-plan-section-title">
-          Suitable Indexes<InfoIcon tooltip_content={"Other suitable indexes that were not chosen"}/>
-        </span>
+        {usableIndexPanelHeader}
         {usableIndexPanelList}
         <br/>
-        <span className="explain-plan-section-title">
-          Unsuitable Indexes<InfoIcon tooltip_content={"Indexes that do not match the given query"}/>
-        </span>
+        {notUsableIndexPanelHeader}
         {notUsableIndexPanelList}
       </>
     );
