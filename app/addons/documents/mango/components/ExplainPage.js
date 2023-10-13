@@ -144,7 +144,7 @@ export default class ExplainPage extends Component {
   }
 
   parsedContent () {
-    const {index, covered, mrargs} = this.props.explainPlan;
+    const {index, covering, mrargs} = this.props.explainPlan;
     if (!index) {
       return "Invalid explain plan";
     }
@@ -152,9 +152,8 @@ export default class ExplainPage extends Component {
     let extraInfo = this.isKeyRangeUnbounded(mrargs) ?
       <span className='index-extra-info'><span className='fonticon-attention-circled'></span>Full index scan detected. Query time will degrade as documents are added to the index.</span> : null;
 
-
     // Matching index
-    let matchingIndex = <IndexPanel index={index} isWinner={true} covering={covered} onReasonClick={this.showReasonsModal} extraInfo={extraInfo}/>;
+    let matchingIndex = <IndexPanel index={index} isWinner={true} covering={covering} onReasonClick={this.showReasonsModal} extraInfo={extraInfo}/>;
 
     // Candidates
     const {index_candidates} = this.props.explainPlan;
@@ -176,14 +175,18 @@ export default class ExplainPage extends Component {
     if (index_candidates && index_candidates.length > 0) {
       const sortedCandidates = this.pickUsableIndexes(index_candidates);
       usableIndexPanelList = sortedCandidates.map((candidate) => {
-        const { index, reason, covering } = candidate;
+        const { index, analysis } = candidate;
+        const { reasons, covering } = analysis;
+        const reason = reasons[0].name;
         return <IndexPanel key={`${index.ddoc}"-"${index.name}`} isWinner={false} onReasonClick={this.showReasonsModal}
           index={index} reason={reason} covering={covering}/>;
       });
 
       const sortedNotUsable = this.pickNotUsableIndexes(index_candidates);
       notUsableIndexPanelList = sortedNotUsable.map((candidate) => {
-        const { index, reason, covering } = candidate;
+        const { index, analysis } = candidate;
+        const { reasons, covering } = analysis;
+        const reason = reasons[0].name;
         return <IndexPanel key={`${index.ddoc}"-"${index.name}`} isWinner={false} onReasonClick={this.showReasonsModal}
           index={index} reason={reason} covering={covering}/>;
       });
