@@ -26,6 +26,8 @@ import MangoQueryEditor from '../components/MangoQueryEditor';
 import MangoIndexEditor from '../components/MangoIndexEditor';
 import mangoReducer from '../mango.reducers';
 import '../../base';
+import ExplainPage from '../components/ExplainPage';
+import {explainPlan, explainPlanCandidates} from './sampleexplainplan';
 
 const restore = utils.restore;
 const databaseName = 'testdb';
@@ -322,5 +324,40 @@ describe('MangoQueryEditor', function () {
     const warning = wrapper.find('.execution-stats .warning');
     expect(warning.exists()).toBe(true);
     expect(warning.text()).toContain('sample warning');
+  });
+});
+
+describe('Explain Page', function() {
+  it('shows suitable/unsuitable indexes when avaiable', function() {
+    const wrapper = mount(
+      <ExplainPage explainPlan = {explainPlanCandidates} />
+    );
+    expect(wrapper.find('#explain-parsed-view .btn.active.btn-cf-secondary')).toHaveLength(1);
+    const headers = wrapper.find('.explain-plan-section-title');
+    const panels = wrapper.find('.row.explain-index-panel');
+    expect(headers).toHaveLength(3);
+    expect(panels).toHaveLength(5);
+
+    expect((headers.get(0)).props.children).toContain('Selected Index');
+    expect((panels.get(1)).props.children[0]).toMatchObject(/foo-json-index/);
+
+    expect((headers.get(1)).props.children).toContain('Suitable Indexes');
+    expect((panels.get(1)).props.children[0]).toMatchObject(/foo-test-json-index/);
+
+    expect((headers.get(2)).props.children).toContain('Unsuitable Indexes');
+    expect((panels.get(2)).props.children[0]).toMatchObject(/_all_docs/);
+
+  });
+
+  it('toggles between parsed and json, with no candidate indexes', function() {
+    const wrapper = mount(
+      <ExplainPage explainPlan = {explainPlan} />
+    );
+
+    expect(wrapper.find('#explain-parsed-view .btn.active.btn-cf-secondary')).toHaveLength(1);
+    expect(((wrapper.find('.explain-plan-section-title')).get(0)).props.children).toContain('Selected Index');
+    wrapper.find('button#explain-json-view').simulate('click');
+    expect(wrapper.find('#explain-json-view .btn.active.btn-cf-secondary')).toHaveLength(1);
+    expect(((wrapper.find('.explain-plan-section-title')).get(0)).props.children).toContain('JSON Response');
   });
 });

@@ -45,41 +45,14 @@ export default class ExplainPage extends Component {
 
   // Sort candidates indexes to show list JSON indexes not chosen first, then unusable
   // JSON indexes, then all others (text, partial, etc)
-  sortCandidateIndexes_OldFormat (candidates) {
-    const notChosenJsonIndexes = [];
-    const notUsableJsonIndexes = [];
-    const otherIndexes = [];
-    candidates.forEach((c) => {
-      if (c.index.type === 'json') {
-        if (c.reason && c.reason.includes('not_chosen')) {
-          notChosenJsonIndexes.push(c);
-        } else {
-          notUsableJsonIndexes.push(c);
-        }
-      } else {
-        otherIndexes.push(c);
-      }
-    });
-    notChosenJsonIndexes.sort((a, b) => {
-      if (a.ranking === undefined) {
-        return 1;
-      }
-      if (b.score === undefined) {
-        return -1;
-      }
-      return a.score - b.score;
-    });
-    return notChosenJsonIndexes.concat(notUsableJsonIndexes).concat(otherIndexes);
-  }
-
   sortCandidatesByRanking(a, b) {
-    if (a.ranking === undefined) {
+    if (a.analysis.ranking === undefined) {
       return 1;
     }
-    if (b.ranking === undefined) {
+    if (b.analysis.ranking === undefined) {
       return -1;
     }
-    const diff = a.ranking - b.ranking;
+    const diff = a.analysis.ranking - b.analysis.ranking;
     if (diff === 0) {
       return a.index.name.localeCompare(b.index.name);
     }
@@ -88,13 +61,13 @@ export default class ExplainPage extends Component {
 
   pickUsableIndexes(candidates) {
     return candidates.filter(c => {
-      return c.index.type === 'json' && c.usable;
+      return c.index.type === 'json' && c.analysis.usable;
     }).sort(this.sortCandidatesByRanking);
   }
 
   pickNotUsableIndexes(candidates) {
     return candidates.filter(c => {
-      return c.index.type !== 'json' || !c.usable;
+      return c.index.type !== 'json' || !c.analysis.usable;
     }).sort(this.sortCandidatesByRanking);
   }
 
@@ -159,16 +132,12 @@ export default class ExplainPage extends Component {
     const {index_candidates} = this.props.explainPlan;
 
     //only show suitable/unsuitable indexes if index_candidates is defined
-    let usableIndexPanelHeader = null;
-    let notUsableIndexPanelHeader = null;
-    if (index_candidates) {
-      usableIndexPanelHeader = <span className="explain-plan-section-title">
-        Suitable Indexes<InfoIcon tooltip_content={"Other suitable indexes that were not chosen"}/>
-      </span>;
-      notUsableIndexPanelHeader = <span className="explain-plan-section-title">
-        Unsuitable Indexes<InfoIcon tooltip_content={"Indexes that do not match the given query"}/>
-      </span>;
-    }
+    const usableIndexPanelHeader = index_candidates ? <span className="explain-plan-section-title">
+      Suitable Indexes<InfoIcon tooltip_content={"Other suitable indexes that were not chosen"}/>
+    </span> : null;
+    const notUsableIndexPanelHeader = index_candidates ? <span className="explain-plan-section-title">
+      Unsuitable Indexes<InfoIcon tooltip_content={"Indexes that do not match the given query"}/>
+    </span> : null;
 
     let usableIndexPanelList = null;
     let notUsableIndexPanelList = null;
