@@ -20,7 +20,7 @@ function ReasonValue({reason, onClick}) {
 		  ev.preventDefault();
 		  onClick();
   };
-  return <a href="#" data-bypass="true" onClick={_onClick}>{formatReason(reason)}</a>;
+  return <a className='explainReason' href="#" data-bypass="true" onClick={_onClick}>{formatReason(reason)}</a>;
 }
 
 export default function IndexPanel ({index, isWinner, reason,  covering, onReasonClick, extraInfo}) {

@@ -59,7 +59,7 @@ export default function ExplainReasonsLegendModal({isVisible, onHide}) {
       </div>
     </Modal.Body>
     <Modal.Footer>
-      <button onClick={onHide} data-bypass="true" className="btn btn-cf-secondary">Close</button>
+      <button onClick={onHide} data-bypass="true" className="btn btn-cf-secondary" id='closeReasonModal'>Close</button>
     </Modal.Footer>
   </Modal>;
 }
