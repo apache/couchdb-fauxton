@@ -89,7 +89,7 @@
 }
 
 .explain-index-panel {
-  	background-color: white;
+  	background-color: $cf-white;
 	margin-left: 0.25rem !important;
 	margin-right: 0.25rem !important;
 	padding: 0.5rem;
@@ -121,12 +121,12 @@
 
 		div.remove-filter {
 			padding: 0.5rem;
-			background-color: #d0e2ff;
+			background-color: $cf-info;
 			border-radius: 5px;
 			span {
 				padding: 0;
 				margin: 0;
-				color: #002d9c;
+				color: $cf-white;
 				font-size: 14px;
 			}
 		}
@@ -136,16 +136,16 @@
 		div.remove-filter {
 			background-color: $cf-primary;
 			span {
-				color: #ffffff;
+				color: $cf-white;
 			}
 		}
 	}
 
 	li.partitioned {
 		div.remove-filter {
-			background-color: #ffa53d;
+			background-color: $cf-tab-element-badge;
 			span {
-				color: #000000;
+				color: $cf-white;
 			}
 		}
 	}
