@@ -129,6 +129,13 @@ export default {
           });
         });
     };
-  }
+  },
+
+  setExplainViewFormat: function (options) {
+    return {
+      type: ActionTypes.SET_EXPLAIN_VIEW_FORMAT,
+      options: options
+    };
+  },
 
 };

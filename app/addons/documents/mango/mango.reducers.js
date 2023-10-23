@@ -81,6 +81,7 @@ const initialState = {
   historyKey: 'default',
   queryIndexTemplates: getDefaultQueryIndexTemplates(),
   executionStatsSupported: false,
+  explainViewFormat: 'parsed',
 };
 
 const loadQueryHistory = (databaseName) => {
@@ -204,6 +205,12 @@ export default function mangoquery(state = initialState, action) {
       return {
         ...state,
         executionStatsSupported: true,
+      };
+
+    case ActionTypes.SET_EXPLAIN_VIEW_FORMAT:
+      return {
+        ...state,
+        explainViewFormat: options,
       };
 
     default:

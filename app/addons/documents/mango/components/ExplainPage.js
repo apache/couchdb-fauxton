@@ -27,12 +27,7 @@ export default class ExplainPage extends Component {
   }
 
   state = {
-    viewFormat: 'parsed',
     isReasonsModalVisible: false,
-  };
-
-  onViewFormatChange = (viewFormat) => {
-    this.setState({ viewFormat });
   };
 
   hideReasonsModal = () => {
@@ -78,13 +73,13 @@ export default class ExplainPage extends Component {
           <ButtonGroup aria-label='Explain format selector' >
             <Button type="button"
               id="explain-parsed-view"
-              active={this.state.viewFormat === 'parsed'}
-              onClick={() => {this.onViewFormatChange('parsed');}}
+              active={this.props.viewFormat === 'parsed'}
+              onClick={() => {this.props.onViewFormatChange('parsed');}}
               variant="cf-secondary">Parsed</Button>
             <Button type="button"
               id="explain-json-view"
-              active={this.state.viewFormat === 'json'}
-              onClick={() => {this.onViewFormatChange('json');}}
+              active={this.props.viewFormat === 'json'}
+              onClick={() => {this.props.onViewFormatChange('json');}}
               variant="cf-secondary">JSON</Button>
           </ButtonGroup>
         </div>
@@ -193,15 +188,17 @@ export default class ExplainPage extends Component {
       <div id="explain-plan-wrapper">
         <ExplainReasonsLegendModal isVisible={this.state.isReasonsModalVisible} onHide={this.hideReasonsModal}/>
         {this.toggleButtons()}
-        {this.state.viewFormat === 'parsed' ? this.parsedContent() : null}
-        {this.state.viewFormat === 'json' ? this.rawJsonResponse() : null}
+        {this.props.viewFormat === 'parsed' ? this.parsedContent() : null}
+        {this.props.viewFormat === 'json' ? this.rawJsonResponse() : null}
       </div>
     );
   }
 }
 
 ExplainPage.propTypes = {
-  explainPlan: PropTypes.object.isRequired
+  explainPlan: PropTypes.object.isRequired,
+  viewFormat: PropTypes.string.isRequired,
+  onViewFormatChange: PropTypes.func.isRequired
 };
 
 const InfoIcon = ({tooltip_content}) => {
