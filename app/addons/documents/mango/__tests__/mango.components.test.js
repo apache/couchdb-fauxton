@@ -328,9 +328,17 @@ describe('MangoQueryEditor', function () {
 });
 
 describe('Explain Page', function() {
+  const defaultProps = {
+    viewFormat: 'parsed',
+    isReasonsModalVisible: false,
+    onViewFormatChange: (() => {}),
+    resetState: (() => {}),
+    hideReasonsModal: (() => {}),
+    showReasonsModal: (() => {}),
+  };
   it('shows suitable/unsuitable indexes when avaiable', function() {
     const wrapper = mount(
-      <ExplainPage explainPlan = {explainPlanCandidates} />
+      <ExplainPage {...defaultProps} explainPlan = {explainPlanCandidates} />
     );
     expect(wrapper.find('#explain-parsed-view .btn.active.btn-cf-secondary')).toHaveLength(1);
     const headers = wrapper.find('.explain-plan-section-title');
@@ -346,17 +354,18 @@ describe('Explain Page', function() {
 
     expect((headers.get(2)).props.children).toContain('Unsuitable Indexes');
     expect((panels.get(2)).props.children[0]).toMatchObject(/_all_docs/);
-
   });
 
   it('toggles between parsed and json, with no candidate indexes', function() {
+    let spy = sinon.spy();
     const wrapper = mount(
-      <ExplainPage explainPlan = {explainPlan} />
+      <ExplainPage {...defaultProps} explainPlan = {explainPlan} onViewFormatChange={spy} />
     );
 
     expect(wrapper.find('#explain-parsed-view .btn.active.btn-cf-secondary')).toHaveLength(1);
     expect(((wrapper.find('.explain-plan-section-title')).get(0)).props.children).toContain('Selected Index');
     wrapper.find('button#explain-json-view').simulate('click');
+    expect(spy.calledOnce).toBeTruthy();
     expect(wrapper.find('#explain-json-view .btn.active.btn-cf-secondary')).toHaveLength(1);
     expect(((wrapper.find('.explain-plan-section-title')).get(0)).props.children).toContain('JSON Response');
   });

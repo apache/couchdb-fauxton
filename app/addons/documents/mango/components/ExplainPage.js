@@ -29,18 +29,6 @@ export default class ExplainPage extends Component {
     this.props.resetState();
   }
 
-  state = {
-    isReasonsModalVisible: false,
-  };
-
-  hideReasonsModal = () => {
-    this.setState({isReasonsModalVisible: false});
-  };
-
-  showReasonsModal = () => {
-    this.setState({isReasonsModalVisible: true});
-  };
-
   // Sort candidates indexes to show list JSON indexes not chosen first, then unusable
   // JSON indexes, then all others (text, partial, etc)
   sortCandidatesByRanking(a, b) {
@@ -201,7 +189,11 @@ export default class ExplainPage extends Component {
 ExplainPage.propTypes = {
   explainPlan: PropTypes.object.isRequired,
   viewFormat: PropTypes.string.isRequired,
-  onViewFormatChange: PropTypes.func.isRequired
+  isReasonsModalVisible: PropTypes.bool.isRequired,
+  onViewFormatChange: PropTypes.func.isRequired,
+  resetState: PropTypes.func.isRequired,
+  hideReasonsModal: PropTypes.func.isRequired,
+  showReasonsModal: PropTypes.func.isRequired,
 };
 
 const InfoIcon = ({tooltip_content}) => {
