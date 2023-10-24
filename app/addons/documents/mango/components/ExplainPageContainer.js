@@ -19,6 +19,7 @@ const mapStateToProps = ({ mangoQuery }, ownProps) => {
   return {
     explainPlan: ownProps.explainPlan,
     viewFormat: mangoQuery.explainViewFormat,
+    isReasonsModalVisible: mangoQuery.isReasonsModalVisible
   };
 };
 
@@ -26,7 +27,16 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onViewFormatChange: (options) => {
       dispatch(Actions.setExplainViewFormat(options));
-    }
+    },
+    resetState: () => {
+      dispatch(Actions.resetState());
+    },
+    hideReasonsModal: () => {
+      dispatch(Actions.hideReasonsModal());
+    },
+    showReasonsModal: () => {
+      dispatch(Actions.showReasonsModal());
+    },
   };
 };
 

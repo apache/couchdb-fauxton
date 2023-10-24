@@ -16,7 +16,6 @@ import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import IndexPanel from "./IndexPanel";
 import ExplainReasonsLegendModal from './ExplainReasonsLegendModal';
 
-
 export default class ExplainPage extends Component {
   componentDidMount () {
     prettyPrint();
@@ -24,6 +23,10 @@ export default class ExplainPage extends Component {
 
   componentDidUpdate () {
     prettyPrint();
+  }
+
+  componentWillUnmount() {
+    this.props.resetState();
   }
 
   state = {
@@ -121,7 +124,7 @@ export default class ExplainPage extends Component {
       <span className='index-extra-info'><span className='fonticon-attention-circled'></span>Full index scan detected. Query time will degrade as documents are added to the index.</span> : null;
 
     // Matching index
-    let matchingIndex = <IndexPanel index={index} isWinner={true} covering={covering} onReasonClick={this.showReasonsModal} extraInfo={extraInfo}/>;
+    let matchingIndex = <IndexPanel index={index} isWinner={true} covering={covering} onReasonClick={this.props.showReasonsModal} extraInfo={extraInfo}/>;
 
     // Candidates
     const {index_candidates} = this.props.explainPlan;
@@ -142,7 +145,7 @@ export default class ExplainPage extends Component {
         const { index, analysis } = candidate;
         const { reasons, covering } = analysis;
         const reason = reasons[0].name;
-        return <IndexPanel key={`${index.ddoc}"-"${index.name}`} isWinner={false} onReasonClick={this.showReasonsModal}
+        return <IndexPanel key={`${index.ddoc}"-"${index.name}`} isWinner={false} onReasonClick={this.props.showReasonsModal}
           index={index} reason={reason} covering={covering}/>;
       });
 
@@ -151,7 +154,7 @@ export default class ExplainPage extends Component {
         const { index, analysis } = candidate;
         const { reasons, covering } = analysis;
         const reason = reasons[0].name;
-        return <IndexPanel key={`${index.ddoc}"-"${index.name}`} isWinner={false} onReasonClick={this.showReasonsModal}
+        return <IndexPanel key={`${index.ddoc}"-"${index.name}`} isWinner={false} onReasonClick={this.props.showReasonsModal}
           index={index} reason={reason} covering={covering}/>;
       });
     }
@@ -186,7 +189,7 @@ export default class ExplainPage extends Component {
   render () {
     return (
       <div id="explain-plan-wrapper">
-        <ExplainReasonsLegendModal isVisible={this.state.isReasonsModalVisible} onHide={this.hideReasonsModal}/>
+        <ExplainReasonsLegendModal isVisible={this.props.isReasonsModalVisible} onHide={this.props.hideReasonsModal}/>
         {this.toggleButtons()}
         {this.props.viewFormat === 'parsed' ? this.parsedContent() : null}
         {this.props.viewFormat === 'json' ? this.rawJsonResponse() : null}

@@ -138,4 +138,22 @@ export default {
     };
   },
 
+  hideReasonsModal: function () {
+    return {
+      type: ActionTypes.HIDE_EXPLAIN_REASONS_MODAL
+    };
+  },
+
+  showReasonsModal: function () {
+    return {
+      type: ActionTypes.SHOW_EXPLAIN_REASONS_MODAL
+    };
+  },
+
+  resetState: function () {
+    return {
+      type: ActionTypes.EXPLAIN_RESULTS_REDUX_RESET_STATE
+    };
+  },
+
 };
