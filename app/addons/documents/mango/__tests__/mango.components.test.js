@@ -337,7 +337,7 @@ describe('Explain Page', function() {
     showReasonsModal: (() => {}),
   };
 
-  it('shows suitable/unsuitable indexes when avaiable', function() {
+  it('shows suitable/unsuitable indexes when available', function() {
     const wrapper = mount(
       <ExplainPage {...defaultProps} explainPlan={explainPlanCandidates} />
     );
