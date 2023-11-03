@@ -30,12 +30,17 @@
       "screenshots" : {
         "enabled" : true,
         "path" : "./test/nightwatch_tests/reports"
+        <% 
+        // Add the line below to generate screenshots for any failures
+        // "on_failure" : true
+        %>
       },
       "desiredCapabilities" : {
         "browserName" : "chrome",
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
-        "chromeOptions": {}
+        "chromeOptions": {},
+        "moz:firefoxOptions": {}
       },
       "exclude": <%= exclude_tests %>,
       "skiptags": <%= skiptags %>
