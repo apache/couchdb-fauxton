@@ -70,7 +70,7 @@ export default function ExplainReasonsLegendModal({isVisible, onHide}) {
             </tr>
             <tr>
               <td>unfavored_type</td>
-              <td>An index with a preferred type was selected. Order of index type preference: json, text, special (<code>_all docs</code>).</td>
+              <td>An index with a preferred type was selected. Order of index type preference: json, text, special (<code>_all_docs</code>).</td>
             </tr>
           </tbody>
         </Table>
