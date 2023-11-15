@@ -31,6 +31,11 @@ export default function IndexPanel ({index, isWinner, reason,  covering, onReaso
   if (covering) {
     tags.push('covering');
   }
+  const tagExplanations = {
+    'partitioned': 'Index queries over a single data partition',
+    'global': 'Index queries over all data within database',
+    'covering': 'Query is covered by this index'
+  };
 
   return (
     <div className='row explain-index-panel'>
@@ -40,7 +45,7 @@ export default function IndexPanel ({index, isWinner, reason,  covering, onReaso
         {index.ddoc ? (<><span className="index-ddoc-name">{index.ddoc}</span><br/></>) : null}
       </div>
       <div className={columnClass}>
-        <ReactComponents.BadgeList elements={tags} removeBadge={() => {}} />
+        <ReactComponents.BadgeList elements={tags} tagExplanations={tagExplanations} removeBadge={() => {}} />
       </div>
       <div className={columnClass}>
         <IndexFields fields={index.def.fields} isTextIndex={index.type === 'text'}/>

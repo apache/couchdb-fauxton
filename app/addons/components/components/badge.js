@@ -11,6 +11,7 @@
 // the License.
 
 import PropTypes from 'prop-types';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -20,6 +21,7 @@ export class BadgeList extends React.Component {
     elements: PropTypes.array.isRequired,
     removeBadge: PropTypes.func.isRequired,
     showClose: PropTypes.bool,
+    tagExplanations: PropTypes.object
   };
 
   static defaultProps = {
@@ -40,7 +42,9 @@ export class BadgeList extends React.Component {
         key={i}
         id={el}
         remove={this.removeBadge}
-        showClose={this.props.showClose} />;
+        showClose={this.props.showClose}
+        showTooltip={this.props.tagExplanations}
+        tooltip={this.props.tagExplanations[el]} />;
     }.bind(this));
   };
 
@@ -62,6 +66,8 @@ export class Badge extends React.Component {
     label: PropTypes.string.isRequired,
     remove: PropTypes.func.isRequired,
     showClose: PropTypes.bool,
+    showTooltip: PropTypes.bool,
+    tooltip: PropTypes.string
   };
   static defaultProps = {
     showClose: false,
@@ -74,10 +80,16 @@ export class Badge extends React.Component {
 
   render() {
     const className = "badge " + this.props.label.replace(' ', '-');
+    const tooltip = <Tooltip id="graveyard-tooltip">{this.props.tooltip}</Tooltip>;
+
     return (
       <li className={className}>
         <div className="remove-filter">
-          <span>{this.props.label}</span>
+          {this.props.showTooltip ?
+            <OverlayTrigger placement="top" overlay={tooltip}>
+              <span>{this.props.label}</span>
+            </OverlayTrigger> :
+            <span>{this.props.label}</span>}
           { this.props.showClose ?
             <a
               href="#"
