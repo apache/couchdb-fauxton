@@ -28,7 +28,7 @@ export default function IndexPanel ({index, isWinner, reason,  covering, onReaso
   const tags = [
     index.partitioned ? 'partitioned' : 'global',
   ];
-  if (!covering) {
+  if (covering) {
     tags.push('covering');
   }
   const tagExplanations = {
