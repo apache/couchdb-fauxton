@@ -33,6 +33,7 @@ export class BadgeList extends React.Component {
       return el;
     },
     showClose: false,
+    tagExplanations: null
   };
 
   getBadges = () => {
@@ -43,8 +44,8 @@ export class BadgeList extends React.Component {
         id={el}
         remove={this.removeBadge}
         showClose={this.props.showClose}
-        showTooltip={this.props.tagExplanations}
-        tooltip={this.props.tagExplanations[el]} />;
+        showTooltip={!!this.props.tagExplanations}
+        tooltip={this.props.tagExplanations ? this.props.tagExplanations[el] : ''} />;
     }.bind(this));
   };
 
@@ -71,6 +72,8 @@ export class Badge extends React.Component {
   };
   static defaultProps = {
     showClose: false,
+    showTooltip: false,
+    tooltip: ''
   };
 
   remove = (e) => {
