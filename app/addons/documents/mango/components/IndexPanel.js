@@ -28,13 +28,13 @@ export default function IndexPanel ({index, isWinner, reason,  covering, onReaso
   const tags = [
     index.partitioned ? 'partitioned' : 'global',
   ];
-  if (covering) {
+  if (!covering) {
     tags.push('covering');
   }
   const tagExplanations = {
     'partitioned': 'Index queries over a single data partition',
     'global': 'Index queries over all data within database',
-    'covering': 'Query is covered by this index'
+    'covering': 'Index can return all data needed by the query without having to load document bodies'
   };
 
   return (
