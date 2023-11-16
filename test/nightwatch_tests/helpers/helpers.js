@@ -87,13 +87,21 @@ module.exports = {
       if (res.errors > 0 || res.failed > 0) {
         promGetLog = new Promise((resolve, reject) => {
           try {
-            browser.getLog('browser', (logEntriesArray) => {
-              // !! IMPORTANT: Ends the session since the Nightwatch settings have "end_session_on_fail: false"
-              try {
-                browser.end();
-              } catch (e) {}
-              resolve(logEntriesArray);
+            browser.isLogAvailable('browser', function(isAvailable) {
+              if (isAvailable) {
+                browser.getLog('browser', (logEntriesArray) => {
+                  // !! IMPORTANT: Ends the session since the Nightwatch settings have "end_session_on_fail: false"
+                  try {
+                    browser.end();
+                  } catch (e) {}
+                  resolve(logEntriesArray);
+                });
+              } else {
+                console.warn('Browser logs are not available');
+                resolve([]);
+              }
             });
+            
           } catch (err) {
             reject(err);
           }
