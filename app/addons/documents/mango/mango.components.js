@@ -12,10 +12,10 @@
 
 import MangoQueryEditorContainer from "./components/MangoQueryEditorContainer";
 import MangoIndexEditorContainer from "./components/MangoIndexEditorContainer";
-import ExplainPage from "./components/ExplainPage";
+import ExplainPageContainer from "./components/ExplainPageContainer";
 
 export default {
   MangoIndexEditorContainer,
   MangoQueryEditorContainer,
-  ExplainPage
+  ExplainPageContainer
 };

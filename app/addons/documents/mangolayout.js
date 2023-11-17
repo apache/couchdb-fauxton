@@ -136,7 +136,7 @@ export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetc
     queryDocs={queryDocs} />;
 
   if (explainPlan) {
-    resultsPage = <MangoComponents.ExplainPage explainPlan={explainPlan} />;
+    resultsPage = <MangoComponents.ExplainPageContainer explainPlan={explainPlan} />;
     mangoFooter = null;
   }
 

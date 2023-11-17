@@ -39,7 +39,7 @@ export default class ChangesTabContent extends React.Component {
       <div className="changes-header">
         <AddFilterForm filter={(label) => this.props.removeFilter(label)} addFilter={this.addFilter}
           hasFilter={this.hasFilter} />
-        <ReactComponents.BadgeList elements={this.props.filters} removeBadge={(label) => this.props.removeFilter(label)} />
+        <ReactComponents.BadgeList elements={this.props.filters} removeBadge={(label) => this.props.removeFilter(label)} showClose={true} />
       </div>
     );
   }

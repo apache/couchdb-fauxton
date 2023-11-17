@@ -81,6 +81,8 @@ const initialState = {
   historyKey: 'default',
   queryIndexTemplates: getDefaultQueryIndexTemplates(),
   executionStatsSupported: false,
+  explainViewFormat: 'parsed',
+  isReasonsModalVisible: false
 };
 
 const loadQueryHistory = (databaseName) => {
@@ -204,6 +206,31 @@ export default function mangoquery(state = initialState, action) {
       return {
         ...state,
         executionStatsSupported: true,
+      };
+
+    case ActionTypes.SET_EXPLAIN_VIEW_FORMAT:
+      return {
+        ...state,
+        explainViewFormat: options,
+      };
+
+    case ActionTypes.SHOW_EXPLAIN_REASONS_MODAL:
+      return {
+        ...state,
+        isReasonsModalVisible: true
+      };
+
+    case ActionTypes.HIDE_EXPLAIN_REASONS_MODAL:
+      return {
+        ...state,
+        isReasonsModalVisible: false
+      };
+
+    case ActionTypes.EXPLAIN_RESULTS_REDUX_RESET_STATE:
+      return {
+        ...state,
+        explainPlan: undefined,
+        isReasonsModalVisible: false
       };
 
     default:

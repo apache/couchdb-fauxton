@@ -1,6 +1,6 @@
 {
   "roots": ["app"],
-  "testPathIgnorePatterns": ["/node_modules/", "stub", "fakeActiveTaskResponse", "fixtures"],
+  "testPathIgnorePatterns": ["/node_modules/", "stub", "fakeActiveTaskResponse", "fixtures", "sampleexplainplan"],
 
   "setupFiles": ["./jest-shim.js"],
   "setupFilesAfterEnv": ["./jest-setup.js"],

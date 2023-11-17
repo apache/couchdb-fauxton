@@ -11,6 +11,7 @@
 // the License.
 
 import PropTypes from 'prop-types';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -18,7 +19,9 @@ import ReactDOM from "react-dom";
 export class BadgeList extends React.Component {
   static propTypes = {
     elements: PropTypes.array.isRequired,
-    removeBadge: PropTypes.func.isRequired
+    removeBadge: PropTypes.func.isRequired,
+    showClose: PropTypes.bool,
+    tagExplanations: PropTypes.object
   };
 
   static defaultProps = {
@@ -28,7 +31,9 @@ export class BadgeList extends React.Component {
 
     getId (el) {
       return el;
-    }
+    },
+    showClose: false,
+    tagExplanations: null
   };
 
   getBadges = () => {
@@ -37,7 +42,10 @@ export class BadgeList extends React.Component {
         label={this.props.getLabel(el)}
         key={i}
         id={el}
-        remove={this.removeBadge} />;
+        remove={this.removeBadge}
+        showClose={this.props.showClose}
+        showTooltip={!!this.props.tagExplanations}
+        tooltip={this.props.tagExplanations ? this.props.tagExplanations[el] : ''} />;
     }.bind(this));
   };
 
@@ -57,7 +65,15 @@ export class BadgeList extends React.Component {
 export class Badge extends React.Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
-    remove: PropTypes.func.isRequired
+    remove: PropTypes.func.isRequired,
+    showClose: PropTypes.bool,
+    showTooltip: PropTypes.bool,
+    tooltip: PropTypes.string
+  };
+  static defaultProps = {
+    showClose: false,
+    showTooltip: false,
+    tooltip: ''
   };
 
   remove = (e) => {
@@ -66,17 +82,26 @@ export class Badge extends React.Component {
   };
 
   render() {
+    const className = "badge " + this.props.label.replace(' ', '-');
+    const tooltip = <Tooltip id="graveyard-tooltip">{this.props.tooltip}</Tooltip>;
+
     return (
-      <li className="badge">
+      <li className={className}>
         <div className="remove-filter">
-          <span>{this.props.label}</span>
-          <a
-            href="#"
-            onClick={this.remove}
-            data-bypass="true"
-            className="ms-1">
+          {this.props.showTooltip ?
+            <OverlayTrigger placement="top" overlay={tooltip}>
+              <span>{this.props.label}</span>
+            </OverlayTrigger> :
+            <span>{this.props.label}</span>}
+          { this.props.showClose ?
+            <a
+              href="#"
+              onClick={this.remove}
+              data-bypass="true"
+              className="ms-1">
             &times;
-          </a>
+            </a>
+            : null}
         </div>
       </li>
     );

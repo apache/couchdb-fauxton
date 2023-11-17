@@ -24,7 +24,7 @@ describe('Badges', () => {
 
   it('supports custom label formatters', () => {
     const el = mount(
-      <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={() => {}} getLabel={(el) => { return el + 'foo'; }} />
+      <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={() => {}} showClose={true} getLabel={(el) => { return el + 'foo'; }} />
     );
 
     expect(el.find('.badge').first().text()).toBe('foofoo×');
