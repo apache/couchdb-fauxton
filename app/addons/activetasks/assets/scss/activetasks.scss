@@ -31,15 +31,19 @@
       }
 
       &.header-database {
-        width: 30%;
+        width: 25%;
       }
 
       &.header-tarted-on {
-        width: 13%;
+        width: 10%;
       }
 
       &.header-updated-on {
-        width: 13%;
+        width: 10%;
+      }
+
+      &.header-node {
+        width: 15%;
       }
 
       &.header-pid {
@@ -47,7 +51,7 @@
       }
 
       &.header-progress {
-        width: 23%;
+        width: 20%;
       }
 
       .fonticon-up-dir,

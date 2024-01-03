@@ -51,6 +51,7 @@ export default class ActiveTasksTableHeader extends React.Component {
       ['database', 'Database'],
       ['started-on', 'Started on'],
       ['updated-on', 'Updated on'],
+      ['node', 'Node'],
       ['pid', 'PID'],
       ['progress', 'Status']
     ]
