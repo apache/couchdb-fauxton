@@ -79,6 +79,7 @@ export default class ActiveTaskTableBodyContents extends React.Component {
       objectField: activeTasksHelpers.getDatabaseFieldMessage(item),
       started_on: activeTasksHelpers.getTimeInfo(item.started_on),
       updated_on: activeTasksHelpers.getTimeInfo(item.updated_on),
+      node: item.node,
       pid: item.pid.replace(/[<>]/g, ''),
       progress: activeTasksHelpers.getProgressMessage(item),
     };
@@ -109,6 +110,7 @@ export default class ActiveTaskTableBodyContents extends React.Component {
         <td>{objectFieldMsg}</td>
         <td>{startedOnMsg}</td>
         <td>{updatedOnMsg}</td>
+        <td>{rowData.node}</td>
         <td>{rowData.pid}</td>
         <td>{progressMsg}</td>
       </tr>
