@@ -73,6 +73,10 @@ const activeTasksHelpers = {
 };
 
 export default class ActiveTaskTableBodyContents extends React.Component {
+  static defaultProps = {
+    hiddenColumns: [],
+  };
+
   getInfo = (item) => {
     return {
       type : item.type,
@@ -98,21 +102,24 @@ export default class ActiveTaskTableBodyContents extends React.Component {
   };
 
   render() {
-    var rowData =  this.getInfo(this.props.item);
-    var objectFieldMsg = this.multilineMessage(rowData.objectField, 'to-from-database');
-    var startedOnMsg = this.multilineMessage(rowData.started_on, 'time');
-    var updatedOnMsg = this.multilineMessage(rowData.updated_on, 'time');
-    var progressMsg = this.multilineMessage(rowData.progress);
+    const rowData =  this.getInfo(this.props.item);
+    const typeCell = <td>{rowData.type}</td>;
+    const objectCell = <td>{this.multilineMessage(rowData.objectField, 'to-from-database')}</td>;
+    const startedOnCell = <td>{this.multilineMessage(rowData.started_on, 'time')}</td>;
+    const updatedOnCell = <td>{this.multilineMessage(rowData.updated_on, 'time')}</td>;
+    const nodeCell = <td>{rowData.node}</td>;
+    const pidCell = <td>{rowData.pid}</td>;
+    const progressCell = <td>{this.multilineMessage(rowData.progress)}</td>;
 
     return (
       <tr>
-        <td>{rowData.type}</td>
-        <td>{objectFieldMsg}</td>
-        <td>{startedOnMsg}</td>
-        <td>{updatedOnMsg}</td>
-        <td>{rowData.node}</td>
-        <td>{rowData.pid}</td>
-        <td>{progressMsg}</td>
+        {this.props.hiddenColumns.includes('type') ? null : typeCell}
+        {this.props.hiddenColumns.includes('database') ? null : objectCell}
+        {this.props.hiddenColumns.includes('started-on') ? null : startedOnCell}
+        {this.props.hiddenColumns.includes('updated-on') ? null : updatedOnCell}
+        {this.props.hiddenColumns.includes('node') ? null : nodeCell}
+        {this.props.hiddenColumns.includes('pid') ? null : pidCell}
+        {this.props.hiddenColumns.includes('progress') ? null : progressCell}
       </tr>
     );
   }

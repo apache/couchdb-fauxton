@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import {ActiveTasksFilterTabs, ActiveTasksFilter} from './filtertabs';
+import { ActiveTasksFilterTabs, ActiveTasksFilter } from './filtertabs';
 import ActiveTaskTable from './table';
 
 export default class ActiveTasksController extends React.Component {
@@ -22,7 +22,8 @@ export default class ActiveTasksController extends React.Component {
     this.props.setSearchTerm(searchTerm);
   };
 
-  switchTab = (newRadioButton) => {  //tabs buttons
+  switchTab = (newRadioButton) => {
+    //tabs buttons
     this.props.switchTab(newRadioButton);
   };
 
@@ -31,7 +32,15 @@ export default class ActiveTasksController extends React.Component {
   };
 
   render() {
-    const {isLoading, tasks, searchTerm, selectedRadio, sortByHeader, headerIsAscending} = this.props;
+    const {
+      isLoading,
+      tasks,
+      searchTerm,
+      selectedRadio,
+      sortByHeader,
+      headerIsAscending,
+      hiddenColumns,
+    } = this.props;
 
     const setSearchTerm = this.setNewSearchTerm;
     const onTableHeaderClick = this.tableHeaderOnClick;
@@ -42,13 +51,12 @@ export default class ActiveTasksController extends React.Component {
           <ActiveTasksFilterTabs
             searchTerm={searchTerm}
             selectedRadio={selectedRadio}
-            onRadioClick={this.switchTab}/>
+            onRadioClick={this.switchTab}
+          />
 
           <div className="row">
             <div id="active-tasks-search" className="col-12 col-md-6">
-              <ActiveTasksFilter
-                onSearch={setSearchTerm}
-              />
+              <ActiveTasksFilter onSearch={setSearchTerm} />
             </div>
           </div>
 
@@ -59,7 +67,9 @@ export default class ActiveTasksController extends React.Component {
             selectedRadio={selectedRadio}
             onTableHeaderClick={onTableHeaderClick}
             sortByHeader={sortByHeader}
-            headerIsAscending={headerIsAscending} />
+            headerIsAscending={headerIsAscending}
+            hiddenColumns={hiddenColumns}
+          />
         </div>
       </div>
     );
