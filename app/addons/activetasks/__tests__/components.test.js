@@ -80,6 +80,36 @@ describe('Active Tasks -- Components', () => {
           expect(spy.calledOnce).toBeTruthy();
         });
       });
+
+      it('should not show hidden columns ', () => {
+        const allColumns = mount(
+          <table>
+            <TableHeader
+              onTableHeaderClick={() => {}}
+              headerIsAscending={true}
+              sortByHeader={"All Tasks"}
+              hiddenColumns={[]}
+            />
+          </table>
+        );
+        expect(allColumns.find('th').length).toBe(7);
+
+
+        const withHiddenColumns = mount(
+          <table>
+            <TableHeader
+              onTableHeaderClick={() => {}}
+              headerIsAscending={true}
+              sortByHeader={"All Tasks"}
+              hiddenColumns={['node', 'pid']}
+            />
+          </table>
+        );
+        expect(withHiddenColumns.find('th').length).toBe(5);
+        expect(withHiddenColumns.find('th.header-database').exists()).toBeTruthy();
+        expect(withHiddenColumns.find('th.header-node').exists()).toBeFalsy();
+        expect(withHiddenColumns.find('th.header-pid').exists()).toBeFalsy();
+      });
     });
   });
 });

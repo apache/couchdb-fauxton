@@ -54,7 +54,8 @@ export default class ActiveTasksTableHeader extends React.Component {
       ['node', 'Node'],
       ['pid', 'PID'],
       ['progress', 'Status']
-    ]
+    ],
+    hiddenColumns: [],
   };
 
   createTableHeadingFields = () => {
@@ -64,7 +65,9 @@ export default class ActiveTasksTableHeader extends React.Component {
       headerIsAscending
     } = this.props;
 
-    return this.props.headerNames.map(function (header) {
+    return this.props.headerNames.filter(header => {
+      return !this.props.hiddenColumns.includes(header[0]);
+    }).map(header => {
       return <TableHeader
         headerName={header[0]}
         displayName={header[1]}

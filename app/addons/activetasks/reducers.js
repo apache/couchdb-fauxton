@@ -19,7 +19,8 @@ const initialState = {
   selectedRadio: 'All Tasks',
   searchTerm: '',
   tasks: [],
-  filteredTasks: []
+  filteredTasks: [],
+  hiddenColumns: [],
 };
 
 const sortTasksByColumnHeader = (colName, tasks, headerIsAscending) => {
@@ -112,6 +113,12 @@ export default (state = initialState, {type, options}) => {
     case ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM:
       return setSearchTerm(state, options);
 
+    case ActionTypes.ACTIVE_TASKS_SET_HIDDEN_COLUMNS:
+      return {
+        ...state,
+        hiddenColumns: options
+      };
+
     case ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER:
       const prevSortbyHeader = state.sortByHeader;
       const sortByHeader = options;
@@ -139,3 +146,4 @@ export const getIsLoading = (state) => state.isLoading;
 export const getSelectedRadio = (state) => state.selectedRadio;
 export const getSortByHeader = (state) => state.sortByHeader;
 export const getSearchTerm = (state) => state.searchTerm;
+export const getHiddenColumns = (state) => state.hiddenColumns;

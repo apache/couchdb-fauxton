@@ -22,7 +22,7 @@ export default class ActiveTasksTableBody extends React.Component {
     }
 
     return this.props.tasks.map((item, key) => {
-      return <ActiveTaskTableBodyContents key={key} item={item} />;
+      return <ActiveTaskTableBodyContents key={key} item={item} hiddenColumns={this.props.hiddenColumns}/>;
     });
   };
 
@@ -37,10 +37,11 @@ export default class ActiveTasksTableBody extends React.Component {
 
   noActiveTasks = () => {
     const type = this.getType();
-    let msg = <td  colSpan="6">No active {type} tasks.</td>;
+    const colSpan = 7 - this.props.hiddenColumns.length;
+    let msg = <td  colSpan={colSpan}>No active {type} tasks.</td>;
 
     if (this.props.isLoading) {
-      msg = <td  colSpan="6">Loading tasks.</td>;
+      msg = <td  colSpan={colSpan}>Loading tasks.</td>;
     }
 
     return (

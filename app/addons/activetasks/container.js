@@ -25,7 +25,8 @@ import {
   getSelectedRadio,
   getSortByHeader,
   getSearchTerm,
-  getIsLoading
+  getIsLoading,
+  getHiddenColumns
 } from './reducers';
 
 const mapStateToProps = ({activetasks}) => {
@@ -35,7 +36,8 @@ const mapStateToProps = ({activetasks}) => {
     selectedRadio: getSelectedRadio(activetasks),
     sortByHeader: getSortByHeader(activetasks),
     searchTerm: getSearchTerm(activetasks),
-    isLoading: getIsLoading(activetasks)
+    isLoading: getIsLoading(activetasks),
+    hiddenColumns: getHiddenColumns(activetasks),
   };
 };
 

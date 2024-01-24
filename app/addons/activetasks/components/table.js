@@ -23,7 +23,8 @@ export default class ActiveTaskTable extends React.Component {
       sortByHeader,
       onTableHeaderClick,
       headerIsAscending,
-      isLoading
+      isLoading,
+      hiddenColumns,
     } = this.props;
 
     return (
@@ -32,12 +33,14 @@ export default class ActiveTaskTable extends React.Component {
           <ActiveTasksTableHeader
             onTableHeaderClick={onTableHeaderClick}
             sortByHeader={sortByHeader}
-            headerIsAscending={headerIsAscending}/>
+            headerIsAscending={headerIsAscending}
+            hiddenColumns={hiddenColumns}/>
           <ActiveTasksTableBody
             tasks={tasks}
             selectedRadio={selectedRadio}
             isLoading={isLoading}
-            searchTerm={searchTerm}/>
+            searchTerm={searchTerm}
+            hiddenColumns={hiddenColumns}/>
         </Table>
       </div>
     );
