@@ -62,9 +62,9 @@ const DocumentationPage = () => {
           link='http://www.apache.org/'
           title='The Apache Software Foundation' />
         <DocumentationItem
-          iconClassName='twitter-icon'
-          link='https://twitter.com/couchdb'
-          title='Follow CouchDB on Twitter' />
+          iconClassName='mastodon-icon'
+          link='https://fosstodon.org/@couchdb'
+          title='Follow CouchDB on Mastodon' />
         <DocumentationItem
           iconClassName='linkedin-icon'
           link='https://www.linkedin.com/company/apache-couchdb'
