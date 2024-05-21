@@ -26,7 +26,7 @@ const DocumentationPage = () => {
       <div className="links row mb-4">
         <DocumentationItem
           iconClassName='couchdb-icon'
-          link='http://docs.couchdb.org/en/latest/'
+          link='https://docs.couchdb.org/en/latest/'
           title='CouchDB Official Documentation — Online' />
         <DocumentationItem
           iconClassName='couchdb-icon'
@@ -34,7 +34,7 @@ const DocumentationPage = () => {
           title='CouchDB Official Documentation — Offline' />
         <DocumentationItem
           iconClassName='couchdb-icon'
-          link='http://blog.couchdb.org/'
+          link='https://blog.couchdb.org/'
           title='CouchDB Weekly News' />
         <DocumentationItem
           iconClassName='couchdb-icon'
@@ -59,7 +59,7 @@ const DocumentationPage = () => {
       <div className="links row mb-4">
         <DocumentationItem
           iconClassName='asf-feather-icon'
-          link='http://www.apache.org/'
+          link='https://www.apache.org/'
           title='The Apache Software Foundation' />
         <DocumentationItem
           iconClassName='mastodon-icon'
