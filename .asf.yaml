@@ -16,6 +16,9 @@ github:
     main:
       required_status_checks:
         strict: true
+        # contexts are the names of checks that must pass.
+        contexts:
+          - CI
       required_pull_request_reviews:
         # Set to true if you want to automatically dismiss approving reviews when someone pushes a new commit.
         dismiss_stale_reviews: false
