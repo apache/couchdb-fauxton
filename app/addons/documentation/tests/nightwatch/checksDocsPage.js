@@ -19,15 +19,15 @@ module.exports = {
     client
       .loginToGUI()
       .clickWhenVisible('a[href="#/documentation"]')
-      .waitForElementVisible('a[href="http://docs.couchdb.org/en/latest/"]', waitTime, false)
+      .waitForElementVisible('a[href="https://docs.couchdb.org/en/latest/"]', waitTime, false)
       .waitForElementVisible('a[href="./docs/index.html"]', waitTime, false)
-      .waitForElementVisible('a[href="http://blog.couchdb.org/"]', waitTime, false)
+      .waitForElementVisible('a[href="https://blog.couchdb.org/"]', waitTime, false)
       .waitForElementVisible('a[href="https://couchdb.apache.org/"]', waitTime, false)
       .waitForElementVisible('a[href="https://github.com/apache/couchdb"]', waitTime, false)
       .waitForElementVisible('a[href="https://github.com/apache/couchdb-fauxton"]', waitTime, false)
       .waitForElementVisible('a[href="https://couchdb.apache.org/fauxton-visual-guide/index.html"]', waitTime, false)
-      .waitForElementVisible('a[href="http://www.apache.org/"]', waitTime, false)
-      .waitForElementVisible('a[href="https://twitter.com/couchdb"]', waitTime, false)
+      .waitForElementVisible('a[href="https://www.apache.org/"]', waitTime, false)
+      .waitForElementVisible('a[href="https://fosstodon.org/@couchdb"]', waitTime, false)
       .waitForElementVisible('a[href="https://www.linkedin.com/company/apache-couchdb"]', waitTime, false)
       .end();
   }
