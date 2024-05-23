@@ -18,10 +18,11 @@ github:
         strict: true
         # contexts are the names of checks that must pass.
         contexts:
+          - run-unit-tests
           - run-e2e-tests
       required_pull_request_reviews:
         # Set to true if you want to automatically dismiss approving reviews when someone pushes a new commit.
         dismiss_stale_reviews: false
         # Specifies the number of reviewers required to approve pull requests.
         # Use a number between 1 and 6 or 0 to not require reviewers.
-        required_approving_review_count: 1
+        required_approving_review_count: 0
