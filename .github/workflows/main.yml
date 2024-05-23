@@ -2,7 +2,6 @@ name: CI
 on: [ push ]
 jobs:
   run-unit-tests:
-    name: Run unit tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -19,7 +18,6 @@ jobs:
     - name: Run unit tests
       run: npm run test
   run-e2e-tests:
-    name: Run e2e tests
     runs-on: ubuntu-latest
     needs: [ run-unit-tests ]
     strategy:
