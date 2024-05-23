@@ -13,5 +13,11 @@ github:
     - database
     - javascript
   protected_branches:
-    main
-
+    main:
+      required_status_checks:
+        strict: true
+        # contexts are the names of checks that must pass.
+        contexts:
+          - run-unit-tests
+          - run-e2e-tests
+ 
