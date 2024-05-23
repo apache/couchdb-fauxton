@@ -13,5 +13,11 @@ github:
     - database
     - javascript
   protected_branches:
-    main
-
+    main:
+      required_status_checks:
+        strict: true
+        # contexts are the names of checks that must pass.
+        "contexts":
+          - "Run unit tests"
+          - "Run e2e tests (couchdb:2.3.1, search,partitioned)"
+          - "Run e2e tests (couchdb:3, search,nonpartitioned,couchdb-v2-only)"
