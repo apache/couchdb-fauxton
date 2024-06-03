@@ -45,7 +45,7 @@ module.exports = {
       .assert.elementPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
 
       .waitForElementPresent('button[aria-label="Delete ' + newDatabaseName + '"]', waitTime, false)
-      .execute('button[aria-label="Delete ' + newDatabaseName + '"]").scrollIntoView();')
+      .execute(`document.querySelector("button[aria-label='Delete ${newDatabaseName}']").scrollIntoView();`)
       .clickWhenVisible('button[aria-label="Delete ' + newDatabaseName + '"]', waitTime, false)
 
       .waitForElementVisible('.delete-db-modal', waitTime, false)

@@ -127,7 +127,7 @@ module.exports = {
       .clickWhenVisible('input[id="checkbox-_design/sidebar-update"][type="checkbox"]', waitTime, false)
 
       .waitForElementPresent('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
-      .execute('document.querySelector(".bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]").scrollIntoView();')
+      .execute('document.querySelector(".bulk-action-component-selector-group button.toolbar-btn[icon=\'fonticon-trash\']").scrollIntoView();')
       .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]')
       .acceptAlert()
 
