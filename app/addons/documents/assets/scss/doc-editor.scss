@@ -121,7 +121,7 @@
 
   // hide the labels on the buttons when the screen is shrunk too small,
   @media screen and (max-width: 1000px) {
-    .panel-section button span {
+    .panel-section button > span {
       display: none;
     }
     .panel-section button i[class*=fonticon-] {

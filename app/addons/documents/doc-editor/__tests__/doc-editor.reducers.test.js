@@ -74,4 +74,12 @@ describe('DocEditor Reducer', function () {
     expect(newStateSavingDone.isSaving).toBe(false);
   });
 
+  it('toggles the word wrap option', function () {
+    const newState = reducer(undefined, { type: ActionTypes.TOGGLE_WRAP_LINE_OPTION });
+    expect(newState.docEditorPreferences.wordWrapEnabled).toBe(true);
+
+    const newState2 = reducer(newState, { type: ActionTypes.TOGGLE_WRAP_LINE_OPTION });
+    expect(newState2.docEditorPreferences.wordWrapEnabled).toBe(false);
+  });
+
 });

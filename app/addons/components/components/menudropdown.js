@@ -88,7 +88,7 @@ export class MenuDropDown extends React.Component {
         : CustomMenuLinkToggle;
     return (
       <Dropdown
-        id="dropdown-menu">
+        id={this.props.id ? this.props.id : "dropdown-menu"}>
         <Dropdown.Toggle
           as={CustomMenuToggle}
           icon={this.props.icon}

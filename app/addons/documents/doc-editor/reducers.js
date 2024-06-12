@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import app from "../../../app";
 import ActionTypes from "./actiontypes";
 
 const initialState = {
@@ -25,8 +26,19 @@ const initialState = {
   uploadInProgress: false,
   uploadPercentage: 0,
 
-  docConflictCount: 0
+  docConflictCount: 0,
+  docEditorPreferences: loadDocEditorPreferences(),
 };
+
+function loadDocEditorPreferences() {
+  let savedPref = app.utils.localStorageGet('fauxton:doc_editor_preferences');
+  return {
+    // default values
+    wordWrapEnabled: false,
+    // merge saved preferences
+    ...(savedPref ? savedPref : {}),
+  };
+}
 
 export default function docEditor (state = initialState, action) {
   const { options, type } = action;
@@ -129,6 +141,17 @@ export default function docEditor (state = initialState, action) {
       return {
         ...state,
         isSaving: false,
+      };
+
+    case ActionTypes.TOGGLE_WRAP_LINE_OPTION:
+      const newPreferences = {
+        ...state.docEditorPreferences,
+        wordWrapEnabled: !(state.docEditorPreferences.wordWrapEnabled),
+      };
+      app.utils.localStorageSet('fauxton:doc_editor_preferences', newPreferences);
+      return {
+        ...state,
+        docEditorPreferences: newPreferences,
       };
 
     default:

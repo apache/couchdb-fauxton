@@ -144,6 +144,10 @@ const showUploadModal = () => (dispatch) => {
   dispatch({ type: ActionTypes.SHOW_UPLOAD_MODAL });
 };
 
+const toggleWordWrap = () => (dispatch) => {
+  dispatch({ type: ActionTypes.TOGGLE_WRAP_LINE_OPTION });
+};
+
 const hideUploadModal = () => (dispatch) => {
   dispatch({ type: ActionTypes.HIDE_UPLOAD_MODAL });
 };
@@ -261,6 +265,7 @@ export default {
   dispatchInitDocEditor,
   initDocEditor,
   saveDoc,
+  toggleWordWrap,
 
   // clone doc
   showCloneDocModal,

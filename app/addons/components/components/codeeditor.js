@@ -30,7 +30,7 @@ export class CodeEditor extends React.Component {
     theme: 'idle_fingers',
     fontSize: 13,
 
-    // this sets the default value for the editor. On the fly changes are stored in state in this component only. To
+    // defaultCode sets the default value for the editor. On the fly changes are stored in state in this component only. To
     // change the editor content after initial construction use CodeEditor.setValue()
     defaultCode: '',
     disabled: false,
@@ -40,6 +40,7 @@ export class CodeEditor extends React.Component {
     autoScrollEditorIntoView: true,
     autoFocus: false,
     stringEditModalEnabled: false,
+    wordWrapEnabled: false,
 
     // these two options create auto-resizeable code editors, with a maximum number of lines
     setHeightToLineCount: false,
@@ -366,6 +367,7 @@ export class CodeEditor extends React.Component {
           fontSize={this.props.fontSize}
           focus={this.props.autoFocus}
           setOptions={{
+            wrap: this.props.wordWrapEnabled
           }}/>
         <button ref={node => this.stringEditIcon = node}
           className="btn string-edit"
@@ -378,6 +380,7 @@ export class CodeEditor extends React.Component {
           ref={node => this.stringEditModal = node}
           visible={this.state.stringEditModalVisible}
           value={this.state.stringEditModalValue}
+          wordWrapEnabled={this.props.wordWrapEnabled}
           onSave={this.saveStringEditModal}
           onClose={this.closeStringEditModal} />
       </div>

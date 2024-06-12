@@ -23,7 +23,8 @@ describe('String Edit Modal', () => {
       var string = "a string!";
       var spy = sinon.spy();
       const el = mount(
-        <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} value={string} />
+        <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy}
+          value={string} wordWrapEnabled={false}/>
       );
       el.find('button#string-edit-save-btn').simulate('click');
       sinon.assert.calledOnce(spy);

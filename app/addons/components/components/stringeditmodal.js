@@ -22,7 +22,8 @@ export class StringEditModal extends React.Component {
     value: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired
+    onSave: PropTypes.func.isRequired,
+    wordWrapEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -39,6 +40,7 @@ export class StringEditModal extends React.Component {
     this.editor = ace.edit(dom_node);
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
+    this.editor.setOption('wrap', !!this.props.wordWrapEnabled);
     this.editor.setTheme('ace/theme/idle_fingers');
     const val = Helpers.parseJSON(this.props.value);
     this.editor.setValue(val, -1);
