@@ -82,7 +82,7 @@
     "prop-types": "^15.8.1",
     "rc-slider": "^10.0.1",
     "react": "^16.14.0",
-    "react-ace": "^10.1.0",
+    "react-ace": "^11.0.1",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^16.14.0",
     "react-motion": "^0.5.0",

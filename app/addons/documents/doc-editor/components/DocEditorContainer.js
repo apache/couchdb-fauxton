@@ -32,7 +32,9 @@ const mapStateToProps = ({ docEditor, databases }, ownProps) => {
     uploadInProgress: docEditor.uploadInProgress,
     uploadPercentage: docEditor.uploadPercentage,
     uploadErrorMessage: docEditor.uploadErrorMessage,
-    numFilesUploaded: docEditor.numFilesUploaded
+    numFilesUploaded: docEditor.numFilesUploaded,
+
+    wordWrapEnabled: docEditor.docEditorPreferences.wordWrapEnabled,
   };
 };
 
@@ -76,7 +78,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     uploadAttachment: (params) => {
       dispatch(Actions.uploadAttachment(params));
-    }
+    },
+
+    toggleWordWrap: () => {
+      dispatch(Actions.toggleWordWrap());
+    },
   };
 };
 

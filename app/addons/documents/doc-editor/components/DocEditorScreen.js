@@ -20,6 +20,7 @@ import AttachmentsPanelButton from './AttachmentsPanelButton';
 import CloneDocModal from './CloneDocModal';
 import PanelButton from './PanelButton';
 import UploadModal from './UploadModal';
+import PreferencesButton from './PreferencesButton';
 
 
 export default class DocEditorScreen extends React.Component {
@@ -58,7 +59,10 @@ export default class DocEditorScreen extends React.Component {
     hideUploadModal: PropTypes.func.isRequired,
     cancelUpload: PropTypes.func.isRequired,
     resetUploadModal: PropTypes.func.isRequired,
-    uploadAttachment: PropTypes.func.isRequired
+    uploadAttachment: PropTypes.func.isRequired,
+
+    wordWrapEnabled: PropTypes.bool.isRequired,
+    toggleWordWrap: PropTypes.func.isRequired,
   };
 
   getCodeEditor = () => {
@@ -89,7 +93,8 @@ export default class DocEditorScreen extends React.Component {
         autoFocus={true}
         editorCommands={editorCommands}
         notifyUnsavedChanges={true}
-        stringEditModalEnabled={true} />
+        stringEditModalEnabled={true}
+        wordWrapEnabled={this.props.wordWrapEnabled}/>
     );
   };
 
@@ -99,7 +104,7 @@ export default class DocEditorScreen extends React.Component {
         this.props.doc && this.props.doc.hasChanged() ||
         (this.props.doc && nextProps.doc && this.props.doc.id !== nextProps.doc.id)) {
       const editor = this.getEditor();
-      if (editor) {
+      if (editor && nextProps.doc) {
         this.getEditor().setValue(JSON.stringify(nextProps.doc.attributes, null, '  '));
       }
       this.onSaveComplete();
@@ -158,6 +163,10 @@ export default class DocEditorScreen extends React.Component {
     }
     return (
       <div>
+        <PreferencesButton
+          wordWrapEnabled={this.props.wordWrapEnabled}
+          toggleWordWrap={this.props.toggleWordWrap} />
+
         <AttachmentsPanelButton
           doc={this.props.doc}
           isLoading={this.props.isLoading}

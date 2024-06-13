@@ -90,7 +90,10 @@ const defaultProps = {
   hideUploadModal: () => {},
   cancelUpload: () => {},
   resetUploadModal: () => {},
-  uploadAttachment: () => {}
+  uploadAttachment: () => {},
+
+  wordWrapEnabled: false,
+  toggleWordWrap: () => {},
 };
 
 describe('DocEditorScreen', () => {
@@ -277,6 +280,26 @@ describe('DocEditorContainer', () => {
     expect(wrapper.find(DocEditorScreen).prop('isUploadModalVisible')).toBe(false);
     wrapper.find('button[title="Upload Attachment"]').simulate('click');
     expect(wrapper.find(DocEditorScreen).prop('isUploadModalVisible')).toBe(true);
+  });
+
+  it('clicking word wrap option turns the feature on/off', async() => {
+    store.dispatch(loadDummyDocAction);
+    const wrapper = mount(
+      <Provider store={store}>
+        <DocEditorContainer
+          isNewDoc={false}
+          database={database} />
+      </Provider>
+    );
+    expect(wrapper.find(DocEditorScreen).prop('wordWrapEnabled')).toBe(false);
+    // open menu then click the dropdown item
+    wrapper.find('div#doc-editor-preferences-menu button.dropdown-toggle').simulate('click');
+    wrapper.find('div#doc-editor-preferences-menu button.dropdown-item').simulate('click');
+    expect(wrapper.find(DocEditorScreen).prop('wordWrapEnabled')).toBe(true);
+    // open menu then click the dropdown item again
+    wrapper.find('div#doc-editor-preferences-menu button.dropdown-toggle').simulate('click');
+    wrapper.find('div#doc-editor-preferences-menu button.dropdown-item').simulate('click');
+    expect(wrapper.find(DocEditorScreen).prop('wordWrapEnabled')).toBe(false);
   });
 
   it('clicking Clone button shows the clone doc dialog', () => {
