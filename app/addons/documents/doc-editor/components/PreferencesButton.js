@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Components from '../../../components/react-components';
-// import Constants from '../constants';
 
 const { MenuDropDown } = Components;
 
