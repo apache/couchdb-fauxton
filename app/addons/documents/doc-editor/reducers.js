@@ -46,7 +46,8 @@ export default function docEditor (state = initialState, action) {
 
     case ActionTypes.RESET_DOC:
       return {
-        ...initialState
+        ...initialState,
+        docEditorPreferences: state.docEditorPreferences
       };
 
     case ActionTypes.DOC_LOADED:
