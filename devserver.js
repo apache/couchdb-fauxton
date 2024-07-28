@@ -1,11 +1,10 @@
 const spawn = require('child_process').spawn;
-const fs = require("fs");
+const fs = require('fs');
 const webpack = require('webpack');
 const WebpackDev = require('webpack-dev-server');
 const config = require('./webpack.config.dev.js');
 const httpProxy = require('http-proxy');
 const path = require('path');
-
 
 const loadSettings = function () {
   let fileName = './settings.json.default.json';
@@ -13,14 +12,16 @@ const loadSettings = function () {
     fileName = './settings.json';
   }
 
-  return require(fileName).couchserver || {
-    port: process.env.FAUXTON_PORT || 8000,
-    contentSecurityPolicy: true,
-    proxy: {
-      target: process.env.COUCH_HOST || 'http://127.0.0.1:5984',
-      changeOrigin: false
+  return (
+    require(fileName).couchserver || {
+      port: process.env.FAUXTON_PORT || 8000,
+      contentSecurityPolicy: true,
+      proxy: {
+        target: process.env.COUCH_HOST || 'http://127.0.0.1:5984',
+        changeOrigin: false
+      }
     }
-  };
+  );
 };
 
 const settings = loadSettings();
@@ -51,9 +52,10 @@ const devSetup = function (cb) {
   });
 };
 
-const defaultHeaderValue = "default-src 'self'; child-src 'self' blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; " +
-                  "script-src 'self'; style-src 'self'; object-src 'none';";
-function getCspHeaders () {
+const defaultHeaderValue =
+  "default-src 'self'; child-src 'self' blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; connect-src 'self' http://localhost:8090; " +
+  "script-src 'self'; style-src 'self'; object-src 'none';";
+function getCspHeaders() {
   if (!settings.contentSecurityPolicy) {
     return;
   }
@@ -74,7 +76,7 @@ const runWebpackServer = function () {
 
   proxy.on('proxyRes', function (proxyRes) {
     if (proxyRes.headers['set-cookie']) {
-      proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
+      proxyRes.headers['set-cookie'][0] = proxyRes.headers['set-cookie'][0].replace('Secure', '');
     }
   });
 
@@ -89,15 +91,15 @@ const runWebpackServer = function () {
     host: '0.0.0.0',
     port: process.env.FAUXTON_PORT || 8000,
     client: {
-      overlay: true,
+      overlay: true
     },
     hot: false,
     historyApiFallback: false,
-    allowedHosts: "auto",
+    allowedHosts: 'auto',
     devMiddleware: {
       stats: {
-        colors: true,
-      },
+        colors: true
+      }
     },
     headers: getCspHeaders(),
 
@@ -106,10 +108,11 @@ const runWebpackServer = function () {
         throw new Error('webpack-dev-server is not defined');
       }
 
-      middlewares.unshift(
-        {
-          name: "proxy-to-couchdb",
-          middleware: ('*', (req, res, next) => {
+      middlewares.unshift({
+        name: 'proxy-to-couchdb',
+        middleware:
+          ('*',
+          (req, res, next) => {
             const accept = req.headers.accept ? req.headers.accept.split(',') : '';
             if (/application\/json/.test(accept[0]) || /multipart\/form-data/.test(accept[0])) {
               proxy.web(req, res);
@@ -117,12 +120,11 @@ const runWebpackServer = function () {
             }
 
             next();
-          }),
-        }
-      );
+          })
+      });
 
       return middlewares;
-    },
+    }
   };
 
   const compiler = webpack(config);
