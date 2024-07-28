@@ -29,7 +29,7 @@ export default FauxtonAPI.RouteObject.extend({
     login: 'login',
     loginidp: 'loginidp',
     logout: 'logout',
-    'session_state*': 'idpCallback',
+    idpresult: 'idpCallback',
     createAdmin: 'checkNodes',
     'createAdmin/:node': 'createAdminForNode'
   },
@@ -47,18 +47,8 @@ export default FauxtonAPI.RouteObject.extend({
     logout();
   },
   idpCallback() {
-    alert('idpCallback');
-    const urlParams = new URLSearchParams(window.location.hash);
-    alert(window.location.hash);
-    const accessToken = urlParams.get('access_token');
-    const refreshToken = urlParams.get('refresh_token');
-    localStorage.setItem('fauxtonToken', accessToken);
-    localStorage.setItem('fauxtonRefreshToken', refreshToken);
-
-    // Extract expiry from the access token
-    const expiry = Idp.getExpiry(accessToken);
-    console.log('Expiry:', expiry);
-    //setTimeout(Idp.refreshToken, (expiry - 60) * 1000);
+    const url = new URL(window.location.href);
+    Idp.codeToToken(url);
   },
 
   createAdminForNode() {

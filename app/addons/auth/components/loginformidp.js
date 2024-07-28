@@ -18,7 +18,6 @@ import { Button, Form } from 'react-bootstrap';
 class LoginFormIdp extends React.Component {
   constructor() {
     super();
-    // TODO: Read local IDP configuration
     this.state = {
       idpurl: localStorage.getItem('FauxtonIdpurl') || '',
       idpcallback: localStorage.getItem('FauxtonIdpcallback') || '',

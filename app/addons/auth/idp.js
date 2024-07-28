@@ -55,7 +55,7 @@ export const getExpiry = (token) => {
 };
 
 export const login = (idpurl, idpcallback, idpappid) => {
-  const authUrl = `${idpurl}/auth?response_type=token&client_id=${idpappid}&redirect_uri=${idpcallback}`;
+  const authUrl = `${idpurl}/auth?response_type=code&client_id=${idpappid}&redirect_uri=${idpcallback}&scope=openid#idpresult`;
   window.location.href = authUrl;
   return Promise.resolve('Authentication initiated');
 };
@@ -66,8 +66,51 @@ export const logout = () => {
   window.location.href = '/_session';
 };
 
+export const codeToToken = (url) => {
+  const authCode = url.searchParams.get('code');
+  if (authCode) {
+    const idpurl = localStorage.getItem('FauxtonIdpurl');
+    const idpappid = localStorage.getItem('FauxtonIdpappid');
+    const callback = localStorage.getItem('FauxtonIdpcallback');
+    // eslint-disable-next-line no-debugger
+    debugger;
+    const authUrl = `${idpurl}/token`;
+    fetch(authUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `grant_type=authorization_code&code=${authCode}&client_id=${idpappid}&redirect_uri=${callback}`
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const accessToken = data.access_token;
+        const jwtRefreshToken = data.refresh_token;
+        localStorage.setItem('fauxtonToken', accessToken);
+        localStorage.setItem('fauxtonRefreshToken', jwtRefreshToken);
+        const expiry = getExpiry(accessToken);
+        setTimeout(() => {
+          refreshToken();
+        }, (expiry - 60) * 1000);
+        return FauxtonAPI.navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error refreshing token:', error);
+        FauxtonAPI.addNotification({
+          msg: error.message,
+          type: 'error'
+        });
+      });
+  } else {
+    FauxtonAPI.addNotification({
+      msg: 'No auth code found',
+      type: 'error'
+    });
+  }
+};
+
 export const refreshToken = () => {
-  const refreshToken = localStorage.getItem('fauxtonRefreshToken');
+  const jwtRefreshToken = localStorage.getItem('fauxtonRefreshToken');
   const idpurl = localStorage.getItem('FauxtonIdpurl');
   const idpappid = localStorage.getItem('FauxtonIdpappid');
   const authUrl = `${idpurl}/token`;
@@ -76,14 +119,16 @@ export const refreshToken = () => {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=${idpappid}`
+    body: `grant_type=refresh_token&refresh_token=${jwtRefreshToken}&client_id=${idpappid}`
   })
     .then((response) => response.json())
     .then((data) => {
       const accessToken = data.access_token;
       localStorage.setItem('fauxtonToken', accessToken);
       const expiry = getExpiry(accessToken);
-      setTimeout(refreshToken, (expiry - 60) * 1000);
+      setTimeout(() => {
+        refreshToken();
+      }, (expiry - 60) * 1000);
     })
     .catch((error) => {
       console.error('Error refreshing token:', error);
@@ -98,6 +143,7 @@ export default {
   login,
   logout,
   refreshToken,
+  codeToToken,
   jwtStillValid,
   decodeToken,
   getExpiry
