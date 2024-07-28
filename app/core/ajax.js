@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
-import {defaultsDeep} from "lodash";
-import {Subject} from 'rxjs';
+import { defaultsDeep } from 'lodash';
+import { Subject } from 'rxjs';
+import { jwtStillValid } from '../addons/auth/idp';
 
 /* Add a multicast observer so that all fetch requests can be observed
   Some usage examples:
@@ -16,7 +17,7 @@ export const fetchObserver = new Subject();
 
 // The default pre-fetch function which simply resolves to the original parameters.
 export function defaultPreFetch(url, options) {
-  return Promise.resolve({url, options});
+  return Promise.resolve({ url, options });
 }
 
 let _preFetchFn = defaultPreFetch;
@@ -33,8 +34,8 @@ let _preFetchFn = defaultPreFetch;
  *
  * @param {function} fn  The pre-fetch function
  */
-export const setPreFetchFn = fn => {
-  if (fn && typeof fn === "function" && fn.length === 2) {
+export const setPreFetchFn = (fn) => {
+  if (fn && typeof fn === 'function' && fn.length === 2) {
     _preFetchFn = fn;
   } else {
     throw new Error('preFetch must be a function that accepts two parameters (url and options) like the native fetch()');
@@ -53,26 +54,22 @@ export const setPreFetchFn = fn => {
  *
  * @return {Promise}
  */
-export const json = (url, method = "GET", opts = {}) => {
-  const fetchOptions = defaultsDeep(
-    {},
-    opts,
-    {
-      method,
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        "Pragma":"no-cache" //Disables cache for IE11
-      },
-      cache: "no-cache"
-    }
-  );
+export const json = (url, method = 'GET', opts = {}) => {
+  const fetchOptions = defaultsDeep({}, opts, {
+    method,
+    credentials: 'include',
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'application/json',
+      Pragma: 'no-cache' //Disables cache for IE11
+    },
+    cache: 'no-cache'
+  });
+
+  addAuthToken(fetchOptions);
+
   return _preFetchFn(url, fetchOptions).then((result) => {
-    return fetch(
-      result.url,
-      result.options,
-    ).then(resp => {
+    return fetch(result.url, result.options).then((resp) => {
       fetchObserver.next(resp);
       if (opts.raw) {
         return resp;
@@ -82,21 +79,29 @@ export const json = (url, method = "GET", opts = {}) => {
   });
 };
 
-
 /**
- * get - Get request
+ * addAuthToken - Add the JWT token to the fetch options headers if it exists in local storage
  *
- * @param {string}   url Url of request
- * @param {object} [opts={}] Opts to add to request
- *
- * @return {Promise} A promise with the request's response
+ * @param {object} fetchOptions - The fetch options object
+ * @returns {object} the updated fetch options object
  */
+const addAuthToken = (fetchOptions) => {
+  const token = localStorage.getItem('fauxtonToken');
+  if (token && jwtStillValid(token)) {
+    fetchOptions.headers = {
+      ...fetchOptions.headers,
+      Authorization: `Bearer ${token}`
+    };
+  }
+  return fetchOptions;
+};
+
 export const get = (url, opts = {}) => {
-  return json(url, "GET", opts);
+  return json(url, 'GET', opts);
 };
 
 export const deleteRequest = (url, opts = {}) => {
-  return json(url, "DELETE", opts);
+  return json(url, 'DELETE', opts);
 };
 
 /**
@@ -110,12 +115,10 @@ export const deleteRequest = (url, opts = {}) => {
  */
 export const post = (url, body, opts = {}) => {
   if (typeof body !== 'undefined') {
-    if (opts.rawBody)
-      opts.body = body;
-    else
-      opts.body = JSON.stringify(body);
+    if (opts.rawBody) opts.body = body;
+    else opts.body = JSON.stringify(body);
   }
-  return json(url, "POST", opts);
+  return json(url, 'POST', opts);
 };
 
 /**
@@ -130,39 +133,35 @@ export const post = (url, body, opts = {}) => {
  */
 export const put = (url, body, opts = {}) => {
   if (typeof body !== 'undefined') {
-    if (opts.rawBody)
-      opts.body = body;
-    else
-      opts.body = JSON.stringify(body);
+    if (opts.rawBody) opts.body = body;
+    else opts.body = JSON.stringify(body);
   }
-  return json(url, "PUT", opts);
+  return json(url, 'PUT', opts);
 };
 
 export const formEncoded = (url, method, opts = {}) => {
-  return json(url, method, defaultsDeep(
-    {},
-    opts,
-    {
+  return json(
+    url,
+    method,
+    defaultsDeep({}, opts, {
       headers: {
-        "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
       }
-    }));
+    })
+  );
 };
 
 export const postFormEncoded = (url, body, opts = {}) => {
-  if (body)
-    opts.body = body;
-  return formEncoded(url, "POST", opts);
+  if (body) opts.body = body;
+  return formEncoded(url, 'POST', opts);
 };
 
 export const putFormEncoded = (url, body, opts = {}) => {
-  if (body)
-    opts.body = body;
-  return formEncoded(url, "PUT", opts);
+  if (body) opts.body = body;
+  return formEncoded(url, 'PUT', opts);
 };
 
 export const deleteFormEncoded = (url, body, opts = {}) => {
-  if (body)
-    opts.body = body;
-  return formEncoded(url, "DELETE", opts);
+  if (body) opts.body = body;
+  return formEncoded(url, 'DELETE', opts);
 };

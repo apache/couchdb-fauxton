@@ -17,6 +17,7 @@
     "replication-username-input-placeholder": "Username",
     "replication-password-input-placeholder": "Password",
     "auth-missing-credentials": "Username or password cannot be blank.",
+    "auth-missing-idp": "You need IdPUrl, CallbackUrl and ClientId",
     "auth-logged-in": "You have been logged in.",
     "auth-admin-created": "CouchDB admin created",
     "auth-change-password": "Your password has been updated.",

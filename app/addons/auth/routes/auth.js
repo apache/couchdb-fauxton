@@ -10,51 +10,60 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from "react";
-import FauxtonAPI from "../../../core/api";
-import ClusterActions from "../../cluster/actions";
-import { AuthLayout } from "./../layout";
-import app from "../../../app";
-import Components from "./../components";
-import {logout} from '../actions';
+import React from 'react';
+import FauxtonAPI from '../../../core/api';
+import ClusterActions from '../../cluster/actions';
+import { AuthLayout } from './../layout';
+import app from '../../../app';
+import Components from './../components';
+import { logout } from '../actions';
+import Idp from '../idp';
 
-const {
-  LoginForm,
-  CreateAdminForm
-} = Components;
+const { LoginForm, LoginFormIdp, CreateAdminForm } = Components;
 
-const crumbs = [{ name: "Log In to CouchDB" }];
+const crumbs = [{ name: 'Log In to CouchDB' }];
 
 export default FauxtonAPI.RouteObject.extend({
   routes: {
-    "login?*extra": "login",
-    "login": "login",
-    "logout": "logout",
-    "createAdmin": "checkNodes",
-    "createAdmin/:node": "createAdminForNode"
+    'login?*extra': 'login',
+    login: 'login',
+    loginidp: 'loginidp',
+    logout: 'logout',
+    'session_state*': 'idpCallback',
+    createAdmin: 'checkNodes',
+    'createAdmin/:node': 'createAdminForNode'
   },
   checkNodes() {
-    ClusterActions.navigateToNodeBasedOnNodeCount("/createAdmin/");
+    ClusterActions.navigateToNodeBasedOnNodeCount('/createAdmin/');
   },
   login() {
-    return (
-      <AuthLayout
-        crumbs={crumbs}
-        component={<LoginForm urlBack={app.getParams().urlback} />}
-      />
-    );
+    return <AuthLayout crumbs={crumbs} component={<LoginForm urlBack={app.getParams().urlback} />} />;
+  },
+  loginidp() {
+    const crumbs = [{ name: 'Log In to CouchDB using your IdP' }];
+    return <AuthLayout crumbs={crumbs} component={<LoginFormIdp urlBack={app.getParams().urlback} />} />;
   },
   logout() {
     logout();
   },
+  idpCallback() {
+    alert('idpCallback');
+    const urlParams = new URLSearchParams(window.location.hash);
+    alert(window.location.hash);
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+    localStorage.setItem('fauxtonToken', accessToken);
+    localStorage.setItem('fauxtonRefreshToken', refreshToken);
+
+    // Extract expiry from the access token
+    const expiry = Idp.getExpiry(accessToken);
+    console.log('Expiry:', expiry);
+    //setTimeout(Idp.refreshToken, (expiry - 60) * 1000);
+  },
+
   createAdminForNode() {
     ClusterActions.fetchNodes();
-    const crumbs = [{ name: "Create Admin" }];
-    return (
-      <AuthLayout
-        crumbs={crumbs}
-        component={<CreateAdminForm loginAfter={true} />}
-      />
-    );
+    const crumbs = [{ name: 'Create Admin' }];
+    return <AuthLayout crumbs={crumbs} component={<CreateAdminForm loginAfter={true} />} />;
   }
 });

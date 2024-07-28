@@ -11,12 +11,14 @@
 // the License.
 
 import LoginForm from './loginform.js';
+import LoginFormIdp from './loginformidp.js';
 import PasswordModal from './passwordmodal.js';
 import CreateAdminForm from './createadminform.js';
 import ChangePasswordForm from './changepasswordform.js';
 
 export default {
   LoginForm,
+  LoginFormIdp,
   PasswordModal,
   CreateAdminForm,
   ChangePasswordForm
