@@ -38,7 +38,13 @@ Too many moving parts.... later
 
 ## Authenticate
 
-On the login page there is a new button `Log In with your Identity provider`, click that and it will open the Idp Login page. Provide the 3 required values and click login (The values will be retained in localstore). You should get redirected to your IdP's login page. Your IdP could be configured with any authentication method: username/password, 2FA, Social etc.
+On the login page there is a new button `Log In with your Identity provider`, click that and it will open the Idp Login page.
+
+![Login screen](https://github.com/user-attachments/assets/5d15c0ec-93c9-434f-b13f-429eaf813495)
+
+Provide the 3 required values and click login (The values will be retained in localstore). You should get redirected to your IdP's login page. Your IdP could be configured with any authentication method: username/password, 2FA, Social etc.
+
+![IdP Login screen](https://github.com/user-attachments/assets/93d3d11f-decd-4658-9ae8-df588ee2beff)
 
 After succesful login you get redirected to Fauxton and should see the list of databases
 
