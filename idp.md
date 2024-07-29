@@ -23,7 +23,7 @@ You need:
 
 ## CouchDB setup
 
-Follow [the documentation](https://docs.couchdb.org/en/stable/api/server/authn.html#jwt-authentication). FOR role mapping check what the IdP is emitting.
+Follow [the documentation](https://docs.couchdb.org/en/stable/api/server/authn.html#jwt-authentication). For role mapping check what the IdP is emitting.
 
 For Keycloak, this works:
 
@@ -31,6 +31,23 @@ For Keycloak, this works:
 [jwt_auth]
 roles_claim_path = realm_access.roles
 ```
+
+## Development
+
+In the docker directory there is a shell script `couchdb-idp.sh` that uses the `couchdb-idp.yml` configurtion to spin up a couchDB instance and a Keycloak container. Using `curl` it then configures both to interact:
+
+- creates a realm `sofa`
+- creates a user `johndoe` with password `password`
+- creates a client `fauxton`
+- configures couchDB to recognize the Keycloak public key
+
+To make that shell script work you need some utility helpers:
+
+- [jq](https://jqlang.github.io/jq/) command line json processor
+- [curl](https://curl.se/) http command line processor
+- [OpenSSL](https://www.openssl.org/) to deal with certificates
+
+Keycloak and couchDB in this setting don't persist values.
 
 ## CORS Setup
 
