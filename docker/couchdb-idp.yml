@@ -1,7 +1,7 @@
 services:
   couchdb:
     container_name: couchdb
-    image: chouchdb:latest
+    image: couchdb:latest
     environment:
       COUCHDB_USER: tester
       COUCHDB_PASSWORD: testerpass
@@ -13,8 +13,8 @@ services:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:latest
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
     ports:
       - "8090:8080"
     command: start-dev
