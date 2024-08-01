@@ -59,7 +59,7 @@ function kc_get() {
     local url=${KC_URL}$1
 
     # Get an URL and store the response
-    echo GET from $url
+    echo GET from $url >&2
     local response=$(curl $url \
         --no-progress-meter \
         --header 'Content-Type: application/json' \
@@ -70,7 +70,7 @@ function kc_get() {
 function kc_post() {
     local url=${KC_URL}$1
     local data=$2
-    echo POST to $url
+    echo POST to $url >&2
     # Post the form data and store the response
     local response=$(curl -S -X POST $url \
         --header 'Content-Type: application/json' \
@@ -89,7 +89,8 @@ function kc_config() {
 
     # Create _admin Role
     kc_post "/admin/realms/sofa/roles" admin_role.json
-    adminrole=$(kc_get "/admin/realms/sofa/roles?first=0&max=101&q=_admin" | jq -r .[0].id)
+    adminroleRaw=$(kc_get "/admin/realms/sofa/roles?first=0&max=101&q=_admin")
+    adminrole=$(echo $adminroleRaw | jq -r .[0].id)
     echo adminrole $adminrole
     echo '[{"id": "'${adminrole}'",' >docker/johndoe_role.json
     echo '"name": "_admin", "description": "CouchDB Administrator",' >>docker/johndoe_role.json
@@ -142,7 +143,7 @@ function couch_put() {
 }
 
 # Part3: Launch containers
-docker compose -f docker/couchdb-idp.yml pull
+# docker compose -f docker/couchdb-idp.yml pull
 docker compose -f docker/couchdb-idp.yml up -d
 
 # Pre part 4: Wait for Keycloak to start
@@ -152,7 +153,7 @@ curl -k \
     --retry-all-errors \
     --no-progress-meter \
     --fail \
-    ${KC_URL}/admin/master/console/ >null
+    ${KC_URL}/admin/master/console/ >/dev/null
 
 if [ "$?" -ne 0 ]; then
     echo "Failed to start Keycloak"
