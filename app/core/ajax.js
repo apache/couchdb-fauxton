@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import { defaultsDeep } from 'lodash';
 import { Subject } from 'rxjs';
-import { jwtStillValid } from '../addons/auth/idp';
+import { addAuthToken } from '../addons/auth/idp';
 
 /* Add a multicast observer so that all fetch requests can be observed
   Some usage examples:
@@ -66,9 +66,9 @@ export const json = (url, method = 'GET', opts = {}) => {
     cache: 'no-cache'
   });
 
-  addAuthToken(fetchOptions);
+  const updatedFetchOptions = addAuthToken(fetchOptions);
 
-  return _preFetchFn(url, fetchOptions).then((result) => {
+  return _preFetchFn(url, updatedFetchOptions).then((result) => {
     return fetch(result.url, result.options).then((resp) => {
       fetchObserver.next(resp);
       if (opts.raw) {
@@ -77,23 +77,6 @@ export const json = (url, method = 'GET', opts = {}) => {
       return resp.json();
     });
   });
-};
-
-/**
- * addAuthToken - Add the JWT token to the fetch options headers if it exists in local storage
- *
- * @param {object} fetchOptions - The fetch options object
- * @returns {object} the updated fetch options object
- */
-const addAuthToken = (fetchOptions) => {
-  const token = localStorage.getItem('fauxtonToken');
-  if (token && jwtStillValid(token)) {
-    fetchOptions.headers = {
-      ...fetchOptions.headers,
-      Authorization: `Bearer ${token}`
-    };
-  }
-  return fetchOptions;
 };
 
 export const get = (url, opts = {}) => {
