@@ -23,6 +23,11 @@ class LoginFormIdp extends React.Component {
       idpcallback: localStorage.getItem('FauxtonIdpcallback') || '',
       idpappid: localStorage.getItem('FauxtonIdpappid') || ''
     };
+    if (this.state.idpcallback === '') {
+      let url = new URL(window.location);
+      let append = url.pathname.startsWith('/_utils') ? '/_utils/' : '/';
+      this.state.idpcallback = window.location.origin + append;
+    }
   }
 
   onIdpurlChange(e) {
@@ -76,8 +81,11 @@ class LoginFormIdp extends React.Component {
       <div className="couch-login-wrapper">
         <form id="login" onSubmit={this.submit.bind(this)}>
           <div className="row">
-            <div className="col12 col-md-5 col-xl-4 mb-3">
-              <label htmlFor="idpurl">Enter your IdP information</label>
+            <label htmlFor="idpurl">Identity Provider (IdP) URL</label>
+            <p className="help-block">
+              must point to your IdP&apos;s <code>/.well-known/openid-configuration</code>
+            </p>
+            <div className="col12 col-md-10 col-xl-8 mb-3">
               <Form.Control
                 type="text"
                 id="idpurl"
@@ -90,7 +98,12 @@ class LoginFormIdp extends React.Component {
             </div>
           </div>
           <div className="row">
-            <div className="col12 col-md-5 col-xl-4 mb-3">
+            <label htmlFor="idpcallback">Callback URL</label>
+            <p className="help-block">
+              This should be the URL of your CouchDB instance, including the protocol and port number.{' '}
+              <span style={{ color: 'red' }}>Should we show this? It can be computed</span>
+            </p>
+            <div className="col12 col-md-10 col-xl-8 mb-3">
               <Form.Control
                 type="text"
                 id="idpcallback"
@@ -103,6 +116,10 @@ class LoginFormIdp extends React.Component {
             </div>
           </div>
           <div className="row">
+            <label htmlFor="idpappid">Application ID</label>
+            <p className="help-block">
+              The Application ID gets assigned by the IdP admin, suggested standard is <code>fauxton</code>
+            </p>
             <div className="col12 col-md-5 col-xl-4 mb-3">
               <Form.Control
                 type="text"
@@ -124,9 +141,9 @@ class LoginFormIdp extends React.Component {
           </div>
         </form>
         <div className="row">
-          <div className="col12 col-md-5 col-xl-4 mb-3">
+          <div className="col12 col-md-6 col-xl-5 mb-4">
             <Button id="login-creds-btn" variant="cf-secondary" onClick={this.navigateToLogin}>
-              Log In with CouchDB Credentials
+              Back to - Log In with CouchDB Credentials
             </Button>
           </div>
         </div>

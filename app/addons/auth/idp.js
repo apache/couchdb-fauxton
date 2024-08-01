@@ -13,6 +13,72 @@
 import FauxtonAPI from '../../core/api';
 
 /**
+ * Keeping track of IdP URLs derived from openid-configuration
+ * with access to auth and token endpoints
+ */
+const idpCache = {};
+
+/**
+ * Reads the openid-configuration from the IdP URL
+ *
+ * @param {string} idpurl
+ * @returns object with authorization and token endpoints
+ */
+const getIdPEndpoints = (idpurl) =>
+  new Promise((resolve, reject) => {
+    if (idpCache[idpurl]) {
+      return resolve(idpCache[idpurl]);
+    }
+    fetch(idpurl)
+      .then((response) => response.json())
+      .then((data) => {
+        let idpData = {
+          authorization_endpoint: data.authorization_endpoint,
+          token_endpoint: data.token_endpoint
+        };
+        idpCache[idpurl] = idpData;
+        resolve(idpData);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+/**
+ * Retrieves the auth end-point from the openid-configuration
+ *
+ * @param {string} idpurl openid-configuration end-point
+ * @returns auth end-point
+ */
+const getAuthEndpoint = (idpurl) =>
+  new Promise((resolve, reject) => {
+    getIdPEndpoints(idpurl)
+      .then((idpData) => {
+        resolve(idpData.authorization_endpoint);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+/**
+ * Retrieves the token end-point from the openid-configuration
+ *
+ * @param {string} idpurl openid-configuration end-point
+ * @returns token end-point
+ */
+const getTokenEndpoint = (idpurl) =>
+  new Promise((resolve, reject) => {
+    getIdPEndpoints(idpurl)
+      .then((idpData) => {
+        resolve(idpData.token_endpoint);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+/**
  * jwtStillValid - Check if a JWT token is still valid
  *
  * @param {string} token The JWT token
@@ -29,7 +95,8 @@ export const jwtStillValid = (token) => {
   }
 
   const currentTime = Math.floor(Date.now() / 1000);
-  return decodedToken.exp > currentTime;
+  let isStillgood = decodedToken.exp > currentTime;
+  return isStillgood;
 };
 
 /**
@@ -55,15 +122,26 @@ export const getExpiry = (token) => {
 };
 
 export const login = (idpurl, idpcallback, idpappid) => {
-  const authUrl = `${idpurl}/auth?response_type=code&client_id=${idpappid}&redirect_uri=${idpcallback}&scope=openid#idpresult`;
-  window.location.href = authUrl;
-  return Promise.resolve('Authentication initiated');
+  return getAuthEndpoint(idpurl)
+    .then((authEndpoint) => {
+      const authUrl = `${authEndpoint}?response_type=code&client_id=${idpappid}&redirect_uri=${idpcallback}&scope=openid#idpresult`;
+      window.location.href = authUrl;
+      return Promise.resolve('Authentication initiated');
+    })
+    .catch((error) => {
+      console.error('Error fetching auth endpoint:', error);
+      FauxtonAPI.addNotification({
+        msg: error.message,
+        type: 'error'
+      });
+    });
 };
 
 export const logout = () => {
   localStorage.removeItem('fauxtonToken');
   localStorage.removeItem('fauxtonRefreshToken');
   window.location.href = '/_session';
+  // TODO: do we need to call the end_session_endpoint?
 };
 
 export const codeToToken = (url) => {
@@ -72,16 +150,16 @@ export const codeToToken = (url) => {
     const idpurl = localStorage.getItem('FauxtonIdpurl');
     const idpappid = localStorage.getItem('FauxtonIdpappid');
     const callback = localStorage.getItem('FauxtonIdpcallback');
-    // eslint-disable-next-line no-debugger
-    debugger;
-    const authUrl = `${idpurl}/token`;
-    fetch(authUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `grant_type=authorization_code&code=${authCode}&client_id=${idpappid}&redirect_uri=${callback}`
-    })
+    getTokenEndpoint(idpurl)
+      .then((authUrl) => {
+        return fetch(authUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `grant_type=authorization_code&code=${authCode}&client_id=${idpappid}&redirect_uri=${callback}`
+        });
+      })
       .then((response) => response.json())
       .then((data) => {
         const accessToken = data.access_token;
@@ -90,6 +168,8 @@ export const codeToToken = (url) => {
         localStorage.setItem('fauxtonRefreshToken', jwtRefreshToken);
         const expiry = getExpiry(accessToken);
         setTimeout(() => {
+          // eslint-disable-next-line no-console
+          console.log('Refreshing token');
           refreshToken();
         }, (expiry - 60) * 1000);
         return FauxtonAPI.navigate('/');
@@ -97,7 +177,7 @@ export const codeToToken = (url) => {
       .catch((error) => {
         console.error('Error refreshing token:', error);
         FauxtonAPI.addNotification({
-          msg: error.message,
+          msg: `Error refreshing token: ${error.message}`,
           type: 'error'
         });
       });
@@ -113,30 +193,69 @@ export const refreshToken = () => {
   const jwtRefreshToken = localStorage.getItem('fauxtonRefreshToken');
   const idpurl = localStorage.getItem('FauxtonIdpurl');
   const idpappid = localStorage.getItem('FauxtonIdpappid');
-  const authUrl = `${idpurl}/token`;
-  fetch(authUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `grant_type=refresh_token&refresh_token=${jwtRefreshToken}&client_id=${idpappid}`
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const accessToken = data.access_token;
-      localStorage.setItem('fauxtonToken', accessToken);
-      const expiry = getExpiry(accessToken);
-      setTimeout(() => {
-        refreshToken();
-      }, (expiry - 60) * 1000);
-    })
-    .catch((error) => {
-      console.error('Error refreshing token:', error);
-      FauxtonAPI.addNotification({
-        msg: error.message,
-        type: 'error'
-      });
+  if (!jwtRefreshToken) {
+    FauxtonAPI.addNotification({
+      msg: `Refresh Token missing`,
+      type: 'error'
     });
+    return;
+  }
+  getTokenEndpoint(idpurl).then((authUrl) =>
+    fetch(authUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `grant_type=refresh_token&refresh_token=${jwtRefreshToken}&client_id=${idpappid}`
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const accessToken = data.access_token;
+        localStorage.setItem('fauxtonToken', accessToken);
+        const expiry = getExpiry(accessToken);
+        setTimeout(() => {
+          refreshToken();
+        }, (expiry - 60) * 1000);
+      })
+      .catch((error) => {
+        console.error('Error refreshing token:', error);
+        FauxtonAPI.addNotification({
+          msg: `Refreshing Token failed: ${error.message}`,
+          type: 'error'
+        });
+        localStorage.removeItem('fauxtonToken');
+        localStorage.removeItem('fauxtonRefreshToken');
+      })
+  );
+};
+
+/**
+ * addAuthToken - Add the JWT token to the fetch options headers if it exists in local storage
+ *
+ * @param {object} fetchOptions - The fetch options object
+ * @returns {object} the updated fetch options object
+ */
+export const addAuthToken = (fetchOptions) => {
+  // eslint-disable-next-line no-console
+  console.debug('addAuthToken', fetchOptions);
+  const token = localStorage.getItem('fauxtonToken');
+  if (token && jwtStillValid(token)) {
+    fetchOptions.headers = {
+      ...fetchOptions.headers,
+      Authorization: `Bearer ${token}`
+    };
+  } else {
+    localStorage.removeItem('fauxtonToken');
+  }
+  return fetchOptions;
+};
+
+export const addAuthHeader = (httpRequest) => {
+  const token = localStorage.getItem('fauxtonToken');
+  if (token && jwtStillValid(token)) {
+    httpRequest.setRequestHeader('Authorization', `Bearer ${token}`);
+  }
+  return httpRequest;
 };
 
 export default {
@@ -146,5 +265,7 @@ export default {
   codeToToken,
   jwtStillValid,
   decodeToken,
-  getExpiry
+  getExpiry,
+  addAuthToken,
+  addAuthHeader
 };
