@@ -128,11 +128,11 @@
     "preversion": "node version-check.js && grunt release",
     "test-before-publish": "npm run preversion && npm install . -g",
     "create:animaldb": "node ./bin/create-animal-db",
-    "docker:couchdb-up": "docker-compose -f ./docker/couchdb.yml up -d couchdb",
+    "docker:couchdb-up": "docker compose -f ./docker/couchdb.yml up -d couchdb",
     "docker:reset": "npm run docker:down && npm run docker:up",
     "docker:logs": "docker logs couchdb",
-    "docker:up": "docker-compose -f ./docker/couchdb.yml up -d",
-    "docker:down": "docker-compose -f ./docker/couchdb.yml down",
+    "docker:up": "docker compose -f ./docker/couchdb.yml up -d",
+    "docker:down": "docker compose -f ./docker/couchdb.yml down",
     "remove-test-dbs": "node ./bin/remove-test-dbs.js"
   },
   "repository": {
