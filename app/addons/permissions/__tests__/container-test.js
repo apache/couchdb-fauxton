@@ -23,7 +23,7 @@ import { Provider } from 'react-redux';
 import reducer from '../reducers';
 import PermissionsContainer from '../container/PermissionsContainer';
 
-var fetchMock = require('fetch-mock');
+import fetchMock from 'fetch-mock';
 
 describe('Permissions Container', () => {
 
