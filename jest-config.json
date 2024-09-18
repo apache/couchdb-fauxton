@@ -8,6 +8,7 @@
   "moduleNameMapper": {
     "underscore": "lodash",
     "ace-builds": "<rootDir>/node_modules/ace-builds",
+    "fetch-mock": "<rootDir>/node_modules/fetch-mock/dist/cjs/index.js",
     "./ace-mode-mango.js": "<rootDir>/app/addons/components/components/ace-mode-mango.js",
     "./ace-worker-mango.js": "<rootDir>/app/addons/components/components/ace-worker-mango.js",
 
