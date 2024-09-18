@@ -10,17 +10,27 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "./base";
-import Router from "./router";
-import RouteObject from "./routeObject";
-import utils from "./utils";
-import Store from "./store";
-import constants from "../constants";
-import dispatcher from "./dispatcher";
-import $ from "jquery";
-import Backbone from "backbone";
-import _ from "lodash";
-import Promise from "bluebird";
+import FauxtonAPI from './base';
+import Router from './router';
+import RouteObject from './routeObject';
+import utils from './utils';
+import Store from './store';
+import constants from '../constants';
+import dispatcher from './dispatcher';
+import $ from 'jquery';
+import Backbone from 'backbone';
+import _ from 'lodash';
+import Promise from 'bluebird';
+import { addAuthHeader } from '../addons/auth/idp';
+
+// Monkey patching Backbone.ajax to add the Auth header
+// for JWT authentication
+$.ajaxSetup({
+  beforeSend: function (xhr) {
+    xhr.setRequestHeader('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    addAuthHeader(xhr);
+  }
+});
 
 Backbone.$ = $;
 Backbone.ajax = function () {
@@ -43,7 +53,7 @@ FauxtonAPI.constants = constants;
 FauxtonAPI.dispatch = dispatcher.dispatch;
 
 FauxtonAPI.navigate = function (url, _opts) {
-  var options = _.extend({trigger: true}, _opts);
+  var options = _.extend({ trigger: true }, _opts);
   FauxtonAPI.router.navigate(url, options);
   if (options.trigger) {
     FauxtonAPI.router.trigger('trigger-update');
@@ -69,13 +79,13 @@ FauxtonAPI.registerUrls = function (namespace, urls) {
 };
 
 FauxtonAPI.url = {
-  encode(name = "") {
+  encode(name = '') {
     // These special caracters are allowed by couch: _, $, (, ), +, -, and /
     // From them only $ + and / are to be escaped in a URI component.
-    return (/[$+/]/g.test(name)) ? encodeURIComponent(name) : name;
+    return /[$+/]/g.test(name) ? encodeURIComponent(name) : name;
   },
-  decode(name = "") {
-    return (/[$+/]/g.test(name)) ? decodeURIComponent(name) : name;
+  decode(name = '') {
+    return /[$+/]/g.test(name) ? decodeURIComponent(name) : name;
   }
 };
 
@@ -95,7 +105,9 @@ FauxtonAPI.urls = function (name, context) {
     return false;
   });
 
-  if (!_.isUndefined(url)) { return url; }
+  if (!_.isUndefined(url)) {
+    return url;
+  }
 
   if (!urlPaths[name]) {
     console.error('could not find name ', name);

@@ -10,51 +10,50 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from "react";
-import FauxtonAPI from "../../../core/api";
-import ClusterActions from "../../cluster/actions";
-import { AuthLayout } from "./../layout";
-import app from "../../../app";
-import Components from "./../components";
-import {logout} from '../actions';
+import React from 'react';
+import FauxtonAPI from '../../../core/api';
+import ClusterActions from '../../cluster/actions';
+import { AuthLayout } from './../layout';
+import app from '../../../app';
+import Components from './../components';
+import { logout } from '../actions';
+import Idp from '../idp';
 
-const {
-  LoginForm,
-  CreateAdminForm
-} = Components;
+const { LoginForm, LoginFormIdp, CreateAdminForm } = Components;
 
-const crumbs = [{ name: "Log In to CouchDB" }];
+const crumbs = [{ name: 'Log In to CouchDB' }];
 
 export default FauxtonAPI.RouteObject.extend({
   routes: {
-    "login?*extra": "login",
-    "login": "login",
-    "logout": "logout",
-    "createAdmin": "checkNodes",
-    "createAdmin/:node": "createAdminForNode"
+    'login?*extra': 'login',
+    login: 'login',
+    loginidp: 'loginidp',
+    logout: 'logout',
+    idpresult: 'idpCallback',
+    createAdmin: 'checkNodes',
+    'createAdmin/:node': 'createAdminForNode'
   },
   checkNodes() {
-    ClusterActions.navigateToNodeBasedOnNodeCount("/createAdmin/");
+    ClusterActions.navigateToNodeBasedOnNodeCount('/createAdmin/');
   },
   login() {
-    return (
-      <AuthLayout
-        crumbs={crumbs}
-        component={<LoginForm urlBack={app.getParams().urlback} />}
-      />
-    );
+    return <AuthLayout crumbs={crumbs} component={<LoginForm urlBack={app.getParams().urlback} />} />;
+  },
+  loginidp() {
+    const crumbs = [{ name: 'Log In to CouchDB using your IdP' }];
+    return <AuthLayout crumbs={crumbs} component={<LoginFormIdp urlBack={app.getParams().urlback} />} />;
   },
   logout() {
     logout();
   },
+  idpCallback() {
+    const url = new URL(window.location.href);
+    Idp.codeToToken(url);
+  },
+
   createAdminForNode() {
     ClusterActions.fetchNodes();
-    const crumbs = [{ name: "Create Admin" }];
-    return (
-      <AuthLayout
-        crumbs={crumbs}
-        component={<CreateAdminForm loginAfter={true} />}
-      />
-    );
+    const crumbs = [{ name: 'Create Admin' }];
+    return <AuthLayout crumbs={crumbs} component={<CreateAdminForm loginAfter={true} />} />;
   }
 });

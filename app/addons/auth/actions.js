@@ -9,66 +9,86 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../core/api";
-import app from "../../app";
+import FauxtonAPI from '../../core/api';
+import app from '../../app';
 import ActionTypes from './actiontypes';
 import Api from './api';
+import Idp from './idp';
 
-const {
-  AUTH_HIDE_PASSWORD_MODAL,
-} = ActionTypes;
+const { AUTH_HIDE_PASSWORD_MODAL } = ActionTypes;
 
 const errorHandler = ({ message }) => {
   FauxtonAPI.addNotification({
     msg: message,
-    type: "error"
+    type: 'error'
   });
 };
 
 const validate = (...predicates) => {
-  return predicates.every(isTrue => isTrue);
+  return predicates.every((isTrue) => isTrue);
 };
 
 export const validateUser = (username, password) => {
   return validate(!_.isEmpty(username), !_.isEmpty(password));
 };
 
+export const validateIdP = (idpurl, idpcallback, idpappid) => {
+  return validate(!_.isEmpty(idpurl), !_.isEmpty(idpcallback), !_.isEmpty(idpappid));
+};
+
 export const validatePasswords = (password, passwordConfirm) => {
-  return validate(
-    !_.isEmpty(password),
-    !_.isEmpty(passwordConfirm),
-    password === passwordConfirm
-  );
+  return validate(!_.isEmpty(password), !_.isEmpty(passwordConfirm), password === passwordConfirm);
 };
 
 export const login = (username, password, urlBack) => {
   if (!validateUser(username, password)) {
-    return errorHandler({message: app.i18n.en_US['auth-missing-credentials']});
+    return errorHandler({ message: app.i18n.en_US['auth-missing-credentials'] });
   }
 
-  return Api.login({name: username, password})
-    .then(resp => {
+  return Api.login({ name: username, password })
+    .then((resp) => {
       if (resp.error) {
-        errorHandler({message: resp.reason});
+        errorHandler({ message: resp.reason });
         return resp;
       }
 
       let msg = app.i18n.en_US['auth-logged-in'];
       if (msg) {
-        FauxtonAPI.addNotification({msg});
+        FauxtonAPI.addNotification({ msg });
       }
 
-      if (urlBack && !urlBack.includes("login")) {
+      if (urlBack && !urlBack.includes('login')) {
         return FauxtonAPI.navigate(urlBack);
       }
-      FauxtonAPI.navigate("/");
+      FauxtonAPI.navigate('/');
+    })
+    .catch(errorHandler);
+};
+
+export const loginidp = (idpurl, idpcallback, idpappid) => {
+  if (!validateIdP(idpurl, idpcallback, idpappid)) {
+    return errorHandler({ message: app.i18n.en_US['auth-missing-idp'] });
+  }
+  return Idp.login(idpurl, idpcallback, idpappid)
+    .then((resp) => {
+      if (resp.error) {
+        errorHandler({ message: resp.reason });
+        return resp;
+      }
+
+      let msg = app.i18n.en_US['auth-logged-in'];
+      if (msg) {
+        FauxtonAPI.addNotification({ msg });
+      }
+
+      FauxtonAPI.navigate('/');
     })
     .catch(errorHandler);
 };
 
 export const changePassword = (username, password, passwordConfirm, nodes) => () => {
   if (!validatePasswords(password, passwordConfirm)) {
-    return errorHandler({message: app.i18n.en_US['auth-passwords-not-matching']});
+    return errorHandler({ message: app.i18n.en_US['auth-passwords-not-matching'] });
   }
   //To change an admin's password is the same as creating an admin. So we just use the
   //same api function call here.
@@ -76,36 +96,32 @@ export const changePassword = (username, password, passwordConfirm, nodes) => ()
     name: username,
     password,
     node: nodes[0].node
-  }).then(
-    () => {
-      FauxtonAPI.addNotification({
-        msg: app.i18n.en_US["auth-change-password"]
-      });
-    },
-    errorHandler
-  );
+  }).then(() => {
+    FauxtonAPI.addNotification({
+      msg: app.i18n.en_US['auth-change-password']
+    });
+  }, errorHandler);
 };
 
 export const createAdmin = (username, password, loginAfter, nodes) => () => {
   const node = nodes[0].node;
   if (!validateUser(username, password)) {
-    return errorHandler({message: app.i18n.en_US['auth-missing-credentials']});
+    return errorHandler({ message: app.i18n.en_US['auth-missing-credentials'] });
   }
 
-  Api.createAdmin({name: username, password, node})
-    .then(resp => {
-      if (resp.error) {
-        return errorHandler({message: `${app.i18n.en_US['auth-admin-creation-failed-prefix']} ${resp.reason}`});
-      }
+  Api.createAdmin({ name: username, password, node }).then((resp) => {
+    if (resp.error) {
+      return errorHandler({ message: `${app.i18n.en_US['auth-admin-creation-failed-prefix']} ${resp.reason}` });
+    }
 
-      FauxtonAPI.addNotification({
-        msg: app.i18n.en_US['auth-admin-created']
-      });
-
-      if (loginAfter) {
-        return FauxtonAPI.navigate("/login");
-      }
+    FauxtonAPI.addNotification({
+      msg: app.i18n.en_US['auth-admin-created']
     });
+
+    if (loginAfter) {
+      return FauxtonAPI.navigate('/login');
+    }
+  });
 };
 
 // simple authentication method - does nothing other than check creds
@@ -116,15 +132,15 @@ export const authenticate = (username, password, onSuccess) => {
   })
     .then((resp) => {
       if (resp.error) {
-        throw (resp);
+        throw resp;
       }
       hidePasswordModal();
       onSuccess(username, password);
     })
     .catch(() => {
       FauxtonAPI.addNotification({
-        msg: "Your username or password is incorrect.",
-        type: "error",
+        msg: 'Your username or password is incorrect.',
+        type: 'error',
         clear: true
       });
     });
@@ -135,7 +151,7 @@ export const hidePasswordModal = () => {
 };
 
 export const logout = () => {
-  FauxtonAPI.addNotification({ msg: "You have been logged out." });
+  FauxtonAPI.addNotification({ msg: 'You have been logged out.' });
   Api.logout()
     .then(Api.getSession)
     .then(() => FauxtonAPI.navigate('/'))
