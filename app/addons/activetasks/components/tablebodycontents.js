@@ -63,6 +63,10 @@ const activeTasksHelpers = {
       progressMessage.push(item.changes_done + ' Changes done.');
     }
 
+    if (_.has(item, 'process_status') && item.process_status != 'waiting') {
+      progressMessage.push('Process Status: ' + item.process_status);
+    }
+
     return progressMessage;
   },
 
@@ -86,6 +90,7 @@ export default class ActiveTaskTableBodyContents extends React.Component {
       node: item.node,
       pid: item.pid.replace(/[<>]/g, ''),
       progress: activeTasksHelpers.getProgressMessage(item),
+      process_status: item.process_status,
     };
   };
 
