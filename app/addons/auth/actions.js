@@ -41,6 +41,10 @@ export const validatePasswords = (password, passwordConfirm) => {
   );
 };
 
+export const validateIdP = (idpurl, idpcallback, idpappid) => {
+  return validate(!_.isEmpty(idpurl), !_.isEmpty(idpcallback), !_.isEmpty(idpappid));
+};
+
 export const login = (username, password, urlBack) => {
   if (!validateUser(username, password)) {
     return errorHandler({message: app.i18n.en_US['auth-missing-credentials']});
@@ -62,6 +66,27 @@ export const login = (username, password, urlBack) => {
         return FauxtonAPI.navigate(urlBack);
       }
       FauxtonAPI.navigate("/");
+    })
+    .catch(errorHandler);
+};
+
+export const loginidp = (idpurl, idpcallback, idpappid) => {
+  if (!validateIdP(idpurl, idpcallback, idpappid)) {
+    return errorHandler({ message: app.i18n.en_US['auth-missing-idp'] });
+  }
+  return Idp.login(idpurl, idpcallback, idpappid)
+    .then((resp) => {
+      if (resp.error) {
+        errorHandler({ message: resp.reason });
+        return resp;
+      }
+
+      let msg = app.i18n.en_US['auth-logged-in'];
+      if (msg) {
+        FauxtonAPI.addNotification({ msg });
+      }
+
+      FauxtonAPI.navigate('/');
     })
     .catch(errorHandler);
 };

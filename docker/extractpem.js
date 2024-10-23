@@ -8,18 +8,9 @@
 // distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
-// the License.
 
-import LoginForm from './loginform.js';
-import LoginFormIdp from './loginformidp.js';
-import PasswordModal from './passwordmodal.js';
-import CreateAdminForm from './createadminform.js';
-import ChangePasswordForm from './changepasswordform.js';
-
-export default {
-  LoginForm,
-  LoginFormIdp,
-  PasswordModal,
-  CreateAdminForm,
-  ChangePasswordForm
-};
+const jwkToPem = require('jwk-to-pem');
+let key = process.argv[2];
+let pem = jwkToPem(JSON.parse(key));
+let flatpem = pem.replace(/\n/g, '\\\\n');
+console.log('"' + flatpem + '"');

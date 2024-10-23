@@ -1,0 +1,32 @@
+{
+    "protocol": "openid-connect",
+    "clientId": "fauxton",
+    "name": "Fauxton",
+    "description": "Fauxton for CouchDB administration",
+    "publicClient": true,
+    "authorizationServicesEnabled": false,
+    "serviceAccountsEnabled": false,
+    "implicitFlowEnabled": true,
+    "directAccessGrantsEnabled": true,
+    "standardFlowEnabled": true,
+    "frontchannelLogout": true,
+    "attributes": {
+        "saml_idp_initiated_sso_url_name": "",
+        "oauth2.device.authorization.grant.enabled": false,
+        "oidc.ciba.grant.enabled": false
+    },
+    "alwaysDisplayInConsole": false,
+    "rootUrl": "",
+    "baseUrl": "http://localhost:8000",
+    "redirectUris": [
+        "http://localhost:8000",
+        "http://localhost:8000/_callback",
+        "http://localhost:5984",
+        "http://localhost:5984/_callback"
+    ],
+    "webOrigins": [
+        "*",
+        "http://localhost:8000",
+        "http://localhost:5984"
+    ]
+}

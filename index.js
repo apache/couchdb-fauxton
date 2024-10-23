@@ -49,8 +49,11 @@ module.exports = function (options) {
       accept = req.headers.accept.split(',');
     }
     if (setContentSecurityPolicy) {
-      var headerValue = "default-src 'self'; child-src 'self' data: blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; " +
-                        "script-src 'self'; style-src 'self'; object-src 'none';";
+      //var headerValue = "default-src 'self'; child-src 'self' data: blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; " +
+      //                  "script-src 'self'; style-src 'self'; object-src 'none';";
+      const headerValue =
+          "default-src 'self'; child-src 'self' data: blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; connect-src http://localhost:8090 'self'; " +
+          "script-src 'self'; style-src 'self'; object-src 'none';";
       res.setHeader('Content-Security-Policy', headerValue);
     }
 

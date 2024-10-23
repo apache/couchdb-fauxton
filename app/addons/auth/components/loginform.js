@@ -13,6 +13,7 @@
 import PropTypes from 'prop-types';
 
 import React from "react";
+import FauxtonAPI from '../../../core/base';
 import { login } from "./../actions";
 import { Button, Form } from 'react-bootstrap';
 
@@ -57,6 +58,12 @@ class LoginForm extends React.Component {
   login(username, password) {
     login(username, password, this.props.urlBack);
   }
+
+  navigateToIdp(e) {
+    e.preventDefault();
+    FauxtonAPI.navigate('/loginidp');
+  }
+
   componentDidMount() {
     this.usernameField.focus();
   }
@@ -97,6 +104,13 @@ class LoginForm extends React.Component {
             </div>
           </div>
         </form>
+        <div className="row">
+          <div className="col12 col-md-5 col-xl-4 mb-3">
+            <Button id="login-idp-btn" variant="cf-secondary" onClick={this.navigateToIdp}>
+              Log In with your Identity Provider
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }

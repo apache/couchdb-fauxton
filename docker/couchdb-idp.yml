@@ -1,0 +1,20 @@
+services:
+  couchdb:
+    container_name: couchdb
+    image: couchdb:latest
+    environment:
+      COUCHDB_USER: tester
+      COUCHDB_PASSWORD: testerpass
+    ports:
+      - "5984:5984"
+    depends_on:
+      - keycloak
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    ports:
+      - "8090:8080"
+    command: start-dev

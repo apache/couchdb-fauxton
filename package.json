@@ -49,6 +49,7 @@
     "html-webpack-plugin": "^5.5.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
+    "jwk-to-pem": "^2.0.5",
     "mini-css-extract-plugin": "^2.6.1",
     "mock-local-storage": "^1.1.23",
     "nightwatch": "^3.2.0",
