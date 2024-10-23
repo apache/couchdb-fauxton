@@ -67,8 +67,8 @@ export default FauxtonAPI.RouteObject.extend({
     localStorage.setItem('fauxtonRefreshToken', refreshToken);
     // Extract expiry from the access token
     const expiry = Idp.getExpiry(accessToken);
+    // eslint-disable-next-line no-console
     console.log('Expiry:', expiry);
-    //setTimeout(Idp.refreshToken, (expiry - 60) * 1000);
   },
   createAdminForNode() {
     ClusterActions.fetchNodes();

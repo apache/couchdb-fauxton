@@ -13,6 +13,7 @@ import FauxtonAPI from "../../core/api";
 import app from "../../app";
 import ActionTypes from './actiontypes';
 import Api from './api';
+import Idp from './idp';
 
 const {
   AUTH_HIDE_PASSWORD_MODAL,

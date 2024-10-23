@@ -81,7 +81,7 @@ class LoginFormIdp extends React.Component {
       <div className="couch-login-wrapper">
         <form id="login" onSubmit={this.submit.bind(this)}>
           <div className="row">
-          <label htmlFor="idpurl">Identity Provider (IdP) URL</label>
+            <label htmlFor="idpurl">Identity Provider (IdP) URL</label>
             <p className="help-block">
               must point to your IdP&apos;s <code>/.well-known/openid-configuration</code>
             </p>
@@ -98,7 +98,7 @@ class LoginFormIdp extends React.Component {
             </div>
           </div>
           <div className="row">
-          <label htmlFor="idpcallback">Callback URL</label>
+            <label htmlFor="idpcallback">Callback URL</label>
             <p className="help-block">
               This should be the URL of your CouchDB instance, including the protocol and port number.{' '}
               <span style={{ color: 'red' }}>Should we show this? It can be computed</span>
@@ -116,7 +116,7 @@ class LoginFormIdp extends React.Component {
             </div>
           </div>
           <div className="row">
-          <label htmlFor="idpappid">Application ID</label>
+            <label htmlFor="idpappid">Application ID</label>
             <p className="help-block">
               The Application ID gets assigned by the IdP admin, suggested standard is <code>fauxton</code>
             </p>
