@@ -51,8 +51,11 @@ const devSetup = function (cb) {
   });
 };
 
-const defaultHeaderValue = "default-src 'self'; child-src 'self' blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; " +
-                  "script-src 'self'; style-src 'self'; object-src 'none';";
+// const defaultHeaderValue = "default-src 'self'; child-src 'self' blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; " +
+//                  "script-src 'self'; style-src 'self'; object-src 'none';";
+const defaultHeaderValue =
+  "default-src 'self'; child-src 'self' blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; connect-src 'self' http://localhost:8090; " +
+  "script-src 'self'; style-src 'self'; object-src 'none';";
 function getCspHeaders () {
   if (!settings.contentSecurityPolicy) {
     return;

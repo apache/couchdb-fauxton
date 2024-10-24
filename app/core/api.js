@@ -21,6 +21,16 @@ import $ from "jquery";
 import Backbone from "backbone";
 import _ from "lodash";
 import Promise from "bluebird";
+import { addAuthHeader } from '../addons/auth/idp';
+
+// Monkey patching Backbone.ajax to add the Auth header
+// for JWT authentication
+$.ajaxSetup({
+  beforeSend: function (xhr) {
+    xhr.setRequestHeader('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    addAuthHeader(xhr);
+  }
+});
 
 Backbone.$ = $;
 Backbone.ajax = function () {
