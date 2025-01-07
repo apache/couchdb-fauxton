@@ -13,6 +13,7 @@ import FauxtonAPI from "../../core/api";
 import app from "../../app";
 import ActionTypes from './actiontypes';
 import Api from './api';
+import FauxtonJwt from "./fauxtonjwt";
 
 const {
   AUTH_HIDE_PASSWORD_MODAL,
@@ -31,6 +32,10 @@ const validate = (...predicates) => {
 
 export const validateUser = (username, password) => {
   return validate(!_.isEmpty(username), !_.isEmpty(password));
+};
+
+export const validateToken = (token) => {
+  return validate(!_.isEmpty(token));
 };
 
 export const validatePasswords = (password, passwordConfirm) => {
@@ -52,18 +57,50 @@ export const login = (username, password, urlBack) => {
         errorHandler({message: resp.reason});
         return resp;
       }
-
-      let msg = app.i18n.en_US['auth-logged-in'];
-      if (msg) {
-        FauxtonAPI.addNotification({msg});
-      }
-
-      if (urlBack && !urlBack.includes("login")) {
-        return FauxtonAPI.navigate(urlBack);
-      }
-      FauxtonAPI.navigate("/");
+      navigateToDatabasePage(resp, urlBack);
     })
     .catch(errorHandler);
+};
+
+export const loginJwt = (token, urlBack) => {
+  if (!validateToken(token)) {
+    return errorHandler({message: app.i18n.en_US['auth-missing-token']});
+  }
+
+  return Api.loginJwt(token)
+    .then(resp => {
+      if (resp.error) {
+        FauxtonJwt.deleteJwtCookie();
+        errorHandler({message: resp.reason});
+        return resp;
+      }
+      if (!resp.info.authentication_handlers.includes("jwt")) {
+        FauxtonJwt.deleteJwtCookie();
+        let msg = app.i18n.en_US['auth-jwt-not-available'];
+        errorHandler({message: msg});
+        return resp;
+      }
+      if (!resp.userCtx.name) {
+        FauxtonJwt.deleteJwtCookie();
+        let msg = app.i18n.en_US['auth-jwt-failure'];
+        errorHandler({message: msg});
+        return resp;
+      }
+      navigateToDatabasePage(resp, urlBack);
+    })
+    .catch(errorHandler);
+};
+
+const navigateToDatabasePage = (resp, urlBack) => {
+  let msg = app.i18n.en_US['auth-logged-in'];
+  if (msg) {
+    FauxtonAPI.addNotification({msg});
+  }
+
+  if (urlBack && !urlBack.includes("login")) {
+    return FauxtonAPI.navigate(urlBack);
+  }
+  FauxtonAPI.navigate("/");
 };
 
 export const changePassword = (username, password, passwordConfirm, nodes) => () => {
