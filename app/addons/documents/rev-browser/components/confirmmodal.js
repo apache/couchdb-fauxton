@@ -50,17 +50,17 @@ export default class ConfirmModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Do you want to delete all conflicting revisions for this document?
+            Do you want to delete all conflicting revisions for this documentcc?
           </p>
+
+        </Modal.Body>
+        <Modal.Footer>
           <div className='col-12'>
             <Form.Check type="checkbox"
               className='do-not-show-again'
               label="Do not show this warning message again"
               onChange={() => { this.setState({checked: !this.state.checked }); }} />
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-
           <Button href="#"
             variant="cf-cancel"
             className='cancel-link'
