@@ -10,7 +10,7 @@
     "fauxton": "./bin/fauxton"
   },
   "engines": {
-    "node": "^18"
+    "node": "^20"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",

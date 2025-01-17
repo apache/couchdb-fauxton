@@ -50,9 +50,8 @@ export default class ConfirmModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Do you want to delete all conflicting revisions for this documentcc?
+            Do you want to delete all conflicting revisions for this document?
           </p>
-
         </Modal.Body>
         <Modal.Footer>
           <div className='col-12'>
