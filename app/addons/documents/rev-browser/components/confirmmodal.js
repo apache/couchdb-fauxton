@@ -54,31 +54,24 @@ export default class ConfirmModal extends React.Component {
           </p>
         </Modal.Body>
         <Modal.Footer>
-
           <div className='col-12'>
             <Form.Check type="checkbox"
               className='do-not-show-again'
               label="Do not show this warning message again"
               onChange={() => { this.setState({checked: !this.state.checked }); }} />
           </div>
-
-          <div className="col-auto">
-            <Button href="#"
-              variant="cf-cancel"
-              className='cancel-link'
-              onClick={this.close}
-              data-bypass="true"
-            >
-            Cancel
-            </Button>
-          </div>
-          <div className="col-auto">
-            <ConfirmButton
-              onClick={this.onDeleteConflicts}
-              text="Delete Revisions"
-              variant="danger" />
-          </div>
-
+          <Button href="#"
+            variant="cf-cancel"
+            className='cancel-link'
+            onClick={this.close}
+            data-bypass="true"
+          >
+          Cancel
+          </Button>
+          <ConfirmButton
+            onClick={this.onDeleteConflicts}
+            text="Delete Revisions"
+            variant="danger" />
         </Modal.Footer>
       </Modal>
     );

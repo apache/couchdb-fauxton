@@ -142,7 +142,12 @@ div#dashboard-content div.revision-wrapper {
 }
 
 .delete-conflicts-modal {
-  .do-not-show-again label {
-    font-size: 13px;
+  .do-not-show-again {
+    &.form-check {
+      padding-left: 2em;
+    }
+    label {
+      font-size: 13px;
+    }
   }
 }
