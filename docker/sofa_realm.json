@@ -1,0 +1,13 @@
+{
+    "id": "sofa",
+    "realm": "sofa",
+    "displayName": "Where documents live",
+    "enabled": true,
+    "sslRequired": "NONE",
+    "registrationAllowed": true,
+    "loginWithEmailAllowed": true,
+    "duplicateEmailsAllowed": false,
+    "resetPasswordAllowed": true,
+    "editUsernameAllowed": true,
+    "bruteForceProtected": true
+}
