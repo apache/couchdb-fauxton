@@ -13,6 +13,7 @@
 import app from './../../app';
 import Helpers from "../../helpers";
 import {deleteFormEncoded, get, postFormEncoded, put} from '../../core/ajax';
+import FauxtonJwt from "./fauxtonjwt";
 
 
 export function createAdmin({name, password, node}) {
@@ -43,15 +44,23 @@ export function login(body) {
   return postFormEncoded(url, app.utils.queryParams(body));
 }
 
+export function loginJwt(token) {
+  FauxtonJwt.setJwtCookie(token);
+  const url = Helpers.getServerUrl('/_session');
+  return get(url);
+}
+
 export function logout() {
   loggedInSessionPromise = null;
   const url = Helpers.getServerUrl('/_session');
+  FauxtonJwt.deleteJwtCookie();
   return deleteFormEncoded(url, app.utils.queryParams({ username: "_", password: "_" }));
 }
 
 export default {
   createAdmin,
   login,
+  loginJwt,
   logout,
   getSession
 };
