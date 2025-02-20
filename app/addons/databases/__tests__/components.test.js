@@ -118,6 +118,16 @@ describe('DatabasePagination', () => {
     expect(controller.find('.all-db-footer__total-db-count').text()).toBe('30');
   });
 
+  it('renders custom content when supplied', () => {
+    const withCustomFooter = (
+      <Views.DatabasePagination linkPath="_custom_path">
+        <span className="custom">custom content</span>
+      </Views.DatabasePagination>
+    );
+    const el = mount(withCustomFooter);
+    expect(el.find('span.custom').exists()).toBe(true);
+  });
+
 });
 
 describe('DatabaseTable', () => {

@@ -531,6 +531,7 @@ class DatabasePagination extends React.Component {
     const { limit, page, totalAmountOfDatabases } = this.state;
     const start = 1 + (page - 1) * limit;
     const end = Math.min(totalAmountOfDatabases, page * limit);
+    const { children } = this.props;
 
     return (
       <footer className="all-db-footer pagination-footer">
@@ -547,6 +548,9 @@ class DatabasePagination extends React.Component {
           Showing <span className="all-db-footer__range">{start}&ndash;{end}</span>
           &nbsp;of&nbsp;<span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>
           &nbsp;databases.
+        </div>
+        <div className="custom-db-footer-item">
+          {children}
         </div>
       </footer>
     );
