@@ -142,8 +142,8 @@ module.exports = {
 
     const replicatorDoc = {
       _id: 'existing-doc-id',
-      source: "http://source-db.com",
-      target: "http://target-db.com"
+      source: "http://source-db.com.test",
+      target: "http://target-db.com.test"
     };
 
     client
