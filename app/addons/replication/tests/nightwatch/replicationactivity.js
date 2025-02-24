@@ -19,8 +19,8 @@ module.exports = {
 
     const replicatorDoc = {
       _id: 'existing-doc-id-view-doc',
-      source: "https://source-db.com",
-      target: "https://target-db.com"
+      source: "https://source-db.com.test",
+      target: "https://target-db.com.test"
     };
     client
       .deleteDatabase('_replicator')
@@ -43,8 +43,8 @@ module.exports = {
 
     const replicatorDoc = {
       _id: 'existing-doc-id-edit-doc',
-      source: "https://source-db.com",
-      target: "https://target-db.com"
+      source: "https://source-db.com.test",
+      target: "https://target-db.com.test"
     };
     client
       .deleteDatabase('_replicator')
@@ -68,14 +68,14 @@ module.exports = {
 
     const replicatorDoc1 = {
       _id: 'existing-doc-id-filter1',
-      source: "https://source-db.com",
-      target: "https://target-db.com"
+      source: "https://source-db.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc2 = {
       _id: 'existing-doc-filter2',
-      source: "https://source-db2.com",
-      target: "https://target-db.com"
+      source: "https://source-db2.com.test",
+      target: "https://target-db.com.test"
     };
     client
       .deleteDatabase('_replicator')
@@ -102,14 +102,14 @@ module.exports = {
 
     const replicatorDoc1 = {
       _id: 'existing-doc-id-filter1',
-      source: "https://source-db.com",
-      target: "https://target-db.com"
+      source: "https://source-db.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc2 = {
       _id: 'existing-doc-filter2',
-      source: "https://source-db2.com",
-      target: "https://target-db.com"
+      source: "https://source-db2.com.test",
+      target: "https://target-db.com.test"
     };
     client
       .deleteDatabase('_replicator')
@@ -139,38 +139,38 @@ module.exports = {
 
     const replicatorDoc1 = {
       _id: 'existing-doc-id-display',
-      source: "https://source-db.com",
-      target: "https://target-db.com"
+      source: "https://source-db.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc2 = {
       _id: 'existing-doc-id-display2',
-      source: "https://source-db2.com",
-      target: "https://target-db.com"
+      source: "https://source-db2.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc3 = {
       _id: 'existing-doc-id-display3',
-      source: "https://source-db3.com",
-      target: "https://target-db.com"
+      source: "https://source-db3.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc4 = {
       _id: 'existing-doc-id-display4',
-      source: "https://source-db4.com",
-      target: "https://target-db.com"
+      source: "https://source-db4.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc5 = {
       _id: 'existing-doc-id-display5',
-      source: "https://source-db5.com",
-      target: "https://target-db.com"
+      source: "https://source-db5.com.test",
+      target: "https://target-db.com.test"
     };
 
     const replicatorDoc6 = {
       _id: 'existing-doc-id-display6',
-      source: "https://source-db6.com",
-      target: "https://target-db.com"
+      source: "https://source-db6.com.test",
+      target: "https://target-db.com.test"
     };
 
     client
