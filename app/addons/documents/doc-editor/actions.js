@@ -13,6 +13,7 @@
 import FauxtonAPI from '../../../core/api';
 import { deleteRequest } from '../../../core/ajax';
 import ActionTypes from './actiontypes';
+import { addAuthHeader } from '../../auth/idp';
 
 var currentUploadHttpRequest;
 
@@ -204,6 +205,7 @@ const uploadAttachment = (params) => (dispatch) => {
     });
   };
   const httpRequest = new XMLHttpRequest();
+  addAuthHeader(httpRequest); // for JWT
   currentUploadHttpRequest = httpRequest;
   httpRequest.withCredentials = true;
   if (httpRequest.upload) {
