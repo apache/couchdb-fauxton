@@ -28,7 +28,7 @@
     "babel-loader": "^8.2.5",
     "babel-plugin-array-includes": "^2.0.3",
     "bootstrap": "^5.2.3",
-    "chromedriver": "^134.0.3",
+    "chromedriver": "latest",
     "css-loader": "^6.7.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
