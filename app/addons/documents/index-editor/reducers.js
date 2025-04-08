@@ -16,7 +16,7 @@ import Helpers from '../helpers';
 
 const defaultMap = 'function (doc) {\n  emit(doc._id, 1);\n}';
 const defaultReduce = 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}';
-const builtInReducers = ['_sum', '_count', '_stats', '_approx_count_distinct'];
+const builtInReducers = ['_sum', '_count', '_stats', '_approx_count_distinct', '_top_1', '_top_10', '_top_100', '_bottom_1', '_bottom_10', '_bottom_100', '_first', '_last'];
 const allReducers = builtInReducers.concat(['CUSTOM', 'NONE']);
 
 const initialState = {
