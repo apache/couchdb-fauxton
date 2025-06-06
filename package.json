@@ -58,7 +58,7 @@
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.10.1"
+    "webpack-dev-server": "^5.2.1"
   },
   "dependencies": {
     "@webcomponents/url": "^0.7.8",
