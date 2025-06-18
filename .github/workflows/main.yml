@@ -78,4 +78,6 @@ jobs:
         NIGHTWATCH_SKIPTAGS: ${{ matrix.NIGHTWATCH_SKIPTAGS }}
       run: xvfb-run --auto-servernum ./node_modules/.bin/grunt nightwatch_retries
     - name: Shutdown CouchDB
+      env:
+        COUCHDB_IMAGE: ${{ matrix.COUCHDB_IMAGE }}
       run: npm run docker:down
