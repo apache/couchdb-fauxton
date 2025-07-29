@@ -49,3 +49,6 @@ coverage
 # IDEs
 .idea/
 .vscode
+
+# Env variables
+.env
