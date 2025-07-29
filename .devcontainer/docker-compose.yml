@@ -11,6 +11,7 @@ services:
       - .env
     depends_on:
       - couchdb
+      - keycloak
 
   couchdb:
     image: couchdb:latest
@@ -20,7 +21,6 @@ services:
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-      - INSIDE_CONTAINER=true
     env_file:
       - .env
 

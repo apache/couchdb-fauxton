@@ -17,7 +17,7 @@ const config = {
   "sourceUrl": `${process.env.KEYCLOAK || 'http://localhost:8090'}/realms/empire/.well-known/openid-configuration`,
   "targetUrl": `${process.env.SRV ||'http://localhost:5984'}/_node/nonode@nohost/_config/jwt_keys`,
   "adminCredentials": {
-    "username": COUCHDB_USER || "admin",
+    "username": process.env.COUCHDB_USER || "admin",
     "password":  process.env.COUCHDB_PASSWORD ||"password"
   }
 };
