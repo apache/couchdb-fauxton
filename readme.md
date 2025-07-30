@@ -16,20 +16,22 @@ See `fauxton --help` for extra options.
 
 ## Setting up Fauxton
 
+(alternative see below: Running Fauxton in a devcontainer)
+
 Please note that [node.js](http://nodejs.org/) and npm is required. Specifically, Fauxton requires at least Node 6 and npm 3.
 
 1. Fork this repo (see [GitHub help](https://help.github.com/articles/fork-a-repo/) for details)
 1. Clone your fork: `git clone https://github.com/YOUR-USERNAME/couchdb-fauxton.git`
 1. Go to your cloned copy: `cd couchdb-fauxton`
-1. Set up the upstream repo: 
+1. Set up the upstream repo:
     * `git remote add upstream https://github.com/apache/couchdb-fauxton.git`
     * `git fetch upstream`
     * `git branch --set-upstream-to=upstream/main main`
 1. Download all dependencies: `npm install`
 1. Make sure you have CouchDB installed.
     - Option 1 (**recommended**): Use `npm run docker:up` to start a Docker container running CouchDB with user `tester` and password `testerpass`.
-      - You need to have [Docker](https://docs.docker.com/engine/installation/) installed to use this option. 
-    - Option 2: Follow instructions 
+      - You need to have [Docker](https://docs.docker.com/engine/installation/) installed to use this option.
+    - Option 2: Follow instructions
 [found here](http://couchdb.readthedocs.org/en/latest/install/index.html)
 
 
@@ -52,7 +54,7 @@ You should be able to access Fauxton at `http://localhost:8000`
 
 ### Preparing a Fauxton Release
 
-Follow the "Setting up Fauxton" section above, then edit the `settings.json` variable root where the document will live, 
+Follow the "Setting up Fauxton" section above, then edit the `settings.json` variable root where the document will live,
 e.g. `/_utils/`. Then type:
 
 ```
@@ -82,9 +84,34 @@ part of the deployable release artifact.
     # Or fully compiled install
     npm run couchdb
 
+## Running Fauxton in a devcontainer
 
+This repository contains a folder `.devcontainer` that hold a container definition following the [devcontainer standard](https://containers.dev).
+It allows to start Fauxton and CouchDB together with a predefinded configuration. It also runs a Keycloak instance to be able to test (a future) IdP integration. The instances are ephidermal, so a container rebuild gets you back to a defined pristine state.
 
-## More information 
+Using the devcontainer is your choice and optional. Prerequisites:
+
+- a container runtime installed: Docker desktop, Rancher deskop, Orbstack etc.
+- a compatible Ide: VS-Code, IntelliJ etc
+- a file `.devcontainer/.env` (not version controlled)
+
+```env
+# CouchDB
+COUCHDB_USER=admin
+COUCHDB_PASSWORD=password
+
+# Keycloak
+KEYCLOAK_ADMIN=admin
+KEYCLOAK_ADMIN_PASSWORD=password
+```
+
+Follow the instructions of your Ide to build and start the container. In VS-Code select "Dev Containers: Rebuild Container". Your container gets build, the system databases for CouchDB created, Keycloak configured and CouchDB JWT enabled. You can reach the following endpoints:
+
+- http://localhost:8000 The Fauxton UI
+- http://localhost:5984 The CouchDB
+- http://localhost:8090 The Keycloak IdP
+
+## More information
 
 Check out the following pages for a lot more information about Fauxton:
 

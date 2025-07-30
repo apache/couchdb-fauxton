@@ -3,7 +3,11 @@
 npm install
 
 # Give containers some space
-sleep 15
+# Wait until CouchDB answers
+until curl -fsS "http://localhost:5984/_up" >/dev/null 2>&1; do sleep 2; done
+# Wait until Keycloak answers
+until curl -fsS "http://localhost:8090/realms/master" >/dev/null 2>&1; do sleep 2; done
+
 # Variables needed
 now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 REALM=empire
@@ -25,23 +29,23 @@ echo Couch $SRV
 echo keycloak $KEYCLOAK
 
 #SYSTEM databases
-curl -u ${COUCHDB_USRPWD} -X PUT ${SRV}/_users
-curl -u ${COUCHDB_USRPWD} -X PUT ${SRV}/_replicator
-curl -u ${COUCHDB_USRPWD} -X PUT ${SRV}/_global_changes
+curl -u "${COUCHDB_USRPWD}" -X PUT ${SRV}/_users
+curl -u "${COUCHDB_USRPWD}" -X PUT ${SRV}/_replicator
+curl -u "${COUCHDB_USRPWD}" -X PUT ${SRV}/_global_changes
 
 #DEMO database
-curl -u ${COUCHDB_USRPWD} -X PUT ${SRV}/demo
-curl -u ${COUCHDB_USRPWD} -X PUT ${SRV}/demo/firstdoc -d '{"name" : "Peter Pan", "location" : "Neverland"}' | jq
-curl -u ${COUCHDB_USRPWD} -X POST ${SRV}/demo -H "Content-Type: application/json" -d "{\"date\" : \"$now\", \"action\" : \"postCreate\"}" | jq
+curl -u "${COUCHDB_USRPWD}" -X PUT ${SRV}/demo
+curl -u "${COUCHDB_USRPWD}" -X PUT ${SRV}/demo/firstdoc -d '{"name" : "Peter Pan", "location" : "Neverland"}' | jq
+curl -u "${COUCHDB_USRPWD}" -X POST ${SRV}/demo -H "Content-Type: application/json" -d "{\"date\" : \"$now\", \"action\" : \"postCreate\"}" | jq
 
 # Status
-curl -u ${COUCHDB_USRPWD} ${SRV} | jq
+curl -u "${COUCHDB_USRPWD}" ${SRV} | jq
 
 # Session
-curl -u ${COUCHDB_USRPWD} ${SRV}/_session | jq
+curl -u "${COUCHDB_USRPWD}" ${SRV}/_session | jq
 
 #DEMO back
-curl -u ${COUCHDB_USRPWD} ${SRV}/demo/firstdoc | jq
+curl -u "${COUCHDB_USRPWD}" ${SRV}/demo/firstdoc | jq
 
 
 # Check required Keycloak environment variables
@@ -122,9 +126,9 @@ curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/roles \
 }'
 
 echo retrive id for _admin
-ROLE_ADMIN=$(curl "${KEYCLOAK}/admin/realms/${REALM}/roles?first=0&max=101&search=_admin" \
+ROLE_ADMIN=$(curl "${KEYCLOAK}/admin/realms/${REALM}/roles?search=_admin" \
   --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
-  --header 'caontent-type: application/json' | jq -r '.[0].id')
+  --header 'content-type: application/json' | jq -r '.[0].id')
 
 echo create role role1
 curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/roles \
@@ -136,7 +140,7 @@ curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/roles \
 }'
 
 echo retrieve id for role1
-ROLE_ROLE1=$(curl "${KEYCLOAK}/admin/realms/${REALM}/roles?first=0&max=101&search=role1" \
+ROLE_ROLE1=$(curl "${KEYCLOAK}/admin/realms/${REALM}/roles?search=role1" \
   --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
   --header 'content-type: application/json' | jq -r '.[0].id')
 
@@ -162,7 +166,7 @@ curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users \
 }'
 
 echo retrieve ID for user harisedon
-USER_SELDON=$(curl "${KEYCLOAK}/admin/realms/${REALM}/ui-ext/brute-force-user?first=0&max=101&q=&search=hariseldon" \
+USER_SELDON=$(curl "${KEYCLOAK}/admin/realms/${REALM}/users?username=hariseldon" \
   --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
   --header 'content-type: application/json' | jq -r '.[0].id')
 
@@ -188,46 +192,55 @@ curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users \
 }'
 
 echo retrive ID for user gaaldornick
-USER_DORNICK=$(curl "${KEYCLOAK}/admin/realms/${REALM}/ui-ext/brute-force-user?first=0&max=101&q=&search=gaaldornick" \
+USER_DORNICK=$(curl "${KEYCLOAK}/admin/realms/${REALM}/users?username=gaaldornick" \
   --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
   --header 'content-type: application/json' | jq -r '.[0].id')
 
 echo Assign role _admin to seldon
-curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users/${USER_SELDON}/role-mappings/realm/${ROLE_ADMIN}  \
-  --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}"
+curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users/"${USER_SELDON}"/role-mappings/realm/"${ROLE_ADMIN}"  \
+  --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
+  --header 'content-type: application/json' \
+  --data "[{\"id\":\"${ROLE_ADMIN}\",\"name\":\"_admin\"}]"
 
 echo Assign role role1 to seldon
-curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users/${USER_SELDON}/role-mappings/realm/${ROLE_ROLE1}  \
-  --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}"
+curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users/"${USER_SELDON}"/role-mappings/realm/"${ROLE_ROLE1}"  \
+  --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
+  --header 'content-type: application/json' \
+  --data "[{\"id\":\"${ROLE_ROLE1}\",\"name\":\"role1\"}]"
 
 echo Assign role role1 to gaaldornick
-curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users/${USER_DORNICK}/role-mappings/realm/${ROLE_ROLE1}  \
-  --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}"
+curl -X POST ${KEYCLOAK}/admin/realms/${REALM}/users/"${USER_DORNICK}"/role-mappings/realm/"${ROLE_ROLE1}"  \
+  --header "authorization: Bearer ${KEYCLOAK_ACCESS_TOKEN}" \
+  --header 'content-type: application/json' \
+  --data "[{\"id\":\"${ROLE_ROLE1}\",\"name\":\"role1\"}]"
 
 echo enable CouchDB JWT login
-curl -u ${COUCHDB_USRPWD} -X PUT "${SRV}/_node/_local/_config/chttpd/authentication_handlers" \
+curl -u "${COUCHDB_USRPWD}" -X PUT "${SRV}/_node/_local/_config/chttpd/authentication_handlers" \
 -H "Content-Type: text/plain" \
 -d '"{chttpd_auth, cookie_authentication_handler}, {chttpd_auth, jwt_authentication_handler}, {chttpd_auth, default_authentication_handler}"'
 
 echo point to idp_host
-curl -u ${COUCHDB_USRPWD} -X PUT "${SRV}/_node/_local/_config/jwt_auth/idp_host" \
+curl -u "${COUCHDB_USRPWD}" -X PUT "${SRV}/_node/_local/_config/jwt_auth/idp_host" \
   --header 'content-type: text/plain' \
   --data "\"${KEYCLOAK}/realms/${REALM}\""
 
 echo set require exp,iat
-curl -u ${COUCHDB_USRPWD} -X PUT "${SRV}/_node/_local/_config/jwt_auth/required_claims" \
+curl -u "${COUCHDB_USRPWD}" -X PUT "${SRV}/_node/_local/_config/jwt_auth/required_claims" \
   --header 'content-type: text/plain' \
   --data "\"exp,iat\""
 
 echo ADD PUblic key
-node .devcontainer/jwks2couch.mjs
+node .devcontainer/jwks2couch.mjs || {
+  echo "jwks2couch failed" >&2
+  exit 1
+}
 
 echo Set path for role resolution
-curl -u ${COUCHDB_USRPWD} -X PUT "${SRV}/_node/nonode@nohost/_config/jwt_auth/roles_claim_path" \
+curl -u "${COUCHDB_USRPWD}" -X PUT "${SRV}/_node/nonode@nohost/_config/jwt_auth/roles_claim_path" \
 -H "Content-Type: text/plain" \
 -d "\"realm_access.roles\""
 
 echo Restart CouchDB
-curl -u ${COUCHDB_USRPWD} -X POST "${SRV}/_node/_local/_restart"
+curl -u "${COUCHDB_USRPWD}" -X POST "${SRV}/_node/_local/_restart"
 
 echo DONE

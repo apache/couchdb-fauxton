@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -12,13 +10,15 @@ import crypto from 'crypto';
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import crypto from 'crypto';
+
 // This data
 const config = {
   "sourceUrl": `${process.env.KEYCLOAK || 'http://localhost:8090'}/realms/empire/.well-known/openid-configuration`,
   "targetUrl": `${process.env.SRV ||'http://localhost:5984'}/_node/nonode@nohost/_config/jwt_keys`,
   "adminCredentials": {
     "username": process.env.COUCHDB_USER || "admin",
-    "password":  process.env.COUCHDB_PASSWORD ||"password"
+    "password": process.env.COUCHDB_PASSWORD ||"password"
   }
 };
 

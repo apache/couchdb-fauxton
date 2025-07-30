@@ -6,7 +6,7 @@ services:
     volumes:
       - ../..:/workspaces:cached
     command: sleep infinity
-    network_mode: service:couchdb
+    networks: [devnet]
     env_file:
       - .env
     depends_on:
@@ -21,6 +21,7 @@ services:
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    networks: [devnet]
     env_file:
       - .env
 
@@ -34,7 +35,10 @@ services:
       - KC_HTTP_ENABLED=true
       - KC_HOSTNAME_STRICT=false
       - KC_HOSTNAME_STRICT_HTTPS=false
-    network_mode: service:couchdb
+    networks: [devnet]
     env_file:
       - .env
     command: start-dev --http-port=8090
+
+networks:
+  devnet:

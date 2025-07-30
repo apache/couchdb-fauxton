@@ -9,4 +9,6 @@ COUCHDB_PORT=5984
 
 export SRV=http://localhost:${COUCHDB_PORT}
 
-curl -u ${COUCHDB_USRPWD} -X POST ${SRV}/demo -H "Content-Type: application/json" -d "{\"date\" : \"$now\", \"action\" : \"postCreate\"}" | jq
+curl -u "${COUCHDB_USRPWD}" -X POST ${SRV}/demo -H "Content-Type: application/json" -d "{\"date\" : \"$now\", \"action\" : \"postStart\"}" | jq
+
+npm run dev
