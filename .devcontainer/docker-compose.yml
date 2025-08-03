@@ -11,7 +11,6 @@ services:
       - .env
     depends_on:
       - couchdb
-      - keycloak
 
   couchdb:
     image: couchdb:latest
@@ -39,6 +38,9 @@ services:
     env_file:
       - .env
     command: start-dev --http-port=8090
+    profiles:
+      - idp
+      - keycloak
 
 networks:
   devnet:
