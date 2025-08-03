@@ -134,7 +134,7 @@ You then gain an additional endpoint:
 The `.devcontainer` folder contains helper scripts you can use to configure CouchDB and Keycloak. Since you might have different ideas how the environment should be configured, the scripts don't run automatically, but need to be called from a terminal inside the devcontainer.
 
 * `populate_couchdb.sh`: create databases `_users`, `_relicator`, `_global_changes` and `demo`
-* `populate_keycloak.sh`: configure the kecloak server with the realm `empire`, a client `fauxton` and the users `hariseldon`, `gaaldormick`. Furthermore extract the public key from the JWKS, convert it to PEM and configure JWT authentication in CouchDB including trusting that key
+* `populate_keycloak.sh`: configure the keycloak server with the realm `empire`, a client `fauxton` and the users `hariseldon`, `gaaldormick`. Furthermore extract the public key from the JWKS, convert it to PEM and configure JWT authentication in CouchDB including trusting that key
 
 ### Resetting the containers
 
