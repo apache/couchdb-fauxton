@@ -39,7 +39,13 @@
         "browserName" : "chrome",
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
-        "chromeOptions": {},
+        "chromeOptions" : {
+          "prefs" : {
+            "credentials_enable_service" : false,
+            "profile.password_manager_enabled": false,
+            "profile.password_manager_leak_detection": false
+          }
+        },
         "moz:firefoxOptions": {}
       },
       "exclude": <%= exclude_tests %>,
@@ -52,7 +58,12 @@
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["window-size=1400,900", "--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage", "--remote-debugging-port=9222"]
+          "args" : ["window-size=1400,900", "--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage", "--remote-debugging-port=9222"],
+          "prefs" : {
+            "credentials_enable_service" : false,
+            "profile.password_manager_enabled": false,
+            "profile.password_manager_leak_detection": false
+          }
         }
       }
     }
