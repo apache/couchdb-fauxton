@@ -33,6 +33,8 @@ jobs:
         include:
           - COUCHDB_IMAGE: couchdb:3
             NIGHTWATCH_SKIPTAGS: "search,nonpartitioned,couchdb-v2-only"
+          - COUCHDB_IMAGE: couchdb:2.3.1
+            NIGHTWATCH_SKIPTAGS: "search,partitioned"
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
