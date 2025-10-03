@@ -13,7 +13,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as jdp from "jsondiffpatch";
-import "jsondiffpatch/dist/formatters-styles/html.css";
+import * as jdpHtmlFormatter from 'jsondiffpatch/formatters/html';
+import "jsondiffpatch/formatters/styles/html.css";
 
 const RevisionDiffArea = ({ours, theirs}) => {
   if (!ours || !theirs) {
@@ -21,7 +22,7 @@ const RevisionDiffArea = ({ours, theirs}) => {
   }
 
   const delta = jdp.diff(ours, theirs);
-  const html = jdp.formatters.html.format(delta, ours);
+  const html = jdpHtmlFormatter.format(delta, ours);
 
   return (
     <div className="revision-diff-area">
