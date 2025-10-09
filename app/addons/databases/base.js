@@ -108,6 +108,12 @@ FauxtonAPI.registerUrls('databaseBaseURL', {
   }
 });
 
+FauxtonAPI.registerUrls('dbsInfo', {
+  server: function () {
+    return Helpers.getServerUrl('/_dbs_info');
+  }
+});
+
 FauxtonAPI.registerUrls('permissions', {
   server: function (db) {
     return Helpers.getServerUrl('/' + db + '/_security');
