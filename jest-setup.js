@@ -12,10 +12,27 @@
 
 require('jest');
 require('whatwg-fetch');
-require('mock-local-storage');
+
+function newMockLocalStorage() {
+  let store = {};
+  return {
+    getItem: (key) => {
+      return store[key] || null;
+    },
+    setItem: (key, value) => {
+      store[key] = String(value);
+    },
+    removeItem: (key) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+}
 
 Object.defineProperty(window, 'localStorage', {
-  value: global.localStorage,
+  value: newMockLocalStorage(),
   configurable:true,
   enumerable:true,
   writable:true
