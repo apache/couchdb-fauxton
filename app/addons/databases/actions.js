@@ -12,7 +12,7 @@
 import app from '../../app';
 import Helpers from '../../helpers';
 import FauxtonAPI from '../../core/api';
-import { get } from '../../core/ajax';
+import { get, post } from '../../core/ajax';
 import DatabasesBase from '../databases/base';
 import Stores from './stores';
 import ActionTypes from './actiontypes';
@@ -21,29 +21,30 @@ import * as API from './api';
 function getDatabaseDetails (dbList, fullDbList) {
   const databaseDetails = [];
   const failedDbs = [];
-  let seen = 0;
 
-  dbList.forEach((db) => {
-    const url = FauxtonAPI.urls('databaseBaseURL', 'server', db);
-
-    fetch(url)
-      .then((res) => {
-        databaseDetails.push(res);
-      }).catch(() => {
-        failedDbs.push(db);
-      }).then(() => {
-        seen++;
-        if (seen !== dbList.length) {
-          return;
+  const url = FauxtonAPI.urls('dbsInfo', 'server');
+  const body = {
+    keys: dbList
+  };
+  post(url, body)
+    .then((res) => {
+      res.forEach((db) => {
+        if (db.info !== undefined) {
+          databaseDetails.push(db);
+        } else {
+          failedDbs.push(db.key);
         }
-        updateDatabases({
-          dbList: dbList,
-          databaseDetails: databaseDetails,
-          failedDbs: failedDbs,
-          fullDbList: fullDbList
-        });
       });
-  });
+    }).catch(() => {
+      failedDbs.push(...dbList);
+    }).then(() => {
+      updateDatabases({
+        dbList: dbList,
+        databaseDetails: databaseDetails,
+        failedDbs: failedDbs,
+        fullDbList: fullDbList
+      });
+    });
 }
 
 function fetch (url) {
