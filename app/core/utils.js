@@ -120,8 +120,8 @@ const utils = {
 
   localStorageGet: function (key) {
     let data;
-    if (_.has(window.localStorage, key)) {
-      data = window.localStorage[key];
+    if (window.localStorage.getItem(key) != null) {
+      data = window.localStorage.getItem(key);
       try {
         return JSON.parse(data);
       } catch (e) {
