@@ -108,6 +108,9 @@
         "serialize-javascript": "^6.0.2",
         "js-yaml": "4.1.1"
       }
+    },
+    "mocha": {
+      "js-yaml": "4.1.1"
     }
   },
   "scripts": {
