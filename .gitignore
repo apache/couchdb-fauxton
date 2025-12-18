@@ -49,3 +49,7 @@ coverage
 # IDEs
 .idea/
 .vscode
+.quarkus
+
+# Env variables
+.env
