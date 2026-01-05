@@ -23,6 +23,22 @@ import { Provider } from 'react-redux';
 
 import LoadAddons from './load_addons';
 import '../assets/scss/fauxton.scss';
+// Detect local development environment and apply theme
+function isLocalDevelopment() {
+  const hostname = window.location.hostname;
+
+  return (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "[::1]" || // IPv6 localhost
+    hostname.endsWith(".local")
+  );
+}
+
+// Set the environment indicator on the document root
+if (isLocalDevelopment()) {
+  document.documentElement.setAttribute("data-env", "development");
+}
 
 FauxtonAPI.addMiddleware(thunk);
 const store = createStore(
