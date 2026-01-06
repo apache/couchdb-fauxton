@@ -41,7 +41,7 @@ export default class RevisionBrowserControls extends React.Component {
   }
 
   onRevisionClick(revTheirs) {
-    this.props.chooseLeaves(this.props.ours, revTheirs.value);
+    this.props.chooseLeaves(this.props.ours, revTheirs.target.value);
   }
 
   onForwardClick() {
