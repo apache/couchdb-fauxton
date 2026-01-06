@@ -23,6 +23,12 @@ import { Provider } from 'react-redux';
 
 import LoadAddons from './load_addons';
 import '../assets/scss/fauxton.scss';
+import Utils from './core/utils';
+
+// Apply color theme based on environment
+if (Utils.isLocalDevelopment()) {
+  document.documentElement.setAttribute('data-env', 'development');
+}
 
 FauxtonAPI.addMiddleware(thunk);
 const store = createStore(
