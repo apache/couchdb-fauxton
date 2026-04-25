@@ -13,7 +13,6 @@
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import FauxtonAPI from '../../../../../core/api';
 import Components from '../../../../components/react-components';
 import Constants from '../../../constants';
@@ -119,7 +118,7 @@ export default class TableRow extends React.Component {
         <Copy
           title={text}
           text={text}
-          uniqueKey={uuidv4()}
+          uniqueKey={FauxtonAPI.uuid()}
           onClipboardClick={this.showCopiedMessage} />
       </td>
     );

@@ -120,4 +120,9 @@ FauxtonAPI.getIndexTypePropNames = function () {
   return indexTypes;
 };
 
+// Generate a v4 UUID
+FauxtonAPI.uuid = function () {
+  return crypto.randomUUID();
+};
+
 export default FauxtonAPI;
