@@ -122,7 +122,21 @@ FauxtonAPI.getIndexTypePropNames = function () {
 
 // Generate a v4 UUID
 FauxtonAPI.uuid = function () {
-  return crypto.randomUUID();
+  if (crypto && crypto.randomUUID && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return generateUUID();
+
 };
+
+// Generates a random UUID with the same format as crypto.randomUUID().
+// Only meant as an alternative for environments where crypto.randomUUID() is not available.
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 export default FauxtonAPI;
