@@ -32,6 +32,10 @@ export const normalizeUrls = (url) => {
   const el = document.createElement('a');
   el.href = url;
 
+  if (el.protocol !== 'http:' && el.protocol !== 'https:') {
+    return '';
+  }
+
   if (/:/.test(url)) {
     return el.protocol + '//' + el.host;
   }
