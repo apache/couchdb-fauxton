@@ -102,6 +102,7 @@
     "yargs": "^17.5.1"
   },
   "overrides": {
+    "cheerio": "1.0.0-rc.10",
     "nightwatch": {
       "mocha": {
         "serialize-javascript": "^6.0.2",
