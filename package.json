@@ -75,6 +75,7 @@
     "jquery-param-fn": "^1.0.0",
     "jsondiffpatch": "^0.7.2",
     "lodash": "^4.17.20",
+    "lossless-json": "^4.3.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.29.4",
     "nano": "^10.0.0",
