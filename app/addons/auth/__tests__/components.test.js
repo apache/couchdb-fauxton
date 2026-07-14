@@ -22,22 +22,38 @@ describe('Auth -- Components', () => {
 
   describe('LoginForm', () => {
     let stub;
+    let stubJwt;
 
     beforeEach(() => {
       stub = sinon.stub(Actions, 'login');
+      stubJwt = sinon.stub(Actions, 'loginJwt');
     });
 
     afterEach(() => {
       Actions.login.restore();
+      Actions.loginJwt.restore();
     });
 
     it('should trigger login event when form submitted', () => {
       const loginForm = mount(<LoginForm/>);
+      expect(loginForm.find('select#auth-method').prop('value')).toEqual('basic');
       loginForm.find('#login').simulate('submit');
       expect(stub.calledOnce).toBeTruthy();
+      expect(stubJwt.notCalled).toBeTruthy();
     });
 
-    it('in case of nothing in state, should pass actual values to Actions.login()', () => {
+    it('should change login type when dropdown option is chosen', () => {
+      const loginForm = mount(<LoginForm/>);
+      const dropdown = loginForm.find('select#auth-method');
+      expect(loginForm.find('select').prop('value')).toEqual('basic');
+      dropdown.simulate('change', {target: {value: 'token'}});
+      expect(loginForm.find('select').prop('value')).toEqual('token');
+      loginForm.find('#login').simulate('submit');
+      expect(stub.notCalled).toBeTruthy();
+      expect(stubJwt.calledOnce).toBeTruthy();
+    });
+
+    it('in case of nothing in state, should pass actual basic auth values to Actions.login()', () => {
       const username = 'bob';
       const password = 'smith';
 
@@ -54,6 +70,7 @@ describe('Auth -- Components', () => {
       expect(stub.args[0][0]).toBe(username);
       expect(stub.args[0][1]).toBe(password);
     });
+
 
   });
 

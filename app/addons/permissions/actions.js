@@ -18,6 +18,7 @@ import { isValueAlreadySet, addValueToPermissions } from './helpers';
 import {
   PERMISSIONS_UPDATE
 } from './actiontypes';
+import FauxtonJwt from "../auth/fauxtonjwt";
 
 
 export const receivedPermissions = json => {
@@ -28,10 +29,12 @@ export const receivedPermissions = json => {
 };
 
 export const fetchPermissions = url => dispatch => {
-  return fetch(url, {
-    headers: {'Accept': 'application/json' },
+  const options = {
+    headers: {'Accept': 'application/json'},
     credentials: 'include'
-  })
+  };
+  const updatedOptions = FauxtonJwt.addAuthToken(options);
+  return fetch(url, updatedOptions)
     .then((res) => res.json())
     .then(json => {
       if (json.error && json.reason) {
@@ -97,7 +100,7 @@ export const deletePermission = (url, permissions, section, type, value) => disp
 };
 
 export const updatePermissionUnsafe = (url, p, dispatch) => {
-  return fetch(url, {
+  const options = {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -105,7 +108,9 @@ export const updatePermissionUnsafe = (url, p, dispatch) => {
     credentials: 'include',
     method: 'PUT',
     body: JSON.stringify(p)
-  })
+  };
+  const updatedOptions = FauxtonJwt.addAuthToken(options);
+  return fetch(url, updatedOptions)
     .then((res) => res.json())
     .then((json) => {
       if (!json.ok) {
