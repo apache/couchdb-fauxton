@@ -12,7 +12,6 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import FauxtonAPI from '../../../../core/api';
 import ReactComponents from '../../../components/react-components';
 
@@ -128,7 +127,7 @@ export default class DesignDocInfo extends React.Component {
             <li>
               <span className="item-title">MD5 Signature:</span>
               <Copy
-                uniqueKey={uuidv4()}
+                uniqueKey={FauxtonAPI.uuid()}
                 text={viewIndex.signature}
                 onClipboardClick={this.showCopiedMessage} />
             </li>

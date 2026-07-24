@@ -42,3 +42,13 @@ describe('URLs', () => {
   });
 
 });
+
+describe('generateUUID', () => {
+
+  it('returns a valid UUID', () => {
+    const uuid = FauxtonAPI.uuid();
+    expect(uuid).toHaveLength(36);
+    const uuid2 = FauxtonAPI.uuid();
+    expect(uuid).not.toBe(uuid2);
+  });
+});
