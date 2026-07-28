@@ -149,5 +149,12 @@
     "fauxton"
   ],
   "author": "The Apache CouchDB contributors",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "allowScripts": {
+    "@nightwatch/nightwatch-inspector": true,
+    "@parcel/watcher": true,
+    "core-js": true,
+    "unrs-resolver": true,
+    "chromedriver": true
+  }
 }
