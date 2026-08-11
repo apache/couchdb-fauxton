@@ -54,6 +54,7 @@
     "node-fetch": "^2.6.7",
     "redux-mock-store": "^1.5.4",
     "sinon": "^21.0.1",
+    "string-replace-loader": "^3.3.0",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^5.0.1",

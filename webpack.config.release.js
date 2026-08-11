@@ -122,6 +122,15 @@ module.exports = {
             },
           },
           "css-loader",
+          // Removes UTF-8 Byte Order Mark (BOM) characters added by sass, which causes the brower to ignore
+          // CSS properties defined after the character.
+          {
+            loader: "string-replace-loader",
+            options: {
+              search: /^\uFEFF/gm,
+              replace: "",
+            },
+          },
           {
             loader: "sass-loader",
             options: {
