@@ -113,4 +113,41 @@ describe('Utils', () => {
       );
     });
   });
+
+  describe('isLocalDevelopment', () => {
+    it('returns true for localhost', () => {
+      expect(utils.isLocalDevelopment('localhost')).toBe(true);
+    });
+
+    it('returns true for 127.0.0.1', () => {
+      expect(utils.isLocalDevelopment('127.0.0.1')).toBe(true);
+    });
+
+    it('returns true for IPv6 localhost [::1]', () => {
+      expect(utils.isLocalDevelopment('[::1]')).toBe(true);
+    });
+
+    it('returns true for .local domains', () => {
+      expect(utils.isLocalDevelopment('myapp.local')).toBe(true);
+      expect(utils.isLocalDevelopment('test.local')).toBe(true);
+      expect(utils.isLocalDevelopment('dev.mycompany.local')).toBe(true);
+    });
+
+    it('returns false for production domains', () => {
+      expect(utils.isLocalDevelopment('example.com')).toBe(false);
+      expect(utils.isLocalDevelopment('app.example.com')).toBe(false);
+      expect(utils.isLocalDevelopment('couchdb.apache.org')).toBe(false);
+    });
+
+    it('returns false for IP addresses that are not localhost', () => {
+      expect(utils.isLocalDevelopment('203.0.113.1')).toBe(false);
+      expect(utils.isLocalDevelopment('192.168.1.1')).toBe(false);
+      expect(utils.isLocalDevelopment('10.0.0.1')).toBe(false);
+    });
+
+    it('returns false for domains ending with "local" but not .local TLD', () => {
+      expect(utils.isLocalDevelopment('mylocal.com')).toBe(false);
+      expect(utils.isLocalDevelopment('localhost.com')).toBe(false);
+    });
+  });
 });
