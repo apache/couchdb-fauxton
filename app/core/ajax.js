@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import {defaultsDeep} from "lodash";
 import {Subject} from 'rxjs';
+import FauxtonJwt from "../addons/auth/fauxtonjwt";
 
 /* Add a multicast observer so that all fetch requests can be observed
   Some usage examples:
@@ -68,7 +69,8 @@ export const json = (url, method = "GET", opts = {}) => {
       cache: "no-cache"
     }
   );
-  return _preFetchFn(url, fetchOptions).then((result) => {
+  const updatedFetchOptions = FauxtonJwt.addAuthToken(fetchOptions);
+  return _preFetchFn(url, updatedFetchOptions).then((result) => {
     return fetch(
       result.url,
       result.options,

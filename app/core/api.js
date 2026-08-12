@@ -21,10 +21,15 @@ import $ from "jquery";
 import Backbone from "backbone";
 import _ from "lodash";
 import Promise from "bluebird";
+import FauxtonJwt from "../addons/auth/fauxtonjwt";
 
 Backbone.$ = $;
 Backbone.ajax = function () {
-  return Backbone.$.ajax.apply(Backbone.$, arguments);
+  // Get the original AJAX options
+  const options = arguments[0] || {};
+  const updatedOptions = FauxtonJwt.addAuthToken(options);
+  // Call the original Backbone.$.ajax with the modified options
+  return Backbone.$.ajax.apply(Backbone.$, [updatedOptions]);
 };
 
 Object.assign(FauxtonAPI, {
