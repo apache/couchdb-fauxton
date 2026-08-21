@@ -13,6 +13,7 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import { deleteRequest } from "../../core/ajax";
+import * as losslessJSON from "../../core/lossless-json";
 import PagingCollection from "../../../assets/js/plugins/cloudant.pagingcollection";
 
 // defined here because this is contains the base resources used throughout the addon and outside,
@@ -174,7 +175,23 @@ Documents.Doc = FauxtonAPI.Model.extend({
     });
   },
 
+  // Read requests are fetched as raw text (see sync) so that integers larger
+  // than Number.MAX_SAFE_INTEGER survive parsing instead of being rounded.
+  sync: function (method, model, options = {}) {
+    if (method === 'read') {
+      options.dataType = 'text';
+    } else {
+      options.contentType = 'application/json';
+      options.data = losslessJSON.stringify(options.attrs || model.toJSON(options));
+    }
+    return FauxtonAPI.Model.prototype.sync.call(this, method, model, options);
+  },
+
   parse: function (resp) {
+    if (typeof resp === 'string') {
+      resp = losslessJSON.parse(resp);
+    }
+
     if (resp.rev) {
       resp._rev = resp.rev;
       delete resp.rev;
@@ -196,7 +213,7 @@ Documents.Doc = FauxtonAPI.Model.extend({
   prettyJSON: function () {
     var data = this.get("doc") ? this.get("doc") : this.attributes;
 
-    return JSON.stringify(data, null, "  ");
+    return losslessJSON.stringify(data, null, "  ");
   },
 
   copy: function (copyId) {
