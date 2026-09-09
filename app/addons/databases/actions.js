@@ -192,7 +192,7 @@ export default {
       limit: 30
     });
 
-    const url = Helpers.getServerUrl(`/_all_dbs${query}`);
+    const url = Helpers.prependRelativeCouchDbPath(`/_all_dbs${query}`);
     get(url).then((dbs) => {
       const options = dbs.map(db => {
         return {

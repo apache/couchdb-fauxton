@@ -63,9 +63,9 @@ Databases.Model = FauxtonAPI.Model.extend({
       return "/database/" + this.safeID();
     }
     if (this.partitioned) {
-      return Helpers.getServerUrl("/" + this.safeID()) + '?partitioned=true';
+      return Helpers.prependRelativeCouchDbPath("/" + this.safeID()) + '?partitioned=true';
     }
-    return Helpers.getServerUrl("/" + this.safeID());
+    return Helpers.prependRelativeCouchDbPath("/" + this.safeID());
 
   },
 

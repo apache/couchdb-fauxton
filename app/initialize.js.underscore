@@ -23,7 +23,6 @@ export default {
   // The root path to run the application.
   root: "<%= root %>",
   version: "<%= version %>",
-  // Host is used as prefix for urls
-  host: "<%= host %>",
+  couchDbRelativePath: "<%= couchDbRelativePath %>",
   i18n: <%= i18n %>
 };

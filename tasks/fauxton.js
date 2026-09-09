@@ -65,7 +65,7 @@ module.exports = function (grunt) {
     const app = {};
     _.defaults(app, settings.app, {
       root: '/',
-      host: '../..',
+      couchDbRelativePath: '../..',
       version: "0.0"
     });
     grunt.file.write(initDestination, initTemplate(app));

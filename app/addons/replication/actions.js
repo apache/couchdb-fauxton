@@ -16,6 +16,7 @@ import ActionTypes from './actiontypes';
 import Helpers from './helpers';
 import MainHelper from '../../helpers';
 import Constants from './constants';
+import utils from '../../core/utils';
 import {
   supportNewApi,
   createReplicationDoc,
@@ -39,7 +40,7 @@ export const initReplicator = (routeLocalSource, localSource) => dispatch => {
 };
 
 export const getDatabasesList = () => dispatch => {
-  const url = MainHelper.getServerUrl("/_all_dbs");
+  const url = MainHelper.prependRelativeCouchDbPath("/_all_dbs");
   get(url)
     .then((databases) => {
       dispatch({
@@ -53,7 +54,7 @@ export const getDatabasesList = () => dispatch => {
 
 export const replicate = (params, pageLimit) => dispatch => {
   const replicationDoc = createReplicationDoc(params);
-  const url = MainHelper.getServerUrl("/_replicator");
+  const url = MainHelper.prependRelativeCouchDbPath("/_replicator");
   const promise = post(url, replicationDoc);
 
   const source = Helpers.getDatabaseLabel(replicationDoc.source);
@@ -211,7 +212,7 @@ export const deleteDocs = (docs, pageLimit) => dispatch => {
     clear: true
   });
 
-  const url = MainHelper.getServerUrl('/_replicator/_bulk_docs');
+  const url = MainHelper.prependRelativeCouchDbPath('/_replicator/_bulk_docs');
   post(url, {docs: bulkDocs}, {raw: true})
     .then(resp => {
       if (!resp.ok) {
@@ -333,59 +334,70 @@ const getTargetDatabasePartitioned = (createTargetParams) => {
   return false;
 };
 
-export const getReplicationStateFrom = (id) => dispatch => {
-  dispatch({
-    type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
-  });
+const inferDbDetailsFromEndpoint = (endpoint) => {
+  const url = _.isObject(endpoint) ? endpoint.url : endpoint;
+  const urlObj = new URL(url);
 
-  const url = MainHelper.getServerUrl(`/_replicator/${encodeURIComponent(id)}`);
+  const isLocal = utils.isLocalToAppHost(urlObj);
+  const auth = getAuthTypeAndCredentials(endpoint);
+
+  return {
+    isLocal,
+    dbName: decodeURIComponent(urlObj.pathname.slice(1)),
+    fullUrl: decodeFullUrl(url),
+    authType: auth.type,
+    auth: auth.creds,
+  };
+};
+
+const buildStateFromDoc = (doc) => {
+  const source = inferDbDetailsFromEndpoint(doc.source);
+  const target = inferDbDetailsFromEndpoint(doc.target);
+
+  return {
+    // meta
+    replicationDocName: doc._id,
+    replicationType: doc.continuous ? Constants.REPLICATION_TYPE.CONTINUOUS : Constants.REPLICATION_TYPE.ONE_TIME,
+    // source
+    ...(source.isLocal ? {
+      replicationSource: Constants.REPLICATION_SOURCE.LOCAL,
+      localSource: source.dbName,
+    } : {
+      replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+      remoteSource: source.fullUrl,
+    }),
+    sourceAuthType: source.authType,
+    sourceAuth: source.auth,
+    // target
+    ...(target.isLocal ? {
+      replicationTarget: Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE,
+      localTarget: target.dbName,
+    } : {
+      replicationTarget: Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE,
+      remoteTarget: target.fullUrl,
+    }),
+    targetAuthType: target.authType,
+    targetAuth: target.auth,
+    targetDatabasePartitioned: getTargetDatabasePartitioned(doc.create_target_params)
+  };
+};
+
+export const getReplicationStateFrom = (id) => (dispatch) => {
+  dispatch({ type: ActionTypes.REPLICATION_FETCHING_FORM_STATE });
+
+  const url = MainHelper.prependRelativeCouchDbPath(`/_replicator/${encodeURIComponent(id)}`);
   get(url)
     .then((doc) => {
-      const stateDoc = {
-        replicationDocName: doc._id,
-        replicationType: doc.continuous ? Constants.REPLICATION_TYPE.CONTINUOUS : Constants.REPLICATION_TYPE.ONE_TIME,
-      };
-
-      const sourceUrl = _.isObject(doc.source) ? doc.source.url : doc.source;
-      const targetUrl = _.isObject(doc.target) ? doc.target.url : doc.target;
-
-      if (sourceUrl.indexOf(window.location.hostname) > -1) {
-        const url = new URL(sourceUrl);
-        stateDoc.replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
-        stateDoc.localSource = decodeURIComponent(url.pathname.slice(1));
-      } else {
-        stateDoc.replicationSource = Constants.REPLICATION_SOURCE.REMOTE;
-        stateDoc.remoteSource = decodeFullUrl(sourceUrl);
-      }
-      const sourceAuth = getAuthTypeAndCredentials(doc.source);
-      stateDoc.sourceAuthType = sourceAuth.type;
-      stateDoc.sourceAuth = sourceAuth.creds;
-
-      if (targetUrl.indexOf(window.location.hostname) > -1) {
-        const url = new URL(targetUrl);
-        stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE;
-        stateDoc.localTarget = decodeURIComponent(url.pathname.slice(1));
-      } else {
-        stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE;
-        stateDoc.remoteTarget = decodeFullUrl(targetUrl);
-      }
-      const targetAuth = getAuthTypeAndCredentials(doc.target);
-      stateDoc.targetAuthType = targetAuth.type;
-      stateDoc.targetAuth = targetAuth.creds;
-
-      stateDoc.targetDatabasePartitioned = getTargetDatabasePartitioned(doc.create_target_params);
-
       dispatch({
         type: ActionTypes.REPLICATION_SET_STATE_FROM_DOC,
-        options: stateDoc
+        options: buildStateFromDoc(doc),
       });
-
     })
-    .catch(error => {
+    .catch((error) => {
       FauxtonAPI.addNotification({
         msg: error.reason || error.message,
-        type: 'error',
-        clear: true
+        type: "error",
+        clear: true,
       });
     });
 };

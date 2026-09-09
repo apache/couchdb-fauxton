@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import utils from "../utils";
+import utils from '../utils';
 
 describe('Utils', () => {
 
@@ -99,7 +99,6 @@ describe('Utils', () => {
         expect(utils.stripHTML(item.html)).toBe(item.text);
       });
     });
-
   });
 
   describe('queryParams', () => {

@@ -10,10 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import {replicate, getReplicationStateFrom, deleteDocs, setPageLimit} from '../actions';
+import {
+  replicate,
+  getReplicationStateFrom,
+  deleteDocs,
+  setPageLimit,
+} from '../actions';
 import ActionTypes from '../actiontypes';
 import fetchMock from 'fetch-mock';
 import FauxtonAPI from '../../../core/api';
+import utils from '../../../core/utils';
+import { stub } from 'sinon';
 
 FauxtonAPI.session = {
   user () {
@@ -23,7 +30,7 @@ FauxtonAPI.session = {
   }
 };
 
-describe("Replication Actions", () => {
+describe("Replication Actions:", () => {
 
   describe('replicate', () => {
 
@@ -105,9 +112,11 @@ describe("Replication Actions", () => {
   });
 
   describe('getReplicationStateFrom', () => {
+    const isLocalStub = stub(utils, 'isLocalToAppHost');
 
     afterEach(() => {
       fetchMock.reset();
+      isLocalStub.reset();
     });
 
     const doc = {
@@ -154,6 +163,7 @@ describe("Replication Actions", () => {
     };
 
     it('builds up correct state', (done) => {
+      isLocalStub.returns(true);
       const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
           expect(options).toEqual(docState);
@@ -166,6 +176,7 @@ describe("Replication Actions", () => {
     });
 
     it('builds up correct state with custom auth', (done) => {
+      isLocalStub.returns(true);
       const docWithCustomAuth = Object.assign(
         {}, doc, {
           "_id": "rep_custom_auth",
@@ -218,6 +229,85 @@ describe("Replication Actions", () => {
 
       fetchMock.getOnce('./_replicator/rep_custom_auth', docWithCustomAuth);
       getReplicationStateFrom(docWithCustomAuth._id)(dispatch);
+    });
+
+    it('classifies remote URLs correctly', (done) => {
+      isLocalStub.returns(false);
+      const doc = {
+        _id: 'remote-rep-1',
+        _rev: '1-abc123',
+        source: {
+          headers: {
+            Authorization: 'Basic dGVzdGVyOnRlc3RlcnBhc3M=',
+          },
+          url: 'http://remote-couchdb.example.com:5984/animaldb',
+        },
+        target: {
+          headers: {
+            Authorization: 'Basic dGVzdGVyOnRlc3RlcnBhc3M=',
+          },
+          url: 'http://localhost:5984/backupdb',
+        },
+        continuous: false,
+        create_target: true,
+        owner: 'tester',
+        _replication_id: '90ff5a45623aa6821a6b0c20f5d3b5e8',
+      };
+
+      fetchMock.getOnce('./_replicator/remote-rep-1', doc);
+
+      const dispatch = ({ type, options }) => {
+        if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
+          expect(options.replicationSource).toBe('REPLICATION_SOURCE_REMOTE');
+          expect(options.remoteSource).toBe(
+            'http://remote-couchdb.example.com:5984/animaldb',
+          );
+          expect(options.replicationTarget).toBe(
+            'REPLICATION_TARGET_EXISTING_REMOTE_DATABASE',
+          );
+          expect(options.remoteTarget).toBe('http://localhost:5984/backupdb');
+          done();
+        }
+      };
+
+      getReplicationStateFrom('remote-rep-1')(dispatch);
+    });
+
+    it('classifies local URLs correctly', (done) => {
+      isLocalStub.returns(true);
+      const doc = {
+        _id: 'substring-test',
+        _rev: '1-ghi789',
+        source: {
+          headers: {
+            Authorization: 'Basic dGVzdGVyOnRlc3RlcnBhc3M=',
+          },
+          url: 'http://localhost/source-db-local',
+        },
+        target: {
+          headers: {
+            Authorization: 'Basic dGVzdGVyOnRlc3RlcnBhc3M=',
+          },
+          url: 'http://localhost/source-db-local',
+        },
+        continuous: false,
+        create_target: true,
+        owner: 'tester',
+        _replication_id: '90ff5a45623aa6821a6b0c20f5d3b5e8',
+      };
+
+      const dispatch = ({ type, options }) => {
+        if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
+          expect(options.replicationSource).toBe('REPLICATION_SOURCE_LOCAL');
+          expect(options.replicationTarget).toBe(
+            'REPLICATION_TARGET_EXISTING_LOCAL_DATABASE',
+          );
+          done();
+        }
+      };
+
+      fetchMock.getOnce('./_replicator/substring-test', doc);
+      getReplicationStateFrom('substring-test')(dispatch);
     });
   });
 

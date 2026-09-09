@@ -14,7 +14,7 @@ import { get, put, deleteRequest } from '../../core/ajax';
 import Helpers from "../../helpers";
 
 export const configUrl = (node) => {
-  return Helpers.getServerUrl('/_node/' + node + '/_config');
+  return Helpers.prependRelativeCouchDbPath('/_node/' + node + '/_config');
 };
 
 export const fetchConfig = (node) => {
@@ -30,7 +30,7 @@ export const fetchConfig = (node) => {
 export const optionUrl = (node, sectionName, optionName) => {
   const endpointUrl = '/_node/' + node + '/_config/' +
     encodeURIComponent(sectionName) + '/' + encodeURIComponent(optionName);
-  return Helpers.getServerUrl(endpointUrl);
+  return Helpers.prependRelativeCouchDbPath(endpointUrl);
 };
 
 export const saveConfigOption = (node, sectionName, optionName, value) => {

@@ -101,7 +101,7 @@ export default class NewReplicationController extends React.Component {
   }
 
   checkCredentials(username, password) {
-    return json(Helpers.getServerUrl('/'), 'GET', {
+    return json(Helpers.prependRelativeCouchDbPath('/'), 'GET', {
       credentials: 'omit',
       headers: {
         'Authorization':'Basic ' + base64.encode(username + ':' + password)

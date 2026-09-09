@@ -19,17 +19,12 @@
 
 import constants from "./constants";
 import app from "./initialize";
-import utils from "./core/utils";
 import moment from "moment";
 import url from "url";
 import {get} from "./core/ajax";
 import _ from 'lodash';
 
 var Helpers = {};
-
-Helpers.removeSpecialCharacters = utils.removeSpecialCharacters;
-
-Helpers.safeURL = utils.safeURLName;
 
 Helpers.imageUrl = function (path) {
   // TODO: add dynamic path for different deploy targets
@@ -64,26 +59,34 @@ Helpers.escapeJQuerySelector = function (selector) {
   return selector && selector.replace(/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~]/g, "\\$&");
 };
 
-Helpers.getApiUrl = endpointRoute => {
-  if (app.host.endsWith('/') && endpointRoute.startsWith("/")) {
-    endpointRoute = endpointRoute.substr(1);
+const trimSlashes = (str) => {
+  let result = str;
+  while (result.endsWith('/')) {
+    result = result.slice(0, -1);
   }
-  return url.resolve(window.location.href, app.host + endpointRoute);
+  while (result.startsWith('/')) {
+    result = result.slice(1);
+  }
+  return result;
 };
 
-Helpers.getServerUrl = endpointRoute => {
-  if (app.host.endsWith('/') && endpointRoute.startsWith("/")) {
-    endpointRoute = endpointRoute.substr(1);
-  }
-  return app.host + endpointRoute;
+Helpers.prependRelativeCouchDbPath = (path) => {
+  return trimSlashes(app.couchDbRelativePath) + "/" + trimSlashes(path);
+};
+
+// attaches the above to window location
+Helpers.getApiUrl = path => {
+  const relativePath = Helpers.prependRelativeCouchDbPath(path);
+  const res = url.resolve(window.location.href, relativePath);
+  return res;
 };
 
 Helpers.getRootUrl = ({origin, pathname} = window.location) => {
-  return url.resolve(origin + pathname, app.host);
+  return url.resolve(origin + pathname, app.couchDbRelativePath);
 };
 
 Helpers.getUUID = function (count = 1) {
-  const url = Helpers.getServerUrl(`/_uuids?count=${count}`);
+  const url = Helpers.prependRelativeCouchDbPath(`/_uuids?count=${count}`);
   return get(url);
 };
 

@@ -16,7 +16,7 @@ import {deleteFormEncoded, get, postFormEncoded, put} from '../../core/ajax';
 
 
 export function createAdmin({name, password, node}) {
-  const url = Helpers.getServerUrl(`/_node/${node}/_config/admins/${name}`);
+  const url = Helpers.prependRelativeCouchDbPath(`/_node/${node}/_config/admins/${name}`);
   return put(url, password);
 }
 
@@ -27,7 +27,7 @@ export function getSession() {
     return loggedInSessionPromise;
   }
 
-  const url = Helpers.getServerUrl('/_session');
+  const url = Helpers.prependRelativeCouchDbPath('/_session');
   const promise = get(url).then(resp => {
     if (resp.userCtx.name) {
       loggedInSessionPromise = promise;
@@ -39,13 +39,13 @@ export function getSession() {
 }
 
 export function login(body) {
-  const url = Helpers.getServerUrl('/_session');
+  const url = Helpers.prependRelativeCouchDbPath('/_session');
   return postFormEncoded(url, app.utils.queryParams(body));
 }
 
 export function logout() {
   loggedInSessionPromise = null;
-  const url = Helpers.getServerUrl('/_session');
+  const url = Helpers.prependRelativeCouchDbPath('/_session');
   return deleteFormEncoded(url, app.utils.queryParams({ username: "_", password: "_" }));
 }
 
