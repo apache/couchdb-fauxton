@@ -13,7 +13,7 @@
 import PropTypes from 'prop-types';
 
 import React from "react";
-import { login } from "./../actions";
+import { login, loginJwt } from "./../actions";
 import { Button, Form } from 'react-bootstrap';
 
 class LoginForm extends React.Component {
@@ -21,7 +21,9 @@ class LoginForm extends React.Component {
     super();
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      authMethod: "basic",
+      token : ""
     };
   }
   onUsernameChange(e) {
@@ -33,8 +35,14 @@ class LoginForm extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    if (!this.checkUnrecognizedAutoFill()) {
-      this.login(this.state.username, this.state.password);
+    if (this.state.authMethod === "basic") {
+      if (!this.checkUnrecognizedAutoFill()) {
+        // Handle basic authentication
+        this.login(this.state.username, this.state.password);
+      }
+    } else if (this.state.authMethod === "token") {
+      // Handle token authentication
+      this.loginJwt(this.state.token);
     }
   }
   // Safari has a bug where autofill doesn't trigger a change event. This checks for the condition where the state
@@ -57,38 +65,94 @@ class LoginForm extends React.Component {
   login(username, password) {
     login(username, password, this.props.urlBack);
   }
-  componentDidMount() {
-    this.usernameField.focus();
+
+  loginJwt(token) {
+    loginJwt(token, this.props.urlBack);
   }
+
+  componentDidMount() {
+    if (this.usernameField) {
+      this.usernameField.focus();
+    }
+    if (this.tokenField) {
+      this.tokenField.focus();
+    }
+  }
+
+  onAuthMethodChange(event) {
+    this.setState({ authMethod: event.target.value });
+  }
+
+  onTokenChange(event) {
+    this.setState({ token: event.target.value });
+  }
+
   render() {
     return (
       <div className="couch-login-wrapper">
         <form id="login" onSubmit={this.submit.bind(this)}>
           <div className="row">
             <div className="col12 col-md-5 col-xl-4 mb-3">
-              <label>
-                Enter your username and password
-              </label>
-              <Form.Control type="text"
-                id="username"
-                name="username"
-                ref={node => this.usernameField = node}
-                placeholder="Username"
-                onChange={this.onUsernameChange.bind(this)}
-                value={this.state.username} />
+              <label>Choose Authentication Method</label>
+              <div className="col-12 col-md mt-1 mt-md-0"></div>
+              <select className="form-select" id="auth-method" name="authMethod" onChange={this.onAuthMethodChange.bind(this)} value={this.state.authMethod}>
+                <option value="basic">Username & Password</option>
+                <option value="token">Token</option>
+              </select>
             </div>
           </div>
-          <div className="row">
-            <div className="col12 col-md-5 col-xl-4 mb-3">
-              <Form.Control type="password"
-                id="password"
-                name="password"
-                ref={node => this.passwordField = node}
-                placeholder="Password"
-                onChange={this.onPasswordChange.bind(this)}
-                value={this.state.password} />
+
+          {/* Conditionally render Username/Password fields */}
+          {this.state.authMethod === "basic" && (
+            <>
+              <div className="row">
+                <div className="col12 col-md-5 col-xl-4 mb-3">
+                  <label>Enter your username and password</label>
+                  <Form.Control
+                    type="text"
+                    id="username"
+                    name="username"
+                    ref={(node) => (this.usernameField = node)}
+                    placeholder="Username"
+                    onChange={this.onUsernameChange.bind(this)}
+                    value={this.state.username}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col12 col-md-5 col-xl-4 mb-3">
+                  <Form.Control
+                    type="password"
+                    id="password"
+                    name="password"
+                    ref={(node) => (this.passwordField = node)}
+                    placeholder="Password"
+                    onChange={this.onPasswordChange.bind(this)}
+                    value={this.state.password}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Conditionally render Token field */}
+          {this.state.authMethod === "token" && (
+            <div className="row">
+              <div className="col12 col-md-5 col-xl-4 mb-3">
+                <label>Enter your authentication token</label>
+                <Form.Control
+                  type="text"
+                  id="token"
+                  name="token"
+                  ref={(node) => (this.tokenField = node)}
+                  placeholder="Token"
+                  onChange={this.onTokenChange.bind(this)}
+                  value={this.state.token}
+                />
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="row">
             <div className="col12 col-md-5 col-xl-4 mb-3">
               <Button id="login-btn" variant="cf-primary" type="submit">

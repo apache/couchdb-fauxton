@@ -95,4 +95,22 @@ Helpers.isIE1X = function() {
   return document.documentMode == 11 || document.documentMode == 10;
 };
 
+Helpers.getCookie = function (key) {
+  const cookies = document.cookie.split("; "); // Split cookies into key-value pairs
+  for (const cookie of cookies) {
+    const [cookieKey, cookieValue] = cookie.split("="); // Split key and value
+    if (cookieKey === key) {
+      return decodeURIComponent(cookieValue); // Decode and return the value
+    }
+  }
+  return null; // Return null if the key is not found
+};
+
+Helpers.deleteCookie = function(key) {
+  const jwtCookie = this.getCookie(key);
+  if (jwtCookie) {
+    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  }
+};
+
 export default Helpers;

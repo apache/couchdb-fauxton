@@ -49,3 +49,6 @@ coverage
 # IDEs
 .idea/
 .vscode
+/docker/formatted.key
+/docker/test_private_key.pem
+/docker/test_public_key.pem
