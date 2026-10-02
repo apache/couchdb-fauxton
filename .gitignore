@@ -23,6 +23,7 @@ app/addons/*
 !app/addons/setup
 !app/addons/search
 !app/addons/news
+!app/addons/users
 settings.json*
 i18n.json
 !settings.json.default
