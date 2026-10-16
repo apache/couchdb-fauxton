@@ -141,6 +141,15 @@ const utils = {
     const tmpElement = document.createElement('div');
     tmpElement.innerHTML = str;
     return tmpElement.textContent || tmpElement.innerText;
+  },
+
+  isLocalDevelopment: function (hostname = window.location.hostname) {
+    return (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '[::1]' || // IPv6 localhost
+      hostname.endsWith('.local')
+    );
   }
 };
 
