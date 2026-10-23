@@ -78,6 +78,17 @@ describe('Results Toolbar', () => {
     expect(wrapper.find('Button#create-new-doc-btn').prop('href')).toMatch(/\?partitionKey=partKey1$/);
   });
 
+  it('renders Create User button only for the _users database', () => {
+    const wrapper = mount(<ResultsToolBar
+      {...defaultProps}
+      databaseName={'_users'} />);
+    expect(wrapper.find('Button#create-new-user-btn').prop('href')).toBe('/database/_users/_new_user');
+    expect(wrapper.find('Button#create-new-doc-btn').length).toBe(1);
+
+    const otherDbWrapper = mount(<ResultsToolBar {...defaultProps} />);
+    expect(otherDbWrapper.find('Button#create-new-user-btn').length).toBe(0);
+  });
+
   it('toggles display density', async() => {
     // i.e. 'show full values'/'truncate values'
     const mockUpdateStyle = sinon.spy();
