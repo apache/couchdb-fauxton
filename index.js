@@ -13,7 +13,7 @@ module.exports = function (options) {
   var proxyUrl = options.couchdb;
 
   function sendFile (req, res, filePath) {
-    return send(req, filePath)
+    return send(req, filePath, { root: dist_dir })
       .on('error', function (err) {
         if (err.status === 404) {
           console.error('Could not locate', filePath);
@@ -56,9 +56,9 @@ module.exports = function (options) {
 
     if (url === '/' && accept[0] !== 'application/json') {
       // serve main index file from here
-      return sendFile(req, res, path.join(dist_dir, 'index.html'));
+      return sendFile(req, res, 'index.html');
     } else if (isFile(url) && !isDocLink) {
-      return sendFile(req, res, path.join(dist_dir, url));
+      return sendFile(req, res, url);
     }
 
     // This sets the Host header in the proxy so that one can use external
