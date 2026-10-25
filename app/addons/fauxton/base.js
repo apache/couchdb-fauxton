@@ -28,7 +28,7 @@ Fauxton.initialize = () => {
 
 Fauxton.VersionInfo = Backbone.Model.extend({
   url: function () {
-    return app.host;
+    return app.couchDbRelativePath;
   }
 });
 

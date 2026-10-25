@@ -35,7 +35,7 @@ function partitionUrlComponent(partitionKey) {
 
 function checkPartitionedDatabaseFeature () {
   // Checks if the CouchDB server supports Partitioned Databases
-  return get(Helpers.getServerUrl("/")).then((couchdb) => {
+  return get(Helpers.prependRelativeCouchDbPath("/")).then((couchdb) => {
     if (couchdb.features && couchdb.features.includes('partitioned')) {
       return true;
     }
@@ -70,7 +70,7 @@ Databases.databaseUrl = function (database) {
 
 FauxtonAPI.registerUrls('changes', {
   server: function (id, query) {
-    return Helpers.getServerUrl('/' + id + '/_changes' + query);
+    return Helpers.prependRelativeCouchDbPath('/' + id + '/_changes' + query);
   },
 
   app: function (id, partitionKey, query) {
@@ -84,7 +84,7 @@ FauxtonAPI.registerUrls('changes', {
 
 FauxtonAPI.registerUrls('allDBs', {
   server: function (query = '') {
-    return Helpers.getServerUrl(`/_all_dbs${query}`);
+    return Helpers.prependRelativeCouchDbPath(`/_all_dbs${query}`);
   },
 
   app: function () {
@@ -98,7 +98,7 @@ FauxtonAPI.registerUrls('allDBs', {
 
 FauxtonAPI.registerUrls('databaseBaseURL', {
   server: function (database) {
-    return Helpers.getServerUrl('/' + app.utils.safeURLName(database));
+    return Helpers.prependRelativeCouchDbPath('/' + app.utils.safeURLName(database));
   },
   apiurl: function(database) {
     return Helpers.getApiUrl('/' + app.utils.safeURLName(database));
@@ -110,7 +110,7 @@ FauxtonAPI.registerUrls('databaseBaseURL', {
 
 FauxtonAPI.registerUrls('permissions', {
   server: function (db) {
-    return Helpers.getServerUrl('/' + db + '/_security');
+    return Helpers.prependRelativeCouchDbPath('/' + db + '/_security');
   },
 
   app: function (db, partitionKey) {

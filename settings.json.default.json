@@ -30,7 +30,7 @@
         },
         "app": {
           "root": "/",
-          "host": "./",
+          "couchDbRelativePath": "./",
           "version": "1.0.dev"
         }
       },
@@ -46,7 +46,7 @@
         },
         "app": {
           "root": "/",
-          "host": "../",
+          "couchDbRelativePath": "../",
           "version": "1.0"
         }
       },
@@ -62,7 +62,7 @@
         },
         "app": {
           "root": "/",
-          "host": "../../..",
+          "couchDbRelativePath": "../../..",
           "version": "1.0"
         }
       }

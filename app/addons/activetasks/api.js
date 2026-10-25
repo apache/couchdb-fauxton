@@ -14,7 +14,7 @@ import Helpers from "../../helpers";
 import { get } from '../../core/ajax';
 
 export default () => {
-  return get(Helpers.getServerUrl('/_active_tasks'))
+  return get(Helpers.prependRelativeCouchDbPath('/_active_tasks'))
     .then(tasks => {
       if (tasks.error) {
         throw new Error(tasks.reason);

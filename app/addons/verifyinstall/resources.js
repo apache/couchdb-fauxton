@@ -125,7 +125,7 @@ Verifyinstall.testProcess = {
       target: 'verifytestdb_replicate'
     };
     return post(
-      Helpers.getServerUrl('/_replicate'),
+      Helpers.prependRelativeCouchDbPath('/_replicate'),
       body
     ).then(res => {
       if (res.error) {

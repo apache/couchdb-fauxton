@@ -29,7 +29,7 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
       component={<DisabledConfigController/>}
-      endpoint={Helpers.getServerUrl('/_membership')}
+      endpoint={Helpers.prependRelativeCouchDbPath('/_membership')}
       docURL={FauxtonAPI.constants.DOC_URLS.MEMBERSHIP}
       crumbs={[
         { name: 'Config disabled' }

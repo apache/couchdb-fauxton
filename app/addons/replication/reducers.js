@@ -118,23 +118,32 @@ const updateFormField = (state, fieldName, value) => {
   };
   updateState[validFieldMap[fieldName]] = value;
 
-  // Set default username when state is set to local target/source AND auth is user/pwd
-  if (fieldName === validFieldMap.sourceAuthType || fieldName === validFieldMap.replicationSource) {
-    const isUserPwdAuth = updateState[validFieldMap.sourceAuthType] === Constants.REPLICATION_AUTH_METHOD.BASIC;
-    const isLocalDB = updateState[validFieldMap.replicationSource] === Constants.REPLICATION_SOURCE.LOCAL;
-    const usernameNotSet = !updateState[validFieldMap.sourceAuth] || !updateState[validFieldMap.sourceAuth].username;
-    if (isUserPwdAuth && isLocalDB && usernameNotSet) {
+  const replicationSource = updateState[validFieldMap.replicationSource];
+  const sourceAuthType    = updateState[validFieldMap.sourceAuthType];
+  const sourceAuth        = updateState[validFieldMap.sourceAuth];
+
+  const replicationTarget = updateState[validFieldMap.replicationTarget];
+  const targetAuthType    = updateState[validFieldMap.targetAuthType];
+  const targetAuth        = updateState[validFieldMap.targetAuth];
+
+  // Set default username when source auth is set to BASIC
+  if (fieldName === validFieldMap.sourceAuthType &&
+      sourceAuthType === Constants.REPLICATION_AUTH_METHOD.BASIC &&
+      replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
+    if (!sourceAuth || !sourceAuth.username) {
       updateState[validFieldMap.sourceAuth] = {
         username: FauxtonAPI.session.user().name,
         password: ''
       };
     }
-  } else if (fieldName === validFieldMap.targetAuthType || fieldName === validFieldMap.replicationTarget) {
-    const isUserPwdAuth = updateState[validFieldMap.targetAuthType] === Constants.REPLICATION_AUTH_METHOD.BASIC;
-    const isLocalDB = updateState[validFieldMap.replicationTarget] === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
-      updateState[validFieldMap.replicationTarget] === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE;
-    const usernameNotSet = !updateState[validFieldMap.targetAuth] || !updateState[validFieldMap.targetAuth].username;
-    if (isUserPwdAuth && isLocalDB && usernameNotSet) {
+  }
+
+  // Set default username when target auth is set to BASIC
+  if (fieldName === validFieldMap.targetAuthType &&
+      targetAuthType === Constants.REPLICATION_AUTH_METHOD.BASIC &&
+      (replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
+       replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE)) {
+    if (!targetAuth || !targetAuth.username) {
       updateState[validFieldMap.targetAuth] = {
         username: FauxtonAPI.session.user().name,
         password: ''
@@ -142,17 +151,27 @@ const updateFormField = (state, fieldName, value) => {
     }
   }
 
-  // Set default local source/target database to the first in the list (to match the default dropdown display)
+  // Normalize source: keep localSource in sync with replicationSource
   if (fieldName === validFieldMap.replicationSource) {
-    const isLocalDB = updateState[validFieldMap.replicationSource] === Constants.REPLICATION_SOURCE.LOCAL;
-    if (isLocalDB && updateState.databases.length > 0) {
-      updateState[validFieldMap.localSource] = updateState.databases[0];
+    if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
+      if (!updateState.localSource && updateState.databases.length > 0) {
+        updateState.localSource = updateState.databases[0];
+      }
+    } else {
+      updateState.localSource = '';
     }
   }
+
+  // Normalize target: keep localTarget in sync with replicationTarget
   if (fieldName === validFieldMap.replicationTarget) {
-    const isLocalDB = updateState[validFieldMap.replicationTarget] === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE;
-    if (isLocalDB && updateState.databases.length > 0) {
-      updateState[validFieldMap.localTarget] = updateState.databases[0];
+    if (replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE) {
+      if (!updateState.localTarget && updateState.databases.length > 0) {
+        updateState.localTarget = updateState.databases[0];
+      }
+    } else if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
+      updateState.localTarget = '';
+    } else {
+      updateState.localTarget = '';
     }
   }
 

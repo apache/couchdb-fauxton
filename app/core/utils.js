@@ -141,7 +141,19 @@ const utils = {
     const tmpElement = document.createElement('div');
     tmpElement.innerHTML = str;
     return tmpElement.textContent || tmpElement.innerText;
-  }
+  },
+
+  /**
+   * Compares the given url with window.location.host
+   *
+   * Ideally the real CouchDB host could be used from a config value somewhere, but work to integrate that is not in scope / not planned yet
+   */
+  isLocalToAppHost: function (url) {
+    if (!url.host || !window.location.host) {
+      return false;
+    }
+    return window.location.host === url.host;
+  },
 };
 
 export default utils;

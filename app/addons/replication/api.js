@@ -21,7 +21,7 @@ let newApiPromise = null;
 export const supportNewApi = (forceCheck) => {
   if (!newApiPromise || forceCheck) {
     newApiPromise = new FauxtonAPI.Promise((resolve) => {
-      const url = Helpers.getServerUrl('/_scheduler/jobs');
+      const url = Helpers.prependRelativeCouchDbPath('/_scheduler/jobs');
       get(url, {raw: true})
         .then(resp => {
           if (resp.status > 202) {
@@ -279,7 +279,7 @@ export const parseReplicationDocs = (rows) => {
   });
 };
 
-export const convertState = (state) => {
+export const humanJobStatus = (state) => {
   if (state.toLowerCase() === 'error' || state.toLowerCase() === 'crashing') {
     return 'retrying';
   }
@@ -294,7 +294,7 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
       return doc;
     }
 
-    doc.status = convertState(schedule.state);
+    doc.status = humanJobStatus(schedule.state);
     if (schedule.start_time) {
       doc.startTime = new Date(schedule.start_time);
     }
@@ -311,7 +311,7 @@ export const fetchReplicationDocs = (maxItems) => {
   return supportNewApi()
     .then(newApi => {
       // Increase limit by 1 to account for the design doc in the DB
-      const url = Helpers.getServerUrl(`/_replicator/_all_docs?include_docs=true&limit=${maxItems + 1}`);
+      const url = Helpers.prependRelativeCouchDbPath(`/_replicator/_all_docs?include_docs=true&limit=${maxItems + 1}`);
       const docsPromise = get(url)
         .then((res) => {
           if (res.error) {
@@ -339,7 +339,7 @@ export const fetchReplicationDocs = (maxItems) => {
 };
 
 export const fetchSchedulerDocs = () => {
-  const url = Helpers.getServerUrl('/_scheduler/docs?include_docs=true');
+  const url = Helpers.prependRelativeCouchDbPath('/_scheduler/docs?include_docs=true');
   return get(url)
     .then((res) => {
       if (res.error) {
@@ -352,7 +352,7 @@ export const fetchSchedulerDocs = () => {
 
 export const checkReplicationDocID = (docId) => {
   return new Promise((resolve) => {
-    const url = Helpers.getServerUrl(`/_replicator/${docId}`);
+    const url = Helpers.prependRelativeCouchDbPath(`/_replicator/${docId}`);
     get(url)
       .then(resp => {
         if (resp.error === "not_found") {
@@ -373,7 +373,7 @@ export const parseReplicateInfo = (resp) => {
       startTime: new Date(job.start_time),
       statusTime: new Date(job.last_updated),
       //making an asumption here that the first element is the latest
-      status: convertState(job.history[0].type),
+      status: humanJobStatus(job.history[0].type),
       errorMsg: '',
       selected: false,
       continuous: /continuous/.test(job.id),
@@ -389,7 +389,7 @@ export const fetchReplicateInfo = () => {
         return [];
       }
 
-      const url = Helpers.getServerUrl('/_scheduler/jobs');
+      const url = Helpers.prependRelativeCouchDbPath('/_scheduler/jobs');
       return get(url)
         .then(resp => {
           return parseReplicateInfo(resp);
@@ -403,7 +403,7 @@ export const deleteReplicatesApi = (replicates) => {
       replication_id: replicate._id,
       cancel: true
     };
-    const url = Helpers.getServerUrl('/_replicate');
+    const url = Helpers.prependRelativeCouchDbPath('/_replicate');
     return post(url, data);
   });
 
@@ -411,7 +411,7 @@ export const deleteReplicatesApi = (replicates) => {
 };
 
 export const createReplicatorDB = () => {
-  const url = Helpers.getServerUrl('/_replicator');
+  const url = Helpers.prependRelativeCouchDbPath('/_replicator');
   return put(url)
     .then(res => {
       if (!res.ok) {

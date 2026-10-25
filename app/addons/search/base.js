@@ -20,7 +20,7 @@ import './assets/scss/search.scss';
 
 function checkSearchFeature () {
   // Checks if the CouchDB server supports Search
-  return get(Helpers.getServerUrl("/")).then((couchdb) => {
+  return get(Helpers.getApiUrl("/")).then((couchdb) => {
     return couchdb.features && couchdb.features.includes('search');
   }).catch(() => {
     return false;
@@ -70,7 +70,7 @@ FauxtonAPI.registerUrls('partitioned_search', {
 
 FauxtonAPI.registerUrls('search', {
   server: function (id, partitionKey, designDoc, searchName, query) {
-    return Helpers.getServerUrl('/' + id + partitionUrlComponent(partitionKey) + '/_design/' + designDoc + '/_search/' + searchName + query);
+    return Helpers.prependRelativeCouchDbPath('/' + id + partitionUrlComponent(partitionKey) + '/_design/' + designDoc + '/_search/' + searchName + query);
   },
 
   app: function (id, designDoc) {

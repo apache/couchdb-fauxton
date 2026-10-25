@@ -14,7 +14,7 @@ import Helpers from "../../helpers";
 import {get} from '../../core/ajax';
 
 export default () => {
-  return get(Helpers.getServerUrl('/_membership'))
+  return get(Helpers.prependRelativeCouchDbPath('/_membership'))
     .then(res => {
       if (!res.all_nodes) {
         const details = res.reason ? res.reason : '';

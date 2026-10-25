@@ -18,6 +18,7 @@ import {removeCredentialsFromUrl} from '../api';
 import Components from "../../components/react-components";
 import Helpers from '../../../helpers';
 import FauxtonAPI from "../../../core/api";
+import utils from '../../../core/utils';
 
 const { ToolbarButton } = Components;
 
@@ -33,19 +34,18 @@ const getDbNameFromUrl = (urlObj, root) => {
 
 export const formatUrl = (url) => {
   let urlObj;
-  let encoded;
   try {
     urlObj = new URL(removeCredentialsFromUrl(url));
-  } catch (e) {
+  } catch (_) {
     return '';
   }
-  const root = Helpers.getRootUrl();
-  encoded = getDbNameFromUrl(urlObj, root);
-  if (url.indexOf(window.location.hostname) > -1) {
+  const rootUrl = Helpers.getRootUrl();
+  const encodedDbName = getDbNameFromUrl(urlObj, rootUrl);
+  if (utils.isLocalToAppHost(urlObj)) {
     return (
       <span>
-        {root}
-        <a href={`#/database/${encoded}/_all_docs`}>{decodeURIComponent(encoded)}</a>
+        {rootUrl}
+        <a href={`#/database/${encodedDbName}/_all_docs`}>{decodeURIComponent(encodedDbName)}</a>
       </span>
     );
   }
