@@ -1,0 +1,41 @@
+{
+    "name": "Fauxton & CouchDB",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/sshd:1": {},
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        }
+    },
+    "postCreateCommand": "./.devcontainer/postCreate.sh",
+    "postStartCommand": "./.devcontainer/postStart.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bierner.github-markdown-preview",
+                "bierner.markdown-mermaid",
+                "bpruitt-goddard.mermaid-markdown-syntax-highlighting",
+                "github.copilot",
+                "github.copilot-chat",
+                "ms-azuretools.vscode-docker",
+                "shengchen.vscode-checkstyle",
+                "visualstudioexptteam.vscodeintellicode",
+                "wix.vscode-import-cost"
+            ],
+            "settings": {
+                "prettier.enable": false,
+                "editor.formatOnSave": false
+            }
+        }
+    },
+    "forwardPorts": [
+        8000,
+        5984,
+        8080,
+        8090
+    ]
+}
