@@ -49,6 +49,7 @@ export default {
     SETUP: './docs/cluster/setup.html#the-cluster-setup-wizard',
     MEMBERSHIP: './docs/cluster/nodes.html',
     SEARCH_INDEXES: './docs/ddocs/search.html',
-    SEARCH_INDEX_QUERIES: './docs/ddocs/search.html#queries'
+    SEARCH_INDEX_QUERIES: './docs/ddocs/search.html#queries',
+    USERS_DB: './docs/intro/security.html#users-documents'
   }
 };

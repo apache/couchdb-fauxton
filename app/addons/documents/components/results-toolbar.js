@@ -17,6 +17,8 @@ import ResultsOptions from './results-options';
 import Components from "../../components/react-components";
 import Constants from '../constants';
 import Helpers from '../helpers';
+import UsersConstants from '../../users/constants';
+import {getNewUserUrl} from '../../users/helpers';
 
 const {BulkActionComponent} = Components;
 
@@ -66,8 +68,17 @@ export class ResultsToolBar extends React.Component {
 
     let createDocumentLink = null;
     if (databaseName) {
+      let createUserLink = null;
+      if (databaseName === UsersConstants.USERS_DB) {
+        createUserLink = (
+          <Button id="create-new-user-btn" href={getNewUserUrl()} variant="cf-primary" className="me-2">
+            Create User
+          </Button>
+        );
+      }
       createDocumentLink = (
         <div className="ms-auto">
+          {createUserLink}
           <Button id="create-new-doc-btn" href={Helpers.getNewDocUrl(databaseName, partitionKey)} variant="cf-primary">
             Create Document
           </Button>
