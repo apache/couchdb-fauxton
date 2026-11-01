@@ -68,7 +68,7 @@ jobs:
         COUCHDB_IMAGE: ${{ matrix.COUCHDB_IMAGE }}
         NIGHTWATCH_SKIPTAGS: ${{ matrix.NIGHTWATCH_SKIPTAGS }}
       run: |
-        grunt debugDev
+        ./node_modules/.bin/grunt debugDev
         DIST=./dist/debug ./bin/fauxton &
         sleep 10
         curl http://localhost:8000
