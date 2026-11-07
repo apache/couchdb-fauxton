@@ -27,13 +27,27 @@
 // short.
 // =============================================================================================
 
+// Define theme colors as CSS custom properties for runtime switching between production and localhost
+:root {
+  --cf-brand-highlight: #af2d24;
+  --cf-brand-highlight-hover: #e73d34;
+  --input-focus-border-color: #e79289; // tint of red by 50%
+}
+
+// Localhost/development environment theme (purple)
+:root[data-env="development"] {
+  --cf-brand-highlight: #7b2cbf;
+  --cf-brand-highlight-hover: #9d4edd;
+  --input-focus-border-color: #bd96df; // tint of purple by 50%
+}
+
 // base
 $cf-background01: #f2f2f2 !default; // main page background color. former $background
 $cf-background02: #333333 !default; // background for overlay panels, trays
 $cf-background03: #564e4c !default; // background for items in dropdowns, main nav bar
 $cf-background-01-alt: #f7f7f7 !default; // sidebar subitems, stripped table
-$cf-brand-highlight: #af2d24 !default; // former $brandHighlight
-$cf-brand-hightlight-hover: #e73d34 !default; // former $hoverHighlight
+$cf-brand-highlight: var(--cf-brand-highlight) !default; // former $brandHighlight
+$cf-brand-hightlight-hover: var(--cf-brand-highlight-hover) !default; // former $hoverHighlight
 $cf-border-color01: #cccccc !default;
 $cf-border-color02: #999999 !default;
 $cf-primary: #208019 !default;
@@ -299,7 +313,7 @@ $dropdown-color: $cf-dropdown-color !default;
 
 // forms
 $input-btn-focus-color: rgba($cf-brand-highlight, 0.25) !default;
-$input-focus-border-color: tint-color($cf-brand-highlight, 50%) !default;
+$input-focus-border-color: var(--input-focus-border-color) !default;
 $input-bg: $cf-input-bg !default;
 $form-check-input-checked-bg-color: $cf-check-radio-bg !default;
 $form-check-input-checked-border-color: $cf-check-radio-bg !default;
