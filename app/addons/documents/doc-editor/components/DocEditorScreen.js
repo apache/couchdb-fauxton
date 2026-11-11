@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import FauxtonAPI from '../../../../core/api';
+import * as losslessJSON from '../../../../core/lossless-json';
 import FauxtonComponents from '../../../fauxton/components';
 import GeneralComponents from '../../../components/react-components';
 import AttachmentsPanelButton from './AttachmentsPanelButton';
@@ -76,7 +77,7 @@ export default class DocEditorScreen extends React.Component {
         docContent._id = ':' + docContent._id;
       }
     }
-    const code = JSON.stringify(docContent, null, '  ');
+    const code = losslessJSON.stringify(docContent, null, '  ');
     const editorCommands = [{
       name: 'save',
       bindKey: { win: 'Ctrl-S', mac: 'Ctrl-S' },
@@ -105,7 +106,7 @@ export default class DocEditorScreen extends React.Component {
         (this.props.doc && nextProps.doc && this.props.doc.id !== nextProps.doc.id)) {
       const editor = this.getEditor();
       if (editor && nextProps.doc) {
-        this.getEditor().setValue(JSON.stringify(nextProps.doc.attributes, null, '  '));
+        this.getEditor().setValue(losslessJSON.stringify(nextProps.doc.attributes, null, '  '));
       }
       this.onSaveComplete();
     }
@@ -138,7 +139,7 @@ export default class DocEditorScreen extends React.Component {
     if (this.getEditor().hasErrors()) {
       return false;
     }
-    const json = JSON.parse(this.getEditor().getValue());
+    const json = losslessJSON.parse(this.getEditor().getValue());
     this.props.doc.clear().set(json, { validate: true });
 
     return !this.props.doc.validationError;
